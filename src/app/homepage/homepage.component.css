@@ -1,0 +1,16 @@
+body {
+  background-color: #121212;
+  color: #d3d3d3;
+}
+
+.custom-card {
+  background-color: #363535;
+  color: #e0e0e0;
+  border: 1px solid #333;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  width: 350px;
+}
+.background{
+  background-color: #222121;
+}

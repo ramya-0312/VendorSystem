@@ -1,0 +1,41 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 user-register-card w-100" style="max-width: 500px;">
+    <h4 class="text-center mb-4">User Registration</h4>
+
+    <form (ngSubmit)="register()" #form="ngForm">
+      <div class="mb-3">
+        <label>Name</label>
+        <input type="text" class="form-control" name="name" [(ngModel)]="user.name" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Date of Birth</label>
+        <input type="date" class="form-control" name="dob" [(ngModel)]="user.dob" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Phone Number</label>
+        <input type="tel" class="form-control" name="phone" [(ngModel)]="user.phone" required pattern="[0-9]{10}">
+      </div>
+
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email" [(ngModel)]="user.email" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" [(ngModel)]="user.password" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Confirm Password</label>
+        <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="user.confirmPassword" required>
+      </div>
+
+      <div class="d-grid mt-4">
+        <button class="btn btn-primary" type="submit">Register</button>
+      </div>
+    </form>
+  </div>
+</div>

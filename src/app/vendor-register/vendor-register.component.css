@@ -1,0 +1,21 @@
+.vendor-card {
+  background-color: #1e1e1e;
+  color: #dcdcdc;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+input, textarea {
+  background-color: #848282;
+  color: white;
+  border: 1px solid #555;
+}
+
+input:focus, textarea:focus {
+  background-color: #e1dcdc;
+  border-color: #777;
+  outline: none;
+  box-shadow: none;
+}
