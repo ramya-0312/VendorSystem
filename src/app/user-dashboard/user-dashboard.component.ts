@@ -8,6 +8,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-dashboard.component.css']
 })
 export class UserDashboardComponent {
+  activeTab = 'message';  
+
+  setTab(tab: string) {
+    this.activeTab=tab;
+  }
+
 
   constructor(private router: Router) {}
 

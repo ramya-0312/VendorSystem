@@ -1,3 +1,5 @@
+//import { ToasterModule } from './../../node_modules/ngx-toaster/src/toaster/toaster.module';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +18,10 @@ import { UserResetPasswordComponent } from './user-reset-password/user-reset-pas
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
+
 
 @NgModule({
   declarations: [
@@ -31,12 +37,24 @@ import { VendorListComponent } from './vendor-list/vendor-list.component';
     UserResetPasswordComponent,
     UserDashboardComponent,
     MessageComponent,
-    VendorListComponent
+    VendorListComponent,
+    UpdateProfileComponent
   ],
   imports: [
     FormsModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+      timeOut: 3000,
+      closeButton: true,
+      progressBar: true,
+      tapToDismiss: true,
+      toastClass: 'ngx-toastr custom-toastr' // custom class
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

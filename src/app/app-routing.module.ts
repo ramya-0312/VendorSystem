@@ -12,6 +12,7 @@ import { UserResetPasswordComponent } from './user-reset-password/user-reset-pas
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: 'user-reset-password',component:UserResetPasswordComponent},
   { path: 'user-dashboard',component:UserDashboardComponent},
   { path: 'message',component:MessageComponent},
-  { path: 'vendor-list',component:VendorListComponent}
+  { path: 'vendor-list',component:VendorListComponent},
+  {path:'update-profile',component:UpdateProfileComponent}
 ];
 
 @NgModule({

@@ -1,30 +1,28 @@
-<div class="user-dashboard">
-  <div class="header d-flex justify-content-between align-items-center p-3 shadow-sm">
-    <h3 class="text-white">User Dashboard</h3>
-    <button class="btn btn-outline-light" (click)="logout()">Logout</button>
-  </div>
+<nav class="navbar navbar-dark bg-dark px-4">
+  <div class="container-fluid justify-content-between">
 
-  <div class="container mt-4">
-    <div class="row g-4">
-      <div class="col-md-4" (click)="goTo('message')">
-        <div class="card card-hover p-4 text-center">
-          <h5 class="mb-0">Message</h5>
-        </div>
-      </div>
-      <br>
-      <br>
-      <div class="col-md-4" (click)="goTo('vendors')">
-        <div class="card card-hover p-4 text-center">
-          <h5 class="mb-0">List of Vendors</h5>
-        </div>
-      </div>
-      <br>
-      <br>
-      <div class="col-md-4" (click)="goTo('update-profile')">
-        <div class="card card-hover p-4 text-center">
-          <h5 class="mb-0">Update Profile</h5>
-        </div>
-      </div>
+    <!-- Left Nav Items -->
+    <div class="d-flex gap-4">
+      <span class="nav-text" (click)="activeTab = 'chat'">Chat</span>
+      <span class="nav-text" (click)="activeTab = 'vendors'">Vendors</span>
+      <span class="nav-text" (click)="activeTab = 'profile'">Update Profile</span>
     </div>
+
+    <!-- Logout -->
+    <button class="btn btn-danger">Logout</button>
   </div>
+</nav>
+
+<!-- Fullscreen Chat Pop-up -->
+<div *ngIf="activeTab === 'chat'" class="chat-popup">
+  <div class="chat-content">
+    <button class="btn btn-light btn-sm float-end" (click)="activeTab = ''">Close</button>
+    <app-message></app-message>
+  </div>
+</div>
+
+<!-- Other Component Views -->
+<div class="container mt-4" *ngIf="activeTab !== 'chat'">
+  <app-vendor-list *ngIf="activeTab === 'vendors'"></app-vendor-list>
+  <app-update-profile *ngIf="activeTab === 'profile'"></app-update-profile>
 </div>

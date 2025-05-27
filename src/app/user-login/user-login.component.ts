@@ -1,23 +1,34 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 @Component({
+  standalone:false,
   selector: 'app-user-login',
-  standalone: false,
   templateUrl: './user-login.component.html',
-  styleUrl: './user-login.component.css'
+  styleUrls: ['./user-login.component.css']
 })
 export class UserLoginComponent {
-email = '';
+  email = '';
   password = '';
   loginFailed = false;
 
+  constructor(private http: HttpClient) {}
+
   login() {
-    // Dummy check for now
-    if (this.password !== 'correctPassword') {
-      this.loginFailed = true;
-    } else {
-      this.loginFailed = false;
-      // Navigate to vendor dashboard or call API
-    }
+    const payload = {
+      email: this.email,
+      password: this.password
+    };
+
+    this.http.post('https://your-api-url.com/api/user/login', payload).subscribe({
+      next: (res: any) => {
+        this.loginFailed = false;
+
+        console.log('Login success:', res);
+      },
+      error: () => {
+        this.loginFailed = true;
+      }
+    });
   }
-}
+}                                                   

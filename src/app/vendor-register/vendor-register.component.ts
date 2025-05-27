@@ -4,29 +4,65 @@ import { Component } from '@angular/core';
   standalone:false,
   selector: 'app-vendor-register',
   templateUrl: './vendor-register.component.html',
-  styleUrls: ['./vendor-register.component.css']
 })
 export class VendorRegisterComponent {
-  vendor = {
-    company: '',
-    address: '',
-    category: '',
-    photoWork: '',
-    gstNo: '',
-    website: '',
-    phone: '',
+  step: number = 1;
+
+  vendor: any = {
+    businessName: '',
     email: '',
-    password: ''
+    phone: '',
+    password: '',
+    location: '',
+    category: '',
+    experience: '',
+    description: '',
+    certifications: [],
+    portfolio: [],
+    reviews: [],
   };
+   categories: string[] = ['Photography', 'Catering', 'Decoration', 'Event Planning', 'Music', 'Other'];
 
-  confirmPassword = '';
-  passwordMismatch = false;
 
-  register() {
-    this.passwordMismatch = this.vendor.password !== this.confirmPassword;
-    if (!this.passwordMismatch) {
-      console.log('Registered Vendor:', this.vendor);
-      // Call backend API here
+  newReview: string = '';
+
+  termsText: string = ``;
+
+  nextStep(form: any) {
+    if (form.valid) this.step++;
+  }
+
+  prevStep() {
+    this.step--;
+  }
+
+  onPortfolioSelected(event: any) {
+    const files = event.target.files;
+    if (files.length) {
+      for (let file of files) {
+        this.vendor.portfolio.push(file.name); // save file name or file object
+      }
     }
+  }
+
+  onCertUpload(event: any) {
+    const files = event.target.files;
+    if (files.length) {
+      for (let file of files) {
+        this.vendor.certifications.push(file.name); // save file name or file object
+      }
+    }
+  }
+
+  addReview() {
+    if (this.newReview.trim()) {
+      this.vendor.reviews.push(this.newReview.trim());
+      this.newReview = '';
+    }
+  }
+
+  registerVendor() {
+    console.log('Vendor submitted:', this.vendor);
+    // API call here
   }
 }

@@ -1,67 +1,101 @@
-<div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card p-4 vendor-card">
-    <h3 class="text-center mb-4">Vendor Registration</h3>
-    <form #registerForm="ngForm" (ngSubmit)="register()">
+<div class="d-flex justify-content-center align-items-center vh-100 ">
+  <div class="card shadow-lg w-100" style="max-width: 800px;">
+    <div class="card-body">
+      <form #registerForm="ngForm" (ngSubmit)="registerVendor()">
 
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label>Company</label>
-          <input type="text" class="form-control" name="company" [(ngModel)]="vendor.company" required>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label>Category</label>
-          <input type="text" class="form-control" name="category" [(ngModel)]="vendor.category" required>
+        <!-- Step 1 -->
+        <div *ngIf="step === 1">
+          <h4 class="mb-4 text-center">Vendor Registration - Step 1</h4>
+
+          <div class="mb-3">
+            <label>Business Name</label>
+            <input type="text" class="form-control" name="businessName" required [(ngModel)]="vendor.businessName" #bName="ngModel">
+            <div *ngIf="bName.invalid && bName.touched" class="text-danger">Required</div>
+          </div>
+
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control" name="email" required email [(ngModel)]="vendor.email" #email="ngModel">
+            <div *ngIf="email.invalid && email.touched" class="text-danger">Valid email required</div>
+          </div>
+
+          <div class="mb-3">
+            <label>Phone</label>
+            <input type="text" class="form-control" name="phone" required pattern="^[0-9]{10}$" [(ngModel)]="vendor.phone" #phone="ngModel">
+            <div *ngIf="phone.invalid && phone.touched" class="text-danger">Enter 10-digit number</div>
+          </div>
+
+          <div class="mb-3">
+            <label>Password</label>
+            <input type="password" class="form-control" name="password" required minlength="6" [(ngModel)]="vendor.password" #pass="ngModel">
+            <div *ngIf="pass.invalid && pass.touched" class="text-danger">Min 6 characters</div>
+          </div>
+
+          <div class="mb-3">
+            <label>Location</label>
+            <input type="text" class="form-control" name="location" required [(ngModel)]="vendor.location" #loc="ngModel">
+            <div *ngIf="loc.invalid && loc.touched" class="text-danger">Required</div>
+          </div>
+
+          <div class="mb-3">
+            <label>Category</label>
+            <select class="form-select" name="category" required [(ngModel)]="vendor.category" #cat="ngModel">
+              <option value="" disabled selected>Select category</option>
+              <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+            </select>
+            <div *ngIf="cat.invalid && cat.touched" class="text-danger">Required</div>
+          </div>
+
+          <div class="mb-3">
+            <label>Years of Experience</label>
+            <input type="number" class="form-control" name="experience" required min="0" [(ngModel)]="vendor.experience" #exp="ngModel">
+            <div *ngIf="exp.invalid && exp.touched" class="text-danger">Required</div>
+          </div>
+
+          <div class="d-grid">
+            <button class="btn btn-dark" type="button" (click)="nextStep(registerForm)">Next</button>
+          </div>
         </div>
 
-        <div class="col-md-6 mb-3">
-          <label>Phone Number</label>
-          <input type="tel" class="form-control" name="phone" [(ngModel)]="vendor.phone" required>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label>Email</label>
-          <input type="email" class="form-control" name="email" [(ngModel)]="vendor.email" required>
+        <!-- Step 2 -->
+        <div *ngIf="step === 2">
+          <h4 class="mb-4 text-center">Vendor Registration - Step 2</h4>
+
+          <div class="mb-3">
+            <label>Service Description</label>
+            <textarea class="form-control" name="description" rows="3" required [(ngModel)]="vendor.description" #desc="ngModel"></textarea>
+            <div *ngIf="desc.invalid && desc.touched" class="text-danger">Required</div>
+          </div>
+
+          <div class="mb-3">
+            <label>Portfolio</label>
+            <input type="file" class="form-control" multiple (change)="onPortfolioSelected($event)">
+            <ul class="list-group mt-2" *ngIf="vendor.portfolio.length">
+              <li class="list-group-item" *ngFor="let file of vendor.portfolio">{{ file }}</li>
+            </ul>
+          </div>
+
+          <div class="mb-3">
+            <label>Certifications</label>
+            <input type="file" class="form-control" (change)="onCertUpload($event)">
+            <ul class="list-group mt-2" *ngIf="vendor.certifications.length">
+              <li class="list-group-item" *ngFor="let cert of vendor.certifications">{{ cert }}</li>
+            </ul>
+          </div>
+
+          <div class="mb-3">
+            <label>Terms and Conditions</label>
+            <textarea class="form-control" rows="5" [(ngModel)]="termsText" readonly name="termsText"></textarea>
+            <div class="card mt-2 p-3" style="white-space: pre-line;">{{ termsText }}</div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-secondary" type="button" (click)="prevStep()">Back</button>
+            <button class="btn btn-dark" type="submit" [disabled]="registerForm.invalid">Register</button>
+          </div>
         </div>
 
-        <div class="col-md-6 mb-3">
-          <label>GST No</label>
-          <input type="text" class="form-control" name="gstNo" [(ngModel)]="vendor.gstNo">
-        </div>
-        <div class="col-md-6 mb-3">
-          <label>Website</label>
-          <input type="url" class="form-control" name="website" [(ngModel)]="vendor.website">
-        </div>
-
-        <div class="col-md-12 mb-3">
-          <label>Photo Work</label>
-          <input type="text" class="form-control" name="photoWork" [(ngModel)]="vendor.photoWork">
-        </div>
-
-        <div class="col-md-12 mb-3">
-          <label>Address</label>
-          <textarea class="form-control" rows="2" name="address" [(ngModel)]="vendor.address" required></textarea>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label>Password</label>
-          <input type="password" class="form-control" name="password" [(ngModel)]="vendor.password" required>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label>Confirm Password</label>
-          <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="confirmPassword" required>
-        </div>
-
-        <div *ngIf="passwordMismatch" class="text-danger text-center mb-2">
-          Passwords do not match!
-        </div>
-      </div>
-
-      <div class="d-grid mt-2">
-        <button class="btn btn-dark" type="submit" [disabled]="registerForm.invalid">Register</button>
-      </div>
-
-      <div class="text-center mt-3">
-        <a routerLink="/vendor-login" class="text-info">Already registered? Login</a>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
