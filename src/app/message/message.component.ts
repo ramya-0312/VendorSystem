@@ -16,7 +16,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
   newMessage = '';
   typing = false;
   senderName = 'Unknown User';
-  receiverName = 'admin';
+  receiverName = 'kumar';
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('user');
