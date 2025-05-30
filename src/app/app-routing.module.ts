@@ -13,6 +13,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
+import { ImageComponent } from './imageconverter/image/image.component';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
@@ -27,7 +28,9 @@ const routes: Routes = [
   { path: 'user-dashboard',component:UserDashboardComponent},
   { path: 'message',component:MessageComponent},
   { path: 'vendor-list',component:VendorListComponent},
-  {path:'update-profile',component:UpdateProfileComponent}
+  {path:'update-profile',component:UpdateProfileComponent},
+    {path:'image',component:ImageComponent}
+
 ];
 
 @NgModule({

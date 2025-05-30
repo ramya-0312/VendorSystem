@@ -1,0 +1,14 @@
+<p>image works!</p>
+ <input type="file" (change)="onFileSelected($event)" accept="image/*">
+    <div *ngIf="base64Image">
+      <img [src]="base64Image" alt="Selected Image" style="max-width: 300px; max-height: 300px;">
+      <!-- <p *ngIf="base64Image">
+  Base64 Data URL (truncated for display): {{ base64Image?.substring(0, 100) }}...
+</p> -->
+<button (click)="sendImageToBackend()">Click</button>
+    </div>
+    <button (click)="fetchImageFromBackend(1)">Load Image</button>
+
+<!-- <div *ngIf="base64Image">
+  <img [src]="base64Image" alt="Fetched Image" style="max-width: 300px; max-height: 300px;" />
+</div> -->
