@@ -11,20 +11,21 @@ export class UserLoginComponent {
   email = '';
   password = '';
   loginFailed = false;
+  responseMessage = '';
 
   constructor(private http: HttpClient,private router:Router) {}
 
   login() {
-    const payload = {
-      email: this.email,
-      password: this.password
-    };
+  const payload = {
+    email: this.email,
+    password: this.password
+  };
 
     this.http.post('http://localhost:8080/api/users/Login'
 , payload).subscribe({
       next: (res: any) => {
         this.loginFailed = false;
-       
+
         console.log('Login success:', JSON.stringify(res));
      const userdate=    localStorage.setItem('user', JSON.stringify(res));
         this.router.navigate(['/user-dashboard'])
@@ -35,4 +36,4 @@ export class UserLoginComponent {
       }
     });
   }
-}                                                   
+}

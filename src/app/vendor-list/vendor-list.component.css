@@ -1,0 +1,24 @@
+.vendor-card {
+  background-color: #ffffff;
+  transition: transform 0.2s;
+}
+
+.vendor-card:hover {
+  transform: translateY(-5px);
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.profile-section {
+  flex-shrink: 0;
+}
+
+.description-box {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+}

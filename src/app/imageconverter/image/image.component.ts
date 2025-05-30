@@ -45,7 +45,7 @@ export class ImageComponent {
       error: (err) => console.error('Upload failed', err),
     });
 
-    
+
   }
    fetchImageFromBackend(id: number) {
     this.http.get<any>(`http://localhost:8080/api/get-image/3`).subscribe({

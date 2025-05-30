@@ -3,38 +3,59 @@
     <h4 class="text-center mb-4">User Registration</h4>
 
     <form (ngSubmit)="register()" #form="ngForm">
+      <!-- Name -->
       <div class="mb-3">
         <label>Name</label>
         <input type="text" class="form-control" name="name" [(ngModel)]="user.name" required>
       </div>
 
+      <!-- Date of Birth -->
       <div class="mb-3">
         <label>Date of Birth</label>
         <input type="date" class="form-control" name="dob" [(ngModel)]="user.dob" required>
       </div>
 
+      <!-- Phone Number -->
       <div class="mb-3">
         <label>Phone Number</label>
         <input type="tel" class="form-control" name="phone" [(ngModel)]="user.phone" required pattern="[0-9]{10}">
       </div>
 
+      <!-- Email -->
       <div class="mb-3">
         <label>Email</label>
         <input type="email" class="form-control" name="email" [(ngModel)]="user.email" required>
       </div>
 
+      <!-- Password -->
       <div class="mb-3">
         <label>Password</label>
         <input type="password" class="form-control" name="password" [(ngModel)]="user.password" required>
       </div>
 
+      <!-- Confirm Password -->
       <div class="mb-3">
         <label>Confirm Password</label>
         <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="user.confirmPassword" required>
       </div>
 
+      <!-- Location -->
+      <div class="mb-3">
+        <label>Location</label>
+        <input type="text" class="form-control" name="location" [(ngModel)]="user.location" required>
+      </div>
+
+      <!-- Profile Picture -->
+      <div class="mb-3">
+        <label>Profile Picture</label>
+        <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*" required>
+      </div>
+
+      <!-- Submit Button -->
       <div class="d-grid mt-4">
-        <button class="btn btn-primary" type="submit">Register</button>
+        <button class="btn btn-primary" type="submit" [disabled]="isUploading">
+          {{ isUploading ? 'Uploading...' : 'Register' }}
+        </button>
       </div>
     </form>
   </div>
