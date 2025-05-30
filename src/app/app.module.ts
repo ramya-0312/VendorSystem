@@ -20,6 +20,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
+import { ImageComponent } from './imageconverter/image/image.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { UpdateProfileComponent } from './update-profile/update-profile.componen
     UserDashboardComponent,
     MessageComponent,
     VendorListComponent,
-    UpdateProfileComponent
+    UpdateProfileComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,

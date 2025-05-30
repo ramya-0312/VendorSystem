@@ -12,11 +12,13 @@ export class MessageComponent implements OnInit, AfterViewChecked {
 
   constructor(private http: HttpClient) {}
 
-  messages: { from: string, text: string, time: string }[] = [];
+  messages: { from: string, text: string, time: string, profilePic?: string }[] = [];
   newMessage = '';
   typing = false;
   senderName = 'Unknown User';
+  senderPic = '';
   receiverName = 'kumar';
+  receiverPic = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'; 
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('user');
@@ -24,6 +26,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       try {
         const userObj = JSON.parse(storedUser);
         this.senderName = userObj.response?.fullName || userObj.response?.email || 'Unknown User';
+        this.senderPic = userObj.response?.profilePic || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
         this.fetchMessages();
       } catch (e) {
         console.error('Failed to parse user from localStorage', e);
@@ -37,7 +40,8 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       this.messages = data.map(msg => ({
         from: msg.sender === this.senderName ? 'me' : 'other',
         text: msg.message,
-        time: this.formatTime(new Date(msg.createAt))
+        time: this.formatTime(new Date(msg.createAt)),
+        profilePic: msg.sender === this.senderName ? this.senderPic : this.receiverPic
       }));
       this.scrollToBottom();
     });
@@ -48,7 +52,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       const messageText = this.newMessage.trim();
       const time = this.formatTime(new Date());
 
-      this.messages.push({ from: 'me', text: messageText, time });
+      this.messages.push({ from: 'me', text: messageText, time, profilePic: this.senderPic });
       this.newMessage = '';
       this.typing = false;
       this.scrollToBottom();
@@ -60,9 +64,9 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       };
 
       this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
-        next: () => this.fetchMessages(), // Refetch after sending
+        next: () => this.fetchMessages(), // Refresh messages
         error: () => {
-          this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()) });
+          this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()), profilePic: this.receiverPic });
           this.scrollToBottom();
         }
       });

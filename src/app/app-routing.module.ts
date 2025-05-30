@@ -13,7 +13,8 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
-import { AuthGuard } from './auth.guard';
+import { ImageComponent } from './imageconverter/image/image.component';
+
 const routes: Routes = [
   { path: '', component: HomepageComponent },
   { path: 'vendor-login', component: VendorLoginComponent },
@@ -28,10 +29,7 @@ const routes: Routes = [
   { path: 'message',component:MessageComponent},
   { path: 'vendor-list',component:VendorListComponent},
   {path:'update-profile',component:UpdateProfileComponent},
-  { path: 'user-dashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'message', component: MessageComponent, canActivate: [AuthGuard] },
-  { path: 'user-login', component: UserLoginComponent },
-  { path: '', redirectTo: 'user-login', pathMatch: 'full' }
+    {path:'image',component:ImageComponent}
 
 ];
 
