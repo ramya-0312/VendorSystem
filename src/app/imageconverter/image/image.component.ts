@@ -48,7 +48,7 @@ export class ImageComponent {
     
   }
    fetchImageFromBackend(id: number) {
-    this.http.get<any>(`http://localhost:8080/api/get-image/${id}`).subscribe({
+    this.http.get<any>(`http://localhost:8080/api/get-image/3`).subscribe({
       next: (response) => {
         this.base64Image = response.image;
       },
