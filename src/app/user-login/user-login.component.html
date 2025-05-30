@@ -16,6 +16,9 @@
       <div class="d-grid mb-2">
         <button type="submit" class="btn btn-dark">Login</button>
       </div>
+      <div *ngIf="responseMessage" class="alert alert-info mt-3">
+  {{ responseMessage }}
+</div>
 
       <!-- Show only if login fails -->
       <div *ngIf="loginFailed" class="text-danger mb-2 text-center">

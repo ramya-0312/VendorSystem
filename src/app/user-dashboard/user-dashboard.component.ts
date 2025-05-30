@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-dashboard.component.css']
 })
 export class UserDashboardComponent {
-  activeTab = 'message';  
+  activeTab = 'message';
 
   setTab(tab: string) {
     this.activeTab=tab;
