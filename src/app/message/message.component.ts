@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewChecked, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -7,46 +7,62 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css']
 })
-export class MessageComponent implements AfterViewChecked {
+export class MessageComponent implements OnInit, AfterViewChecked {
   @ViewChild('scrollMe') private chatContainer!: ElementRef;
-
-  messages: { from: string; text: string; time: string }[] = [
-    { from: 'me', text: 'Hi!', time: this.formatTime(new Date()) },
-    { from: 'other', text: 'Hello, how can I help you?', time: this.formatTime(new Date()) }
-  ];
-
-  newMessage = '';
-  typing = false;
 
   constructor(private http: HttpClient) {}
 
-  sendMessage() {
+  messages: { from: string, text: string, time: string }[] = [];
+  newMessage = '';
+  typing = false;
+  senderName = 'Unknown User';
+  receiverName = 'kumar';
+
+  ngOnInit(): void {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const userObj = JSON.parse(storedUser);
+        this.senderName = userObj.response?.fullName || userObj.response?.email || 'Unknown User';
+        this.fetchMessages();
+      } catch (e) {
+        console.error('Failed to parse user from localStorage', e);
+      }
+    }
+  }
+
+  fetchMessages(): void {
+    const url = `http://localhost:8080/api/chat/chat?from=${this.senderName}&to=${this.receiverName}`;
+    this.http.get<any[]>(url).subscribe(data => {
+      this.messages = data.map(msg => ({
+        from: msg.sender === this.senderName ? 'me' : 'other',
+        text: msg.message,
+        time: this.formatTime(new Date(msg.createAt))
+      }));
+      this.scrollToBottom();
+    });
+  }
+
+  sendMessage(): void {
     if (this.newMessage.trim()) {
       const messageText = this.newMessage.trim();
       const time = this.formatTime(new Date());
 
-      
       this.messages.push({ from: 'me', text: messageText, time });
       this.newMessage = '';
       this.typing = false;
       this.scrollToBottom();
 
-
       const payload = {
-        sender: 'user',
-        receiver: 'admin',
+        sender: this.senderName,
+        receiver: this.receiverName,
         message: messageText
       };
 
-      // API call
-      this.http.post<any>('https://your-api-url.com/api/chat', payload).subscribe({
-        next: (response) => {
-          const reply = response.reply || 'No reply.';
-          this.messages.push({ from: 'other', text: reply, time: this.formatTime(new Date()) });
-          this.scrollToBottom();
-        },
+      this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
+        next: () => this.fetchMessages(), // Refetch after sending
         error: () => {
-          this.messages.push({ from: 'other', text: 'Error: Unable to get response.', time: this.formatTime(new Date()) });
+          this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()) });
           this.scrollToBottom();
         }
       });
@@ -55,6 +71,13 @@ export class MessageComponent implements AfterViewChecked {
 
   formatTime(date: Date): string {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  simulateTyping(): void {
+    this.typing = true;
+    setTimeout(() => {
+      this.typing = false;
+    }, 2000);
   }
 
   scrollToBottom(): void {

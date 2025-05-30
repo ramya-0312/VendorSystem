@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   standalone:false,
@@ -6,36 +7,24 @@ import { Component } from '@angular/core';
   templateUrl: './vendor-list.component.html',
   styleUrls: ['./vendor-list.component.css']
 })
-export class VendorListComponent {
-  hoveredVendor: any = null;
+export class VendorListComponent implements OnInit {
+  vendors: any[] = [];
 
-  vendors = [
-    {
-      fullName: 'Michael Scott',
-      username: 'michael_scott',
-      role: 'Regional Manager',
-      profilePic: 'https://randomuser.me/api/portraits/men/11.jpg',
-      posts: 428,
-      followers: 1243,
-      following: 57
-    },
-    {
-      fullName: 'Dwight Schrute',
-      username: 'dwight_schrute',
-      role: 'Assistant to the Regional Manager',
-      profilePic: 'https://randomuser.me/api/portraits/men/12.jpg',
-      posts: 310,
-      followers: 892,
-      following: 21
-    },
-    {
-      fullName: 'Jim Halpert',
-      username: 'jim_halpert',
-      role: 'Sales Representative',
-      profilePic: 'https://randomuser.me/api/portraits/men/13.jpg',
-      posts: 150,
-      followers: 950,
-      following: 60
-    }
-  ];
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.fetchVendors();
+  }
+
+  fetchVendors() {
+    this.http.get<any[]>('http://localhost:8080/api/vendors') // Update with actual backend
+      .subscribe({
+        next: data => this.vendors = data,
+        error: err => console.error('Failed to load vendors:', err)
+      });
+  }
+
+  getStars(count: number): number[] {
+    return Array(count).fill(0);
+  }
 }

@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <div class="row" *ngIf="vendors.length > 0; else noData">
+    <div class="col-md-6 mb-4" *ngFor="let vendor of vendors">
+      <div class="vendor-card d-flex p-3 shadow-sm rounded border">
+        <!-- Profile Image -->
+        <div class="profile-section me-3">
+          <img [src]="vendor.profilePic" alt="Profile" class="rounded-circle profile-img" />
+        </div>
+
+        <!-- Vendor Info -->
+        <div class="info-section w-100">
+          <h5 class="mb-1 text-primary">{{ vendor.businessName }}</h5>
+          <p class="mb-1"><strong>Name:</strong> {{ vendor.fullName }}</p>
+          <p class="mb-1"><strong>Category:</strong> {{ vendor.category }}</p>
+          <p class="mb-1">
+            <strong>Rating:</strong>
+            <ng-container *ngFor="let star of getStars(vendor.rating)">
+              <i class="bi bi-star-fill text-warning"></i>
+            </ng-container>
+          </p>
+          <p class="mt-2 description-box">{{ vendor.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Data Template -->
+  <ng-template #noData>
+    <div class="text-center mt-5 text-muted">No vendors found.</div>
+  </ng-template>
+</div>

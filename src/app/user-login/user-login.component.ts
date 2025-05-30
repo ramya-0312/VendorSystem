@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-
+import { Router } from '@angular/router';
 @Component({
   standalone:false,
   selector: 'app-user-login',
@@ -13,7 +13,7 @@ export class UserLoginComponent {
   loginFailed = false;
   responseMessage = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router:Router) {}
 
   login() {
   const payload = {
@@ -21,17 +21,19 @@ export class UserLoginComponent {
     password: this.password
   };
 
-  this.http.post('https://your-api-url.com/api/user/login', payload).subscribe({
-    next: (res: any) => {
-      this.loginFailed = false;
-      this.responseMessage = res.message || 'Login successful';  
-      console.log('Login success:', res);
+    this.http.post('http://localhost:8080/api/users/Login'
+, payload).subscribe({
+      next: (res: any) => {
+        this.loginFailed = false;
 
-    },
-    error: (err) => {
-      this.loginFailed = true;
-      this.responseMessage = err.error?.message || 'Login failed. Please try again.';
-    }
-  });
-}
+        console.log('Login success:', JSON.stringify(res));
+     const userdate=    localStorage.setItem('user', JSON.stringify(res));
+        this.router.navigate(['/user-dashboard'])
+
+      },
+      error: () => {
+        this.loginFailed = true;
+      }
+    });
+  }
 }
