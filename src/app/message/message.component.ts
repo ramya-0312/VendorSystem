@@ -18,7 +18,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
   senderName = 'Unknown User';
   senderPic = '';
   receiverName = 'kumar';
-  receiverPic = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'; 
+  receiverPic = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('user');
@@ -64,7 +64,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       };
 
       this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
-        next: () => this.fetchMessages(), // Refresh messages
+        next: () => this.fetchMessages(), 
         error: () => {
           this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()), profilePic: this.receiverPic });
           this.scrollToBottom();

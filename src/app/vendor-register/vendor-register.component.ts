@@ -1,32 +1,33 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
-  standalone:false,
+  standalone: false,
   selector: 'app-vendor-register',
   templateUrl: './vendor-register.component.html',
 })
 export class VendorRegisterComponent {
   step: number = 1;
-  base64Image: string | null = null;
+
   vendor: any = {
-    businessName: '',
-    email: '',
-    phone: '',
-    password: '',
-    location: '',
-    category: '',
-    experience: '',
-    description: '',
-    base64Image1: '',
-    base64Image: '',
-    reviews: [],
-  };
-   categories: string[] = ['Photography', 'Catering', 'Decoration', 'Event Planning', 'Music', 'Other'];
+  businessName: '',         // fixed spelling
+  email: '',
+  phone: '',
+  password: '',         // fixed typo
+  location: '',
+  category: '',
+  yearsOfExperience: '',
+  servicediscription: '',    // match with backend if that's how your column is spelled
+  portfolioBase64: '',             // base64 string (single image)
+  certificationImageBase64: '',    // base64 string (single image)
+  termsAndCondition: '',     // optional, add if you use this
+};
 
-
+  categories: string[] = ['Photography', 'Catering', 'Decoration', 'Event Planning', 'Music', 'Other'];
+  termsText: string = '';
   newReview: string = '';
 
-  termsText: string = ``;
+  constructor(private http: HttpClient) {}
 
   nextStep(form: any) {
     if (form.valid) this.step++;
@@ -36,40 +37,46 @@ export class VendorRegisterComponent {
     this.step--;
   }
 
-  onFileSelected(event: Event): void {
+  onFileSelected(event: Event, type: 'portfolio' | 'certifications'): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
+
+    if (!input.files || input.files.length === 0) return;
+
+    if (type === 'portfolio') {
       const file = input.files[0];
       const reader = new FileReader();
-
       reader.onload = () => {
-        this.base64Image = reader.result as string;
+        this.vendor.portfolioBase64 = reader.result as string;
+        console.log('Portfolio base64:', this.vendor.portfolioBase64);
       };
-
       reader.readAsDataURL(file);
-    } else {
-      this.base64Image = null;
     }
-  }
 
-  onCertUpload(event: any) {
-    const files = event.target.files;
-    if (files.length) {
-      for (let file of files) {
-        this.vendor.certifications.push(file.name); // save file name or file object
-      }
-    }
-  }
+    if (type === 'certifications') {
+  const file = input.files[0]; // take only one
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.vendor.certificationImageBase64 = reader.result as string;
+    console.log('Certification base64:', this.vendor.certificationImageBase64);
+  };
+  reader.readAsDataURL(file);
+}
 
-  addReview() {
-    if (this.newReview.trim()) {
-      this.vendor.reviews.push(this.newReview.trim());
-      this.newReview = '';
-    }
   }
 
   registerVendor() {
-    console.log('Vendor submitted:', this.vendor);
-    // API call here
+    console.log("Sending vendor data:", this.vendor);
+    console.log(this.vendor.certificationImageBase64)
+    console.log(this.vendor.portfolioBase64)
+    this.http.post('http://localhost:8080/api/vendor/register', this.vendor).subscribe({
+      next: (response) => {
+        console.log('Vendor registered successfully:', response);
+        alert('Vendor registration successful!');
+      },
+      error: (error) => {
+        console.error('Registration failed:', error);
+        alert('Registration failed. Please try again.');
+      }
+    });
   }
 }
