@@ -66,10 +66,10 @@
             <textarea class="form-control" name="description" rows="3" required [(ngModel)]="vendor.description" #desc="ngModel"></textarea>
             <div *ngIf="desc.invalid && desc.touched" class="text-danger">Required</div>
           </div>
-
+<!-- <input type="file" (change)="onFileSelected($event)" accept="image/*"> -->
           <div class="mb-3">
             <label>Portfolio</label>
-            <input type="file" class="form-control" multiple (change)="onPortfolioSelected($event)">
+            <input type="file" class="form-control" multiple (change)="onFileSelected($event)" accept="image/*">
             <ul class="list-group mt-2" *ngIf="vendor.portfolio.length">
               <li class="list-group-item" *ngFor="let file of vendor.portfolio">{{ file }}</li>
             </ul>
@@ -77,7 +77,7 @@
 
           <div class="mb-3">
             <label>Certifications</label>
-            <input type="file" class="form-control" (change)="onCertUpload($event)">
+   <input type="file" class="form-control" multiple (change)="onFileSelected($event)" accept="image/*">
             <ul class="list-group mt-2" *ngIf="vendor.certifications.length">
               <li class="list-group-item" *ngFor="let cert of vendor.certifications">{{ cert }}</li>
             </ul>

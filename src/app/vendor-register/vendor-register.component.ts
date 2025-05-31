@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class VendorRegisterComponent {
   step: number = 1;
-
+  base64Image: string | null = null;
   vendor: any = {
     businessName: '',
     email: '',
@@ -17,8 +17,8 @@ export class VendorRegisterComponent {
     category: '',
     experience: '',
     description: '',
-    certifications: [],
-    portfolio: [],
+    base64Image1: '',
+    base64Image: '',
     reviews: [],
   };
    categories: string[] = ['Photography', 'Catering', 'Decoration', 'Event Planning', 'Music', 'Other'];
@@ -36,12 +36,19 @@ export class VendorRegisterComponent {
     this.step--;
   }
 
-  onPortfolioSelected(event: any) {
-    const files = event.target.files;
-    if (files.length) {
-      for (let file of files) {
-        this.vendor.portfolio.push(file.name); // save file name or file object
-      }
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.base64Image = reader.result as string;
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      this.base64Image = null;
     }
   }
 
