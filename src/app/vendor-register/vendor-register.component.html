@@ -50,7 +50,7 @@
             <label>Years of Experience</label>
 <input type="number" class="form-control" name="yearsOfExperience" required [(ngModel)]="vendor.yearsOfExperience" #exp="ngModel">
             <div *ngIf="exp.invalid && exp.touched" class="text-danger">Required</div>
-          </div>
+          </div>ng
 
           <div class="d-grid">
             <button class="btn btn-dark" type="button" (click)="nextStep(registerForm)">Next</button>
