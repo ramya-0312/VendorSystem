@@ -1,26 +1,44 @@
 <div class="container mt-4">
-  <div *ngIf="vendors.length > 0; else noData">
-    <div class="mb-4" *ngFor="let vendor of vendors">
-      <div class="vendor-card d-flex p-3 shadow-sm rounded border flex-column flex-md-row">
-        <!-- Profile Image -->
-        <div class="profile-section mb-3 mb-md-0 me-md-3 text-center">
-          <img [src]="vendor.portfolioBase64 || 'assets/default-profile.png'" alt="Profile" class="rounded-circle profile-img" />
-        </div>
+  <!-- Category Filter -->
+  <div class="d-flex justify-content-end mb-4">
+    <select id="categoryFilter"
+            class="form-select w-auto rounded-pill px-3 py-2 small"
+            [(ngModel)]="selectedCategory"
+            (change)="onCategoryChange()">
+      <option value="">All Categories</option>
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  </div>
 
-        <!-- Vendor Info -->
-        <div class="info-section w-100">
-          <h5 class="mb-1 text-primary">{{ vendor.businessName }}</h5>
-          <p class="mb-1"><strong>Email:</strong> {{ vendor.email }}</p>
-          <p class="mb-1"><strong>Location:</strong> {{ vendor.location }}</p>
-          <p class="mb-1"><strong>Category:</strong> {{ vendor.category }}</p>
-          <p class="mb-1"><strong>Experience:</strong> {{ vendor.yearsOfExperience }} years</p>
-          <p class="mt-2 description-box">{{ vendor.servicediscription }}</p>
+  <!-- Vendor Cards -->
+  <div *ngIf="paginatedVendors.length > 0; else noData">
+    <div class="mb-4" *ngFor="let vendor of paginatedVendors">
+      <div class="card border-0 shadow mb-4 position-relative">
+        <span class="badge bg-success position-absolute top-0 end-0 m-2">{{ vendor.category }}</span>
+        <div class="card-body d-flex align-items-center">
+          <img [src]="vendor.portfolioBase64 || 'assets/default-profile.png'" 
+               class="rounded-circle me-3"
+               style="width: 70px; height: 70px; object-fit: cover;" />
+          <div>
+            <h5 class="mb-1 text-primary">{{ vendor.businessName }}</h5>
+            <p class="mb-1"><strong>Email:</strong> {{ vendor.email }}</p>
+            <p class="mb-1"><strong>Location:</strong> {{ vendor.location }}</p>
+            <p class="mb-1"><strong>Experience:</strong> {{ vendor.yearsOfExperience }} years</p>
+            <button class="btn btn-outline-light btn-sm mt-2">View Profile</button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-between align-items-center">
+      <button class="btn btn-secondary btn-sm" (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }}</span>
+      <button class="btn btn-secondary btn-sm" (click)="goToNextPage()" [disabled]="(currentPage * pageSize) >= vendors.length">Next</button>
+    </div>
   </div>
 
-  <!-- No Data Template -->
+  <!-- No Data Message -->
   <ng-template #noData>
     <div class="text-center mt-5 text-muted">No vendors found.</div>
   </ng-template>

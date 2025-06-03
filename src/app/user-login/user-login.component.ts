@@ -37,7 +37,8 @@ export class UserLoginComponent {
             phone: res.response?.phone,
             location: res.response?.location,
             dob: res.response?.dob,
-            profilePicture: base64 // 👈 include only if small enough
+            profilePicture: base64 ,// 👈 include only if small enough
+            id:res.response.id,
           };
 
           localStorage.setItem('user', JSON.stringify(userData));
