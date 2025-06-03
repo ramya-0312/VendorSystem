@@ -12,7 +12,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
 
   constructor(private http: HttpClient) {}
 
-  messages: { from: string, text: string, time: string, profilePic?: string }[] = [];
+  messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
   senderName = 'Unknown User';
@@ -52,7 +52,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       const messageText = this.newMessage.trim();
       const time = this.formatTime(new Date());
 
-      this.messages.push({ from: 'me', text: messageText, time, profilePic: this.senderPic });
+      this.messages.push({ from: 'me', text: messageText, time, profilePicture: this.senderPic });
       this.newMessage = '';
       this.typing = false;
       this.scrollToBottom();
@@ -66,7 +66,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
         next: () => this.fetchMessages(), 
         error: () => {
-          this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()), profilePic: this.receiverPic });
+          this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()), profilePicture: this.receiverPic });
           this.scrollToBottom();
         }
       });

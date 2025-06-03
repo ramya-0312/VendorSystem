@@ -39,7 +39,7 @@ export class UserRegisterComponent {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.user.ProfilePicture = reader.result as string;
+        this.user.profilePicture = reader.result as string;
         this.previewUrl = reader.result as string;
         console.log('Profile Pic base64:', this.user.ProfilePicture);
       };
@@ -54,7 +54,7 @@ export class UserRegisterComponent {
       return;
     }
 
-    if (!this.user.ProfilePicture) {
+    if (!this.user.profilePicture) {
       alert('Please upload a profile picture!');
       return;
     }
