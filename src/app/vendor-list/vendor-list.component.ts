@@ -17,7 +17,7 @@ export class VendorListComponent implements OnInit {
   }
 
   fetchVendors() {
-    this.http.get<any[]>('http://localhost:8080/api/vendors') // Update with actual backend
+    this.http.get<any[]>('http://localhost:8080/api/vendors') 
       .subscribe({
         next: data => this.vendors = data,
         error: err => console.error('Failed to load vendors:', err)
