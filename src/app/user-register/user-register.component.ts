@@ -35,17 +35,28 @@ export class UserRegisterComponent {
 
   // Handle profile picture file selection
   onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.user.profilePicture = reader.result as string;
-        this.previewUrl = reader.result as string;
-        console.log('Profile Pic base64:', this.user.ProfilePicture);
-      };
-      reader.readAsDataURL(file);
-    }
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const maxSizeInMB = 3;
+  const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+  // ✅ File size check
+  if (file.size > maxSizeInBytes) {
+    alert(`File is too large. Maximum size allowed is ${maxSizeInMB} MB.`);
+    return;
   }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.user.profilePicture = reader.result as string;
+    this.previewUrl = reader.result as string;
+    console.log('Profile Pic base64:', this.user.profilePicture); // fixed typo: ProfilePicture → profilePicture
+  };
+  reader.readAsDataURL(file);
+}
+
 
   // Register user
   register(): void {

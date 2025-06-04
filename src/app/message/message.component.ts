@@ -15,7 +15,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
   messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
-  senderName = 'Unknown User';
+  senderName = '';
   senderPic = '';
   receiverName = 'kumar';
   receiverPic = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
@@ -25,8 +25,9 @@ export class MessageComponent implements OnInit, AfterViewChecked {
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
-        this.senderName = userObj.response?.fullName || userObj.response?.email || 'Unknown User';
-        this.senderPic = userObj.response?.profilePic || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+        this.senderName = userObj.fullName || userObj.response?.email || 'Unknown User';
+this.senderPic = userObj.profilePicture ;
+
         this.fetchMessages();
       } catch (e) {
         console.error('Failed to parse user from localStorage', e);
@@ -41,7 +42,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
         from: msg.sender === this.senderName ? 'me' : 'other',
         text: msg.message,
         time: this.formatTime(new Date(msg.createAt)),
-        profilePic: msg.sender === this.senderName ? this.senderPic : this.receiverPic
+        profilePicture: msg.sender === this.senderName ? this.senderPic : this.receiverPic
       }));
       this.scrollToBottom();
     });

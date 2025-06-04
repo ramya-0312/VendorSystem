@@ -22,6 +22,7 @@ import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ImageComponent } from './imageconverter/image/image.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,7 @@ import { ImageComponent } from './imageconverter/image/image.component';
     MessageComponent,
     VendorListComponent,
     UpdateProfileComponent,
-    ImageComponent
+    ImageComponent,
   ],
   imports: [
     BrowserModule,

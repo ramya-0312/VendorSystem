@@ -40,7 +40,7 @@ export class VendorListComponent implements OnInit {
       return;
     }
 
-    const params = new HttpParams().set('Category', this.selectedCategory);
+    const params = new HttpParams().set('category', this.selectedCategory);
 
     this.http.get<any[]>('http://localhost:8080/api/vendor/Catagory', { params })
       .subscribe({
