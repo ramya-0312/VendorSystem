@@ -22,7 +22,10 @@ export class UserDashboardComponent {
   }
 
   logout() {
-    // Clear session and redirect
+
+  }
+  confirmLogout(): void {
+   // Clear session and redirect
     localStorage.clear();
     this.router.navigate(['/user-login']);
   }

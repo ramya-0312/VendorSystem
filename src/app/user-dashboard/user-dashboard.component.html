@@ -9,7 +9,9 @@
     </div>
 
     <!-- Logout -->
-    <button class="btn btn-danger"(click)="logout()">Logout</button>
+   <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
+  Logout
+</button>
   </div>
 </nav>
 
@@ -25,4 +27,24 @@
 <div class="container mt-4" *ngIf="activeTab !== 'chat'">
   <app-vendor-list *ngIf="activeTab === 'vendors'"></app-vendor-list>
   <app-update-profile *ngIf="activeTab === 'profile'"></app-update-profile>
+</div>
+<!-- Logout Confirmation Modal -->
+<!-- Custom Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content logout-modal">
+      <div class="modal-header border-0 justify-content-center">
+        <h5 class="modal-title text-center w-100" id="logoutModalLabel">
+          <i class="bi bi-box-arrow-right text-danger fs-3 me-2"></i> Confirm Logout
+        </h5>
+      </div>
+      <div class="modal-body text-center">
+        <p class="mb-0">Are you sure you want to log out?</p>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center gap-3">
+        <button type="button" class="btn cancel-btn px-4" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn confirm-btn px-4" (click)="confirmLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
 </div>

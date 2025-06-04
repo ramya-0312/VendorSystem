@@ -34,9 +34,37 @@ body {
   background-color: #121212;
   font-family: 'Segoe UI', sans-serif;
 }
-.custom-toastr {
-  background-color: #28a745 !important;  /* Bootstrap green */
+
+
+/* Change success toastr background and text color */
+.toast-success {
+  background-color: #fff !important;
+  color: rgb(3, 81, 18) !important;
+  font-weight: bold;
+}
+
+/* Error toast */
+.toast-error {
+  background-color: #fff !important;
+  color: #dc3545 !important;
+}
+
+/* Warning toast */
+.toast-warning {
+  background-color: #fff !important;
+  color: #ffc107!important;
+}
+
+/* Info toast */
+.toast-info {
+  background-color: #03090a !important;
   color: #fff !important;
-  font-weight: 500;
-  text-align: center;
+}
+
+/* Toast container position (optional custom margin/padding) */
+#toast-container > div {
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
