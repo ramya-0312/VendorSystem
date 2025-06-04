@@ -53,6 +53,7 @@ import { ImageComponent } from './imageconverter/image/image.component';
       closeButton: true,
       progressBar: true,
       tapToDismiss: true,
+      preventDuplicates: true,
     })
   ],
   providers: [],

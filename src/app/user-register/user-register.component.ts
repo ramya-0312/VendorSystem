@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: false,
@@ -22,7 +24,7 @@ export class UserRegisterComponent {
   previewUrl: string = '';
   isUploading = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router:Router,private toastr :ToastrService) {}
 
   // Format DOB to yyyy/mm/dd
   private formatDOB(): string {
@@ -61,12 +63,14 @@ export class UserRegisterComponent {
   // Register user
   register(): void {
     if (this.user.password !== this.user.confirmPassword) {
-      alert('Passwords do not match!');
+      //alert('Passwords do not match!');
+      this.toastr.error('Passwords do not match!');
       return;
     }
 
     if (!this.user.profilePicture) {
-      alert('Please upload a profile picture!');
+      //alert('Please upload a profile picture!');
+      this.toastr.warning('Please upload a profile picture!');
       return;
     }
 
@@ -80,11 +84,15 @@ export class UserRegisterComponent {
     this.http.post(apiUrl, formattedUser).subscribe({
       next: (res) => {
         console.log('User registered:', res);
-        alert('User Registered Successfully!');
+       // alert('User Registered Successfully!');
+        this.toastr.success('User Registered Successfully!');
+        this.router.navigate(['/user-login']);
+
       },
       error: (err) => {
         console.error('Registration failed:', err);
-        alert('Registration failed. Please try again.');
+       // alert('Registration failed. Please try again.');
+        this.toastr.error('Registration failed. Please try again.');
       }
     });
   }

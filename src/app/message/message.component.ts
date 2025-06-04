@@ -65,7 +65,7 @@ this.senderPic = userObj.profilePicture ;
       };
 
       this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
-        next: () => this.fetchMessages(), 
+        next: () => this.fetchMessages(),
         error: () => {
           this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()), profilePicture: this.receiverPic });
           this.scrollToBottom();

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   standalone: false,
@@ -14,7 +16,7 @@ export class UserLoginComponent {
   loginFailed = false;
   responseMessage = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router,private toastr:ToastrService) {}
 
   login() {
     const payload = {
@@ -43,9 +45,10 @@ export class UserLoginComponent {
 
           localStorage.setItem('user', JSON.stringify(userData));
         } else {
-          alert('Profile picture too large to store in localStorage!');
+          //alert('Profile picture too large to store in localStorage!');
+          this.toastr.error('Profile picture too large to store in localStorage!');
         }
-
+        this.toastr.success('Login successful!');
         this.router.navigate(['/user-dashboard']);
       },
       error: () => {

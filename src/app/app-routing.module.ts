@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { AuthGuard } from './auth.guard';
 import { RouterModule, Routes } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
 import { VendorLoginComponent } from './vendor-login/vendor-login.component';
@@ -27,9 +27,9 @@ const routes: Routes = [
   { path: 'vendor-reset-password',component:VendorResetPasswordComponent},
   { path: 'user-reset-password',component:UserResetPasswordComponent},
   { path: 'user-dashboard',component:UserDashboardComponent},
-  { path: 'message',component:MessageComponent},
-  { path: 'vendor-list',component:VendorListComponent},
-  {path:'update-profile',component:UpdateProfileComponent},
+  { path: 'message',component:MessageComponent ,canActivate: [AuthGuard]},
+  { path: 'vendor-list',component:VendorListComponent ,canActivate: [AuthGuard]},
+  {path:'update-profile',component:UpdateProfileComponent ,canActivate: [AuthGuard]},
     {path:'image',component:ImageComponent}
 
 ];

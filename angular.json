@@ -34,16 +34,31 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets",
+  "src/favicon.ico"
+
             ],
             "styles": [
                "node_modules/ngx-toastr/toastr.css",
+               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "src/styles.css",
 
               "src/styles.css",
-              "node_modules/bootswatch/dist/darkly/bootstrap.min.css"
+              "node_modules/bootswatch/dist/darkly/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+  "src/styles.css",
+  "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+  "src/styles.css"
+
+
 
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+
+            ]
+
           },
           "configurations": {
             "production": {
@@ -96,15 +111,30 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets",
+  "src/favicon.ico"
+
             ],
             "styles": [
               "src/styles.css",
                "node_modules/ngx-toastr/toastr.css",
+                "node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "src/styles.css",
+   "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+  "src/styles.css",
 
-              "node_modules/bootswatch/dist/darkly/bootstrap.min.css"
+
+
+              "node_modules/bootswatch/dist/darkly/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+  "src/styles.css"
+
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+
+            ]
           }
         }
       }

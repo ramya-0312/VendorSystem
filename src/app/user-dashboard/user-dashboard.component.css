@@ -33,3 +33,54 @@
   color: white;
   position: relative;
 }
+.logout-modal {
+  background-color: #1f1f1f;
+  color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  animation: popUp 0.3s ease-out;
+}
+
+.logout-modal .modal-title {
+  font-weight: 600;
+}
+
+.logout-modal .modal-body p {
+  font-size: 1rem;
+}
+
+.confirm-btn {
+  background-color: #dc3545;
+  color: white;
+  border-radius: 25px;
+  transition: 0.2s;
+}
+
+.confirm-btn:hover {
+  background-color: #bb2d3b;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  color: #ccc;
+  border-radius: 25px;
+  transition: 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #333;
+  color: white;
+  border-color: #444;
+}
+
+@keyframes popUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
