@@ -21,6 +21,7 @@ import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ImageComponent } from './imageconverter/image/image.component';
+import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { ImageComponent } from './imageconverter/image/image.component';
     VendorListComponent,
     UpdateProfileComponent,
     ImageComponent,
+    VendorprofileComponent,
   ],
   imports: [
     BrowserModule,

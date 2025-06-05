@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Router } from '@angular/router';
 
 @Component({
   standalone:false,
-  selector: 'app-vendor-list',
-  templateUrl: './vendor-list.component.html',
-  styleUrls: ['./vendor-list.component.css']
+  selector: 'app-vendorprofile',
+  templateUrl: './vendorprofile.component.html',
+  styleUrls: ['./vendorprofile.component.css']
 })
 
-export class VendorListComponent implements OnInit {
+export class VendorprofileComponent implements OnInit {
   vendors: any[] = [];
   paginatedVendors: any[] = [];
   selectedCategory: string = '';
@@ -24,9 +23,8 @@ export class VendorListComponent implements OnInit {
   currentPage: number = 1;
 
   toggleDetails: { [email: string]: boolean } = {}; // NEW: Track expanded cards
-  navigate: any;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.fetchVendors();
@@ -34,7 +32,6 @@ export class VendorListComponent implements OnInit {
 
   openPanel(vendor: any): void {
   this.selectedVendor = vendor;
-  this.router.navigate(['/vendorprofile'])
 }
 
 getStarsArray(rating: number): number[] {
