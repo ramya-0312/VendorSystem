@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class UserDashboardComponent {
   activeTab = 'message';
+  activaTab='update-profile';
 
   setTab(tab: string) {
     this.activeTab=tab;
@@ -19,6 +20,10 @@ export class UserDashboardComponent {
 
   goTo(path: string) {
     this.router.navigate([`/user-dashboard/${path}`]);
+  }
+
+  switchToChatTab(){
+    this.activeTab = 'message';
   }
 
   logout() {

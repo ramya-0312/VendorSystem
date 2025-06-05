@@ -32,6 +32,7 @@ export class VendorListComponent implements OnInit {
 
   openPanel(vendor: any): void {
   this.selectedVendor = vendor;
+  console.log('Selected vendor:', this.selectedVendor.id);
 }
 
 getStarsArray(rating: number): number[] {
@@ -49,6 +50,8 @@ closePanel(): void {
           this.vendors = data;
           this.currentPage = 1;
           this.updatePaginatedVendors();
+          console.log('Fetched vendors:', this.vendors);
+          localStorage.setItem('vendors', JSON.stringify(this.vendors));
 
           // Initialize toggleDetails map
           data.forEach(v => this.toggleDetails[v.email] = false);
@@ -111,6 +114,7 @@ closePanel(): void {
   }
 
    goToChatTab() {
+    
     const chatTabEl = document.querySelector('chatTab');
     if (chatTabEl) {
       const tab = new this.bootstrap.Tab(chatTabEl);

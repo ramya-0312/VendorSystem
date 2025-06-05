@@ -8,6 +8,15 @@
       <span class="nav-text" (click)="activeTab = 'profile'">Update Profile</span>
     </div>
 
+    <!-- Conditional rendering -->
+<!-- <div *ngIf="activeTab === 'vendors'">
+  <app-vendor (openChat)="switchToChatTab()"></app-vendor>
+</div> -->
+
+<div *ngIf="activeTab === 'chat'">
+  <app-message></app-message>
+</div>
+
     <!-- Logout -->
    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
   Logout
