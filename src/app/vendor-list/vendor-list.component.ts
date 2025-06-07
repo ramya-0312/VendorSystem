@@ -1,47 +1,115 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
+
+declare var bootstrap: any;
 
 @Component({
-  standalone:false,
+  standalone: false,
   selector: 'app-vendor-list',
   templateUrl: './vendor-list.component.html',
   styleUrls: ['./vendor-list.component.css']
 })
-
 export class VendorListComponent implements OnInit {
   vendors: any[] = [];
   paginatedVendors: any[] = [];
   selectedCategory: string = '';
   categories: string[] = ['Photography', 'Catering', 'Decoration', 'Music', 'Makeup'];
   selectedVendor: any = null;
-  bootstrap :any; // Import Bootstrap for tab functionality
+  showReviewBox = false;
+  toggleProfileBase64: string = '';
 
+  rating = 0;
+  reviewText = '';
+  submitted = false;
+  averageRating = '0.0';
+  totalReviews = '0';
+  ratingsCount: { [key: number]: number } = {
+    5: 0,
+    4: 0,
+    3: 0,
+    2: 0,
+    1: 0,
+  };
 
-
+  reviews: any[] = [];
 
   pageSize: number = 5;
   currentPage: number = 1;
+  toggleDetails: { [email: string]: boolean } = {};
 
-  toggleDetails: { [email: string]: boolean } = {}; // NEW: Track expanded cards
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchVendors();
   }
 
+  getPercentage(star: number): number {
+    const total = Object.values(this.ratingsCount).reduce((a, b) => a + b, 0);
+    return total > 0 ? (this.ratingsCount[star] / total) * 100 : 0;
+  }
+
+  formatReview(text: string): string {
+    return text;
+  }
+
   openPanel(vendor: any): void {
-  this.selectedVendor = vendor;
-  console.log('Selected vendor:', this.selectedVendor.id);
-}
+    this.selectedVendor = vendor;
+    this.showReviewBox = false;
+    this.reviews = []; // clear or load specific vendor's reviews
+    this.averageRating = '0.0';
+    this.totalReviews = '0';
+    this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+  }
 
-getStarsArray(rating: number): number[] {
-  return Array(Math.round(rating)).fill(0);
-}
+  closePanel(): void {
+    this.selectedVendor = null;
+  }
 
-closePanel(): void {
-  this.selectedVendor = null;
-}
+  setRating(star: number): void {
+    this.rating = star;
+  }
+
+  submitReview(): void {
+    if (this.rating > 0 && this.reviewText.trim()) {
+      this.submitted = true;
+      this.showReviewBox = false;
+
+      const newReview = {
+        avatar: 'https://i.pravatar.cc/40?img=' + (Math.floor(Math.random() * 70) + 1),
+        rating: this.rating,
+        text: this.reviewText.trim()
+      };
+
+      this.reviews.unshift(newReview);
+
+      if (!this.ratingsCount[this.rating]) {
+        this.ratingsCount[this.rating] = 1;
+      } else {
+        this.ratingsCount[this.rating]++;
+      }
+
+      const total = Object.values(this.ratingsCount).reduce((a, b) => a + b, 0);
+      const weightedSum = Object.entries(this.ratingsCount)
+        .reduce((sum, [star, count]) => sum + (+star * count), 0);
+
+      this.totalReviews = total.toString();
+      this.averageRating = (weightedSum / total).toFixed(1);
+
+      this.rating = 0;
+      this.reviewText = '';
+    } else {
+      alert("Please provide both rating and review.");
+    }
+  }
+
+  getStarsArray(rating: number): number[] {
+    return Array(Math.round(rating)).fill(0);
+  }
+
+  round(value: number): number {
+    return Math.round(value);
+  }
 
   fetchVendors(): void {
     this.http.get<any[]>('http://localhost:8080/api/vendor/getvendorlist')
@@ -50,10 +118,7 @@ closePanel(): void {
           this.vendors = data;
           this.currentPage = 1;
           this.updatePaginatedVendors();
-          console.log('Fetched vendors:', this.vendors);
           localStorage.setItem('vendors', JSON.stringify(this.vendors));
-
-          // Initialize toggleDetails map
           data.forEach(v => this.toggleDetails[v.email] = false);
         },
         error: err => console.error('Failed to load vendors:', err)
@@ -67,15 +132,14 @@ closePanel(): void {
     }
 
     const params = new HttpParams().set('category', this.selectedCategory);
-
     this.http.get<any[]>('http://localhost:8080/api/vendor/Catagory', { params })
       .subscribe({
         next: data => {
           this.vendors = data;
           this.currentPage = 1;
           this.updatePaginatedVendors();
-
           data.forEach(v => this.toggleDetails[v.email] = false);
+          localStorage.setItem('vendors', JSON.stringify(this.vendors));
         },
         error: err => console.error('Failed to load filtered vendors:', err)
       });
@@ -113,13 +177,15 @@ closePanel(): void {
     return Array(Math.round(rating || 0)).fill(0);
   }
 
-   goToChatTab() {
-    
-    const chatTabEl = document.querySelector('chatTab');
-    if (chatTabEl) {
-      const tab = new this.bootstrap.Tab(chatTabEl);
-      tab.show();
-    }
-  }
+  getRounded(value: any): number {
+    return Math.round(Number(value));
+  }
 
+  goToChatTab(): void {
+    const chatTabEl = document.querySelector('#chatTab');
+    if (chatTabEl) {
+      const tab = new bootstrap.Tab(chatTabEl);
+      tab.show();
+    }
+  }
 }

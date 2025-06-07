@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-
+import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomepageComponent } from './homepage/homepage.component';
@@ -21,6 +21,7 @@ import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ImageComponent } from './imageconverter/image/image.component';
+//import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
 
 
 @NgModule({
@@ -40,9 +41,11 @@ import { ImageComponent } from './imageconverter/image/image.component';
     VendorListComponent,
     UpdateProfileComponent,
     ImageComponent,
+    //VendorprofileComponent,
   ],
   imports: [
     BrowserModule,
+    RouterModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,

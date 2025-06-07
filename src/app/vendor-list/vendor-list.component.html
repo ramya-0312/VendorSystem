@@ -49,6 +49,7 @@
   </ng-template>
 
  <!-- Offcanvas Side Panel -->
+  <!-- Vendor Profile Panel -->
 <div class="offcanvas offcanvas-end show"
      tabindex="-1"
      [ngClass]="{ 'd-block': selectedVendor }"
@@ -58,12 +59,12 @@
   <!-- Header -->
   <div class="offcanvas-header border-bottom border-secondary bg-dark text-white">
     <div class="d-flex align-items-center gap-3">
-      <img [src]="selectedVendor.portfolioBase64 || 'assets/default-profile.png'"
+      <img [src]="selectedVendor?.portfolioBase64 || 'assets/default-profile.png'"
            class="rounded"
            style="width: 60px; height: 60px; object-fit: cover;" />
       <div>
-        <h5 class="mb-0 fw-semibold">{{ selectedVendor.businessName }}</h5>
-        <small class="text-muted">{{ selectedVendor.category }}</small>
+        <h5 class="mb-0 fw-semibold">{{ selectedVendor?.businessName }}</h5>
+        <small class="text-muted">{{ selectedVendor?.category }}</small>
       </div>
     </div>
     <button type="button" class="btn-close btn-close-white" (click)="closePanel()"></button>
@@ -71,52 +72,128 @@
 
   <!-- Body -->
   <div class="offcanvas-body p-4">
+
+    <!-- Address -->
     <div class="mb-3">
       <p class="mb-1 small text-muted">📍 Address</p>
-      <p class="fw-medium">{{ selectedVendor.location }}</p>
+      <p class="fw-medium">{{ selectedVendor?.location }}</p>
     </div>
 
+    <!-- Phone -->
     <div class="mb-3">
-      <p class=" mb-1 small text-muted style=">📞 Phone</p>
-      <p class="fw-medium">{{ selectedVendor.phone }}</p>
+      <p class="mb-1 small text-muted">📞 Phone</p>
+      <p class="fw-medium">{{ selectedVendor?.phone }}</p>
     </div>
 
+    <!-- Email -->
     <div class="mb-3">
       <p class="mb-1 small text-muted">📧 Email</p>
-      <p class="fw-medium">{{ selectedVendor.email }}</p>
+      <p class="fw-medium">{{ selectedVendor?.email }}</p>
     </div>
 
+    <!-- Experience -->
     <div class="mb-3">
       <p class="mb-1 small text-muted">🕒 Experience</p>
-      <p class="fw-medium">{{ selectedVendor.yearsOfExperience }} years</p>
+      <p class="fw-medium">{{ selectedVendor?.yearsOfExperience }} years</p>
     </div>
 
+    <!-- Service Description -->
     <div class="mb-3">
       <p class="mb-1 small text-muted">📝 Service Description</p>
-      <p class="fw-medium">{{ selectedVendor.serviceDescription || 'N/A' }}</p>
+      <p class="fw-medium">{{ selectedVendor?.serviceDescription || 'N/A' }}</p>
     </div>
 
-    <div *ngIf="selectedVendor.services?.length" class="mb-3">
+    <!-- Services Offered -->
+    <div *ngIf="selectedVendor?.services?.length" class="mb-3">
       <p class="mb-1 small text-muted">🔧 Services Offered</p>
       <div class="d-flex flex-wrap gap-2">
         <span *ngFor="let service of selectedVendor.services" class="badge rounded-pill bg-info text-dark">{{ service }}</span>
       </div>
     </div>
 
+    <!-- Terms and Conditions -->
     <div class="mb-4">
       <p class="mb-1 small text-muted">📜 Terms & Conditions</p>
       <div class="bg-secondary p-2 rounded small text-white" style="max-height: 120px; overflow-y: auto;">
-        {{ selectedVendor.termsAndCondition || 'Not specified' }}
+        {{ selectedVendor?.termsAndCondition || 'Not specified' }}
       </div>
     </div>
 
-    <!-- Action Buttons -->
-<div class="d-grid gap-2">
-  <a [href]="selectedVendor.website" target="_blank" class="btn btn-outline-info rounded-pill">🌐 Visit Website</a>
-  <button class="btn btn-outline-success rounded-pill">🧭 Get Directions</button>
-  <button class="btn btn-outline-warning rounded-pill">📤 Share Profile</button>
-  <!-- <a [routerLink]="['/chat', selectedVendor.id]" class="btn btn-outline-primary rounded-pill">💬 Chat with Vendor</a> -->
-   <!-- Inside your vendor details component -->
-<button class="btn btn-outline-primary" (click)="goToChatTab()">Chat with Vendor</button>
+    <!-- Add Review Button -->
+<div class="review-section">
+  <button class="btn btn-outline-light rounded-pill mb-3" (click)="showReviewBox = !showReviewBox">
+    Add Review
+  </button>
 
+  <!-- Review Box -->
+  <div *ngIf="showReviewBox" class="review-box mb-4">
+    <label>Give your rating:</label>
+    <div class="stars fs-4 text-warning">
+      <i
+        *ngFor="let star of [1, 2, 3, 4, 5]"
+        class="me-1"
+        [class.fw-bold]="star <= rating"
+        style="cursor: pointer;"
+        (click)="setRating(star)"
+      >★</i>
+    </div>
+
+    <textarea [(ngModel)]="reviewText" placeholder="Write your review..." class="form-control mt-2 mb-2"></textarea>
+    <button class="btn btn-success rounded-pill" (click)="submitReview()">Submit</button>
+  </div>
+
+  <div class="review-summary-container">
+
+    <!-- Overall Rating -->
+    <div class="overall-rating mb-3">
+      <div class="score fs-2">{{ averageRating }}</div>
+      <div class="stars text-warning fs-5">
+        <ng-container *ngFor="let s of [1,2,3,4,5]">
+          <span [class.fw-bold]="s <= getRounded(averageRating)">★</span>
+        </ng-container>
+      </div>
+      <div class="total-reviews text-muted">{{ totalReviews }} reviews</div>
+    </div>
+
+    <!-- Rating Bars -->
+    <div class="rating-bars mb-4">
+      <div *ngFor="let star of [5,4,3,2,1]" class="d-flex align-items-center mb-1">
+        <span class="me-2">{{ star }}</span>
+        <div class="progress flex-grow-1">
+          <div class="progress-bar bg-info" [style.width.%]="getPercentage(star)"></div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Individual Reviews -->
+    <div class="review-list">
+      <div class="review d-flex mb-3" *ngFor="let review of reviews">
+        <img [src]="review.avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;" />
+        <div>
+          <div class="stars text-warning mb-1">
+            <span *ngFor="let s of [1,2,3,4,5]" [class.fw-bold]="s <= review.rating">★</span>
+          </div>
+          <p [innerHTML]="formatReview(review.text)" class="mb-0 small text-light"></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
+
+
+    <!-- Action Buttons -->
+    <div class="d-grid gap-2">
+      <a *ngIf="selectedVendor?.website" [href]="selectedVendor.website" target="_blank" class="btn btn-outline-info rounded-pill">
+        🌐 Visit Website
+      </a>
+      <button class="btn btn-outline-success rounded-pill">🧭 Get Directions</button>
+      <button class="btn btn-outline-warning rounded-pill">📤 Share Profile</button>
+      <button class="btn btn-outline-primary" (click)="goToChatTab()">💬 Chat with Vendor</button>
+    </div>
+
+  </div>
+</div>
+
