@@ -54,14 +54,32 @@ export class VendorListComponent implements OnInit {
   }
 
   openPanel(vendor: any): void {
-    this.selectedVendor = vendor;
-    this.showReviewBox = false;
-    this.reviews = []; // clear or load specific vendor's reviews
-    this.averageRating = '0.0';
-    this.totalReviews = '0';
-    this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+  this.showReviewBox = false;
+  this.reviews = [];
+  this.averageRating = '0.0';
+  this.totalReviews = '0';
+  this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+
+  // Convert services object to array
+  if (vendor.services && typeof vendor.services === 'object') {
+    vendor.services = Object.values(vendor.services); // or Object.keys() if you need keys
   }
 
+  this.fetchReviewsByEmail(vendor.email);
+  
+}
+
+fetchReviewsByEmail(email: string): void {
+  this.http.get<any[]>(`http://localhost:8080/api/ratings/id/${email}`)
+    .subscribe(data => {
+      this.reviews = data;
+      console.log(data)
+      
+  this.selectedVendor = this.reviews;
+      // process ratings here...
+     
+    });
+}
   closePanel(): void {
     this.selectedVendor = null;
   }
@@ -71,37 +89,64 @@ export class VendorListComponent implements OnInit {
   }
 
   submitReview(): void {
-    if (this.rating > 0 && this.reviewText.trim()) {
-      this.submitted = true;
-      this.showReviewBox = false;
+  if (this.rating > 0 && this.reviewText.trim()) {
+    this.submitted = true;
+    this.showReviewBox = false;
 
-      const newReview = {
-        avatar: 'https://i.pravatar.cc/40?img=' + (Math.floor(Math.random() * 70) + 1),
-        rating: this.rating,
-        text: this.reviewText.trim()
-      };
+    const userObj = JSON.parse(localStorage.getItem('user') || '{}');
+const userEmail = userObj.email;  // e.g. set during login
+    // const vendorEmail = localStorage.getItem('vendorEmail'); // e.g. set when viewing a vendor profile
+console.log(userEmail)
+    // if (!userEmail || !vendorEmail) {
+    //   alert("Missing user or vendor email. Please try again.");
+    //   return;
+    // }
 
-      this.reviews.unshift(newReview);
+    const reviewPayload = {
+      usermail: userEmail,
+      vendormail: 'alkjflas@gmail.com',
+      rating: this.rating,
+      review: this.reviewText.trim()
+    };
 
-      if (!this.ratingsCount[this.rating]) {
-        this.ratingsCount[this.rating] = 1;
-      } else {
-        this.ratingsCount[this.rating]++;
-      }
+    this.http.post('http://localhost:8080/api/ratings/add', reviewPayload)
+      .subscribe({
+        next: (response: any) => {
+          const newReview = {
+            avatar: 'https://i.pravatar.cc/40?img=' + (Math.floor(Math.random() * 70) + 1),
+            rating: this.rating,
+            text: this.reviewText.trim()
+          };
 
-      const total = Object.values(this.ratingsCount).reduce((a, b) => a + b, 0);
-      const weightedSum = Object.entries(this.ratingsCount)
-        .reduce((sum, [star, count]) => sum + (+star * count), 0);
+          this.reviews.unshift(newReview);
 
-      this.totalReviews = total.toString();
-      this.averageRating = (weightedSum / total).toFixed(1);
+          if (!this.ratingsCount[this.rating]) {
+            this.ratingsCount[this.rating] = 1;
+          } else {
+            this.ratingsCount[this.rating]++;
+          }
 
-      this.rating = 0;
-      this.reviewText = '';
-    } else {
-      alert("Please provide both rating and review.");
-    }
+          const total = Object.values(this.ratingsCount).reduce((a, b) => a + b, 0);
+          const weightedSum = Object.entries(this.ratingsCount)
+            .reduce((sum, [star, count]) => sum + (+star * count), 0);
+
+          this.totalReviews = total.toString();
+          this.averageRating = (weightedSum / total).toFixed(1);
+
+          this.rating = 0;
+          this.reviewText = '';
+        },
+        error: (err) => {
+          alert('Failed to submit review. Try again later.');
+          console.error(err);
+        }
+      });
+  } else {
+    alert("Please provide both rating and review.");
   }
+}
+
+
 
   getStarsArray(rating: number): number[] {
     return Array(Math.round(rating)).fill(0);
