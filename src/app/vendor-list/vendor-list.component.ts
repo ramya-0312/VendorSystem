@@ -37,6 +37,7 @@ export class VendorListComponent implements OnInit {
   pageSize: number = 5;
   currentPage: number = 1;
   toggleDetails: { [email: string]: boolean } = {};
+  toastr: any;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -66,19 +67,50 @@ export class VendorListComponent implements OnInit {
   }
 
   this.fetchReviewsByEmail(vendor.email);
+  console.log(this.selectedVendor)
   
 }
 
-fetchReviewsByEmail(email: string): void {
-  this.http.get<any[]>(`http://localhost:8080/api/ratings/id/${email}`)
-    .subscribe(data => {
-      this.reviews = data;
-      console.log(data)
+// fetchReviewsByEmail(email: string): void {
+//   this.http.get<any[]>(`http://localhost:8080/api/ratings/id/${email}`)
+//     .subscribe(data => {
+//       this.reviews = data;
+//       console.log(data)
       
-  this.selectedVendor = this.reviews;
-      // process ratings here...
+//   this.selectedVendor = this.reviews;
+//       // process ratings here...
      
-    });
+//     });
+// }
+averageRdfating: number = 0;      // ✅ Correct type
+floorRating: number = 0;
+// totalReviews: number = 0;
+fetchReviewsByEmail(email: string): void {
+  this.http.get<any>(`http://localhost:8080/api/ratings/id/${email}`)
+    .subscribe(data => {
+      this.selectedVendor=data
+      this.averageRdfating = Number(data.averageRating);  // ✅ Typecast here
+      this.floorRating = Math.floor(this.averageRdfating);
+      console.log(this.floorRating)
+      this.totalReviews = data.ratings.length;
+// this.selectedVendor=this.data;
+console.log(this.selectedVendor)
+this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+
+      // Count ratings
+      data.ratings.forEach((r: any) => {
+        const rating = r.ratingValue;
+        if (this.ratingsCount[rating] !== undefined) {
+          this.ratingsCount[rating]++;
+        }
+      });
+      this.reviews = data.ratings.map((r: any) => ({
+        // avatar: 'assets/default-profile.png',
+        rating: r.ratingValue,
+        review: r.review,
+        userEmail: r.userEmail
+      }));
+    });
 }
   closePanel(): void {
     this.selectedVendor = null;
@@ -104,7 +136,7 @@ console.log(userEmail)
 
     const reviewPayload = {
       usermail: userEmail,
-      vendormail: 'alkjflas@gmail.com',
+      vendormail: this.selectedVendor.email,
       rating: this.rating,
       review: this.reviewText.trim()
     };
@@ -112,38 +144,17 @@ console.log(userEmail)
     this.http.post('http://localhost:8080/api/ratings/add', reviewPayload)
       .subscribe({
         next: (response: any) => {
-          const newReview = {
-            avatar: 'https://i.pravatar.cc/40?img=' + (Math.floor(Math.random() * 70) + 1),
-            rating: this.rating,
-            text: this.reviewText.trim()
-          };
-
-          this.reviews.unshift(newReview);
-
-          if (!this.ratingsCount[this.rating]) {
-            this.ratingsCount[this.rating] = 1;
-          } else {
-            this.ratingsCount[this.rating]++;
-          }
-
-          const total = Object.values(this.ratingsCount).reduce((a, b) => a + b, 0);
-          const weightedSum = Object.entries(this.ratingsCount)
-            .reduce((sum, [star, count]) => sum + (+star * count), 0);
-
-          this.totalReviews = total.toString();
-          this.averageRating = (weightedSum / total).toFixed(1);
-
-          this.rating = 0;
-          this.reviewText = '';
+          console.log(response)
+         this.toastr.success('Review submitted successfully! ⭐', 'Success');
         },
         error: (err) => {
-          alert('Failed to submit review. Try again later.');
-          console.error(err);
+                  this.toastr.error('Failed to submit review. Try again later.', 'Error');
+
+          // alert('Failed to submit review. Try again later.');
+          console.log("jot");
         }
       });
-  } else {
-    alert("Please provide both rating and review.");
-  }
+  } 
 }
 
 
@@ -227,10 +238,12 @@ console.log(userEmail)
   }
 
   goToChatTab(): void {
-    const chatTabEl = document.querySelector('#chatTab');
-    if (chatTabEl) {
-      const tab = new bootstrap.Tab(chatTabEl);
-      tab.show();
-    }
+  this.router.navigate(['/message']);
+  let receiver=this.selectedVendor.email;
+    // const chatTabEl = document.querySelector('#chatTab');
+    // if (chatTabEl) {
+    //   const tab = new bootstrap.Tab(chatTabEl);
+    //   tab.show();
+    // }
   }
 }

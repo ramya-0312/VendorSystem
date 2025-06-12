@@ -127,16 +127,20 @@
 
   <!-- Review Box -->
   <div *ngIf="showReviewBox" class="review-box mb-4">
-    <label>Give your rating:</label>
+   
     <div class="stars fs-4 text-warning">
-      <i
-        *ngFor="let star of [1, 2, 3, 4, 5]"
-        class="me-1"
-        [class.fw-bold]="star <= rating"
-        style="cursor: pointer;"
-        (click)="setRating(star)"
-      >★</i>
+      <i 
+    *ngFor="let star of [1, 2, 3, 4, 5]" 
+    class="bi"
+    [ngClass]="{
+      'bi-star-fill text-warning': star <= rating,
+      'bi-star text-text-grey': star > rating
+    }"
+    (click)="setRating(star)"
+    style="cursor: pointer; font-size: 1.5rem;"
+  ></i>
     </div>
+    
 
     <textarea [(ngModel)]="reviewText" placeholder="Write your review..." class="form-control mt-2 mb-2"></textarea>
     <button class="btn btn-success rounded-pill" (click)="submitReview()">Submit</button>
@@ -145,40 +149,71 @@
   <div class="review-summary-container">
 
     <!-- Overall Rating -->
-    <div class="overall-rating mb-3">
-      <div class="score fs-2">{{ averageRating }}</div>
-      <div class="stars text-warning fs-5">
-        <ng-container *ngFor="let s of [1,2,3,4,5]">
-          <span [class.fw-bold]="s <= getRounded(averageRating)">★</span>
-        </ng-container>
-      </div>
-      <div class="total-reviews text-muted">{{ totalReviews }} reviews</div>
-    </div>
+  <div class="overall-rating mb-3">
+  <div class="score fs-2 text-success">{{ averageRdfating }}</div>
+  <div class="stars text-warning fs-5" >
+    <ng-container *ngFor="let s of [1,2,3,4,5]">
+      <span 
+        [ngClass]="{
+          'text-warning fw-bold': s <= floorRating,
+          'text-muted': s > floorRating
+        }"
+      >★</span>
+    </ng-container>
+  </div>
+  <div class="total-reviews text-light">{{ totalReviews }} reviews</div>
+</div>
 
     <!-- Rating Bars -->
     <div class="rating-bars mb-4">
-      <div *ngFor="let star of [5,4,3,2,1]" class="d-flex align-items-center mb-1">
-        <span class="me-2">{{ star }}</span>
-        <div class="progress flex-grow-1">
-          <div class="progress-bar bg-info" [style.width.%]="getPercentage(star)"></div>
-        </div>
+  <div *ngFor="let star of [5,4,3,2,1]" class="d-flex align-items-center mb-1">
+    <!-- Star Label -->
+    <span class="me-2">{{ star }}</span>
+
+    <!-- Progress Bar -->
+    <div class="progress flex-grow-1 me-2" style="height: 20px;">
+      <div class="progress-bar bg-info" 
+           [style.width.%]="getPercentage(star)">
       </div>
     </div>
 
-    <hr />
+    <!-- Count per star -->
+    <span class="text-grey">{{ ratingsCount[star] || 0 }}</span>
+  </div>
+</div>
+
 
     <!-- Individual Reviews -->
-    <div class="review-list">
-      <div class="review d-flex mb-3" *ngFor="let review of reviews">
-        <img [src]="review.avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;" />
-        <div>
-          <div class="stars text-warning mb-1">
-            <span *ngFor="let s of [1,2,3,4,5]" [class.fw-bold]="s <= review.rating">★</span>
-          </div>
-          <p [innerHTML]="formatReview(review.text)" class="mb-0 small text-light"></p>
-        </div>
-      </div>
+   <div class="review-list">
+  <div class="review d-flex mb-3" *ngFor="let review of reviews">
+    <!-- <img [src]="review.avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;" /> -->
+    <div>
+      <!-- Star Rating -->
+      <!-- <div class="stars text-warning mb-1">
+        <span *ngFor="let s of [1,2,3,4,5]" [class.fw-bold]="s <= review.rating">★</span>
+      </div> -->
+      <!-- Star Rating -->
+<div class="stars mb-1">
+  <span 
+    *ngFor="let s of [1,2,3,4,5]" 
+    [ngClass]="{
+      'text-warning fw-bold': s <= review.rating, 
+      'text-muted': s > review.rating
+    }"
+  >
+    ★
+  </span>
+</div>
+
+
+      <!-- Review Text -->
+      <p class="mb-0 small text-light">{{ review.review }}</p>
+
+      <!-- Reviewer Email -->
+      <small class="text-muted">— {{ review.userEmail }}</small>
     </div>
+  </div>
+</div>
 
   </div>
 </div>

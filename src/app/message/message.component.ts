@@ -17,7 +17,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
   typing = false;
   senderName = '';
   senderPic = '';
-  receiverName = 'kumar';
+  receiverName = '';
   receiverPic = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
 
   ngOnInit(): void {

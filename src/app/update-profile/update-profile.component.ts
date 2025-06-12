@@ -79,7 +79,7 @@ export class UpdateProfileComponent {
       dob: this.formatDOB()  // Replace dob with formatted one
     };
 
-    const apiUrl = 'http://localhost:8080/api/users/register';
+    const apiUrl = 'http://localhost:8080/api/users/updated';
 
     this.http.post(apiUrl, formattedUser).subscribe({
       next: (res) => {

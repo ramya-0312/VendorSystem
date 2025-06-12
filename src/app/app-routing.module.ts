@@ -28,7 +28,7 @@ const routes: Routes = [
   { path: 'vendor-reset-password',component:VendorResetPasswordComponent},
   { path: 'user-reset-password',component:UserResetPasswordComponent},
   { path: 'user-dashboard',component:UserDashboardComponent},
-  { path: 'message',component:MessageComponent ,canActivate: [AuthGuard]},
+  { path: 'message',component:MessageComponent },
   { path: 'vendor-list',component:VendorListComponent ,canActivate: [AuthGuard]},
   {path:'update-profile',component:UpdateProfileComponent ,canActivate: [AuthGuard]},
     {path:'image',component:ImageComponent},
