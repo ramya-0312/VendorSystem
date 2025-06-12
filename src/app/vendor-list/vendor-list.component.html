@@ -28,6 +28,7 @@
               <p class="mb-1 small"><strong>Email:</strong> {{ vendor.email }}</p>
               <p class="mb-1 small"><strong>Location:</strong> {{ vendor.location }}</p>
               <p class="mb-1 small"><strong>Experience:</strong> {{ vendor.yearsOfExperience }} years</p>
+
               <button class="btn btn-outline-primary btn-sm mt-2 rounded-pill px-3" (click)="openPanel(vendor)">View Profile</button>
             </div>
           </div>
@@ -66,12 +67,15 @@
         <h5 class="mb-0 fw-semibold">{{ selectedVendor?.businessName }}</h5>
         <small class="text-muted">{{ selectedVendor?.category }}</small>
       </div>
+
     </div>
     <button type="button" class="btn-close btn-close-white" (click)="closePanel()"></button>
   </div>
 
   <!-- Body -->
   <div class="offcanvas-body p-4">
+
+
 
     <!-- Address -->
     <div class="mb-3">
@@ -118,29 +122,60 @@
         {{ selectedVendor?.termsAndCondition || 'Not specified' }}
       </div>
     </div>
+    <div *ngIf="selectedVendor?.portfolioBase64">
+      <p><strong>Portfolio:</strong></p>
+      <img [src]="'data:image/jpeg;base64,' + selectedVendor.portfolioBase64" class="img-fluid rounded mb-2" />
+    </div>
+
+    <div *ngIf="selectedVendor?.certificationImageBase64">
+      <p><strong>Certification:</strong></p>
+      <img [src]="'data:image/jpeg;base64,' + selectedVendor.certificationImageBase64" class="img-fluid rounded mb-2" />
+    </div>
+
+   <div *ngIf="selectedVendor?.workPhotosBase64?.length">
+  <p><strong>PhotoWorks:</strong></p>
+  <div class="d-flex flex-wrap gap-2">
+    <img *ngFor="let photo of selectedVendor.workPhotosBase64"
+         [src]="'data:image/jpeg;base64,' + photo"
+         class="img-thumbnail"
+         style="width: 120px; height: auto;" />
+  </div>
+</div>
+
 
     <!-- Add Review Button -->
 <div class="review-section">
-  <button class="btn btn-outline-light rounded-pill mb-3" (click)="showReviewBox = !showReviewBox">
+  <button class="btn btn-outline-dark rounded-pill mb-3" (click)="showReviewBox = !showReviewBox">
     Add Review
   </button>
 
-  <!-- Review Box -->
-  <div *ngIf="showReviewBox" class="review-box mb-4">
-    <label>Give your rating:</label>
-    <div class="stars fs-4 text-warning">
-      <i
-        *ngFor="let star of [1, 2, 3, 4, 5]"
-        class="me-1"
-        [class.fw-bold]="star <= rating"
-        style="cursor: pointer;"
-        (click)="setRating(star)"
-      >★</i>
-    </div>
-
-    <textarea [(ngModel)]="reviewText" placeholder="Write your review..." class="form-control mt-2 mb-2"></textarea>
-    <button class="btn btn-success rounded-pill" (click)="submitReview()">Submit</button>
+ <!-- Review Box -->
+<div *ngIf="showReviewBox" class="review-box mb-4 "style="background-color: #2c2c3c; padding: 20px; border-radius: 10px;">
+  <label class="form-label">Give your rating:</label>
+  <div class="stars">
+    <span
+      *ngFor="let star of [1, 2, 3, 4, 5]"
+      (click)="setRating(star)"
+      [ngStyle]="{
+        color: star <= rating ? '#ffc107' : '#ccc',
+        cursor: 'pointer',
+        fontSize: '1.8rem',
+        fontWeight: 'bold',
+        marginRight: '8px'
+      }"
+    >★</span>
   </div>
+
+  <textarea
+    [(ngModel)]="reviewText"
+    placeholder="Write your review..."
+    class="form-control mt-3 mb-3"
+    rows="3"
+  ></textarea>
+
+  <button class="btn btn-success rounded-pill" (click)="submitReview()">Submit</button>
+</div>
+
 
   <div class="review-summary-container">
 

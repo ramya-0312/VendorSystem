@@ -52,32 +52,34 @@ export class VendorListComponent implements OnInit {
   formatReview(text: string): string {
     return text;
   }
+openPanel(vendor: any): void {
+  console.log("Opening vendor panel:", vendor);
 
-  openPanel(vendor: any): void {
-  this.showReviewBox = false;
+  this.showReviewBox = true;
   this.reviews = [];
   this.averageRating = '0.0';
   this.totalReviews = '0';
   this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
-  // Convert services object to array
-  if (vendor.services && typeof vendor.services === 'object') {
-    vendor.services = Object.values(vendor.services); // or Object.keys() if you need keys
+  // ✅ Convert object to array if needed
+  if (vendor.workPhotosBase64 && typeof vendor.workPhotosBase64 === 'object') {
+    vendor.workPhotosBase64 = Object.values(vendor.workPhotosBase64);
   }
 
   this.fetchReviewsByEmail(vendor.email);
-  
+  this.selectedVendor = vendor;
 }
+
 
 fetchReviewsByEmail(email: string): void {
   this.http.get<any[]>(`http://localhost:8080/api/ratings/id/${email}`)
     .subscribe(data => {
       this.reviews = data;
       console.log(data)
-      
-  this.selectedVendor = this.reviews;
+
+  //this.selectedVendor = this.reviews;
       // process ratings here...
-     
+
     });
 }
   closePanel(): void {
@@ -163,7 +165,7 @@ console.log(userEmail)
           this.vendors = data;
           this.currentPage = 1;
           this.updatePaginatedVendors();
-          localStorage.setItem('vendors', JSON.stringify(this.vendors));
+         // localStorage.setItem('vendors', JSON.stringify(this.vendors));
           data.forEach(v => this.toggleDetails[v.email] = false);
         },
         error: err => console.error('Failed to load vendors:', err)

@@ -227,3 +227,17 @@ textarea {
 .filled {
   color: #ffc107;
 }
+.review-box {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+}
+
+.stars {
+  margin-bottom: 10px;
+}
+.star {
+  cursor: pointer;
+  padding: 2px;
+}
