@@ -32,7 +32,9 @@ export class VendorListComponent implements OnInit {
     1: 0,
   };
 
+
   reviews: any[] = [];
+
 
   pageSize: number = 5;
   currentPage: number = 1;
@@ -71,15 +73,23 @@ openPanel(vendor: any): void {
 }
 
 
+//
+averageRdfating: number = 0;      // ✅ Correct type
+floorRating: number = 0;
+// totalReviews: number = 0;
 fetchReviewsByEmail(email: string): void {
-  this.http.get<any[]>(`http://localhost:8080/api/ratings/id/${email}`)
+  this.http.get<any>(`http://localhost:8080/api/ratings/id/${email}`)
     .subscribe(data => {
-      this.reviews = data;
-      console.log(data)
+      this.averageRdfating = Number(data.averageRating);  // ✅ Typecast here
+      this.floorRating = Math.floor(this.averageRdfating);
+      this.totalReviews = data.ratings.length;
 
-  //this.selectedVendor = this.reviews;
-      // process ratings here...
-
+      this.reviews = data.ratings.map((r: any) => ({
+        // avatar: 'assets/default-profile.png',
+        rating: r.ratingValue,
+        review: r.review,
+        userEmail: r.userEmail
+      }));
     });
 }
   closePanel(): void {
@@ -106,7 +116,7 @@ console.log(userEmail)
 
     const reviewPayload = {
       usermail: userEmail,
-      vendormail: 'alkjflas@gmail.com',
+      vendormail:this.selectedVendor.e,
       rating: this.rating,
       review: this.reviewText.trim()
     };

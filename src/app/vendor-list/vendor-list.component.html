@@ -122,25 +122,28 @@
         {{ selectedVendor?.termsAndCondition || 'Not specified' }}
       </div>
     </div>
-    <div *ngIf="selectedVendor?.portfolioBase64">
-      <p><strong>Portfolio:</strong></p>
-      <img [src]="'data:image/jpeg;base64,' + selectedVendor.portfolioBase64" class="img-fluid rounded mb-2" />
-    </div>
 
-    <div *ngIf="selectedVendor?.certificationImageBase64">
-      <p><strong>Certification:</strong></p>
-      <img [src]="'data:image/jpeg;base64,' + selectedVendor.certificationImageBase64" class="img-fluid rounded mb-2" />
-    </div>
-
-   <div *ngIf="selectedVendor?.workPhotosBase64?.length">
+    <!-- PhotoWorks -->
+    <div *ngIf="selectedVendor?.portfolioBase64?.length">
   <p><strong>PhotoWorks:</strong></p>
-  <div class="d-flex flex-wrap gap-2">
-    <img *ngFor="let photo of selectedVendor.workPhotosBase64"
+  <div class="d-flex flex-wrap gap-3">
+    <img *ngFor="let photo of selectedVendor.portfolioBase64"
          [src]="'data:image/jpeg;base64,' + photo"
          class="img-thumbnail"
-         style="width: 120px; height: auto;" />
+         style="width: 150px; height: 150px; object-fit: cover;" />
   </div>
 </div>
+    <!-- Certification Image -->
+<div *ngIf="selectedVendor?.certificationImageBase64?.length">
+  <p><strong>Certification:</strong></p>
+  <div class="d-flex flex-wrap gap-3">
+    <img *ngFor="let cert of selectedVendor.certificationImageBase64"
+         [src]="'data:image/jpeg;base64,' + cert"
+         class="img-thumbnail"
+         style="width: 150px; height: 150px; object-fit: cover;" />
+  </div>
+</div>
+
 
 
     <!-- Add Review Button -->
@@ -180,7 +183,7 @@
   <div class="review-summary-container">
 
     <!-- Overall Rating -->
-    <div class="overall-rating mb-3">
+    <!-- <div class="overall-rating mb-3">
       <div class="score fs-2">{{ averageRating }}</div>
       <div class="stars text-warning fs-5">
         <ng-container *ngFor="let s of [1,2,3,4,5]">
@@ -188,7 +191,17 @@
         </ng-container>
       </div>
       <div class="total-reviews text-muted">{{ totalReviews }} reviews</div>
-    </div>
+    </div> -->
+    <!-- Overall Rating -->
+    <div class="overall-rating mb-3">
+  <div class="score fs-2">{{ averageRating }}</div>
+  <div class="stars text-warning fs-5">
+    <ng-container *ngFor="let s of [1,2,3,4,5]">
+      <span [class.fw-bold]="s <= floorRating">★</span>
+    </ng-container>
+  </div>
+  <div class="total-reviews text-muted">{{ totalReviews }} reviews</div>
+</div>
 
     <!-- Rating Bars -->
     <div class="rating-bars mb-4">
@@ -203,7 +216,7 @@
     <hr />
 
     <!-- Individual Reviews -->
-    <div class="review-list">
+    <!-- <div class="review-list">
       <div class="review d-flex mb-3" *ngFor="let review of reviews">
         <img [src]="review.avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;" />
         <div>
@@ -215,6 +228,23 @@
       </div>
     </div>
 
+  </div>
+</div> -->
+<div class="review-list">
+  <div class="review d-flex mb-3" *ngFor="let review of reviews">
+    <!-- <img [src]="review.avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;" /> -->
+    <div>
+      <!-- Star Rating -->
+      <div class="stars text-warning mb-1">
+        <span *ngFor="let s of [1,2,3,4,5]" [class.fw-bold]="s <= review.rating">★</span>
+      </div>
+
+      <!-- Review Text -->
+      <p class="mb-0 small text-light">{{ review.review }}</p>
+
+      <!-- Reviewer Email -->
+      <small class="text-muted">— {{ review.userEmail }}</small>
+    </div>
   </div>
 </div>
 

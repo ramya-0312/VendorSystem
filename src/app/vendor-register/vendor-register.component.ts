@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: false,
@@ -9,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class VendorRegisterComponent {
   step: number = 1;
 
+  constructor(private http: HttpClient, private toastr: ToastrService, private router: Router) {}
 
   vendor: any = {
   businessName: '',         // fixed spelling
@@ -30,7 +33,12 @@ export class VendorRegisterComponent {
   termsText: string = '';
   newReview: string = '';
 
-  constructor(private http: HttpClient) {}
+  //constructor(private http: HttpClient) {}
+
+  removeImage(type: 'photoWorks' | 'certifications', index: number) {
+  this.vendor[type].splice(index, 1);
+}
+
 
   nextStep(form: any) {
     if (form.valid) this.step++;
@@ -74,11 +82,14 @@ export class VendorRegisterComponent {
     this.http.post('http://localhost:8080/api/vendor/register', this.vendor).subscribe({
       next: (response) => {
         console.log('Vendor registered successfully:', response);
-        alert('Vendor registration successful!');
+        this.toastr.success('Vendor registration successful!');
+        this.router.navigate(['/vendor-login']);
+        //alert('Vendor registration successful!');
       },
       error: (error) => {
         console.error('Registration failed:', error);
-        alert('Registration failed. Please try again.');
+        this.toastr.error('Registration failed. Please try again.');
+        //alert('Registration failed. Please try again.');
       }
     });
   }

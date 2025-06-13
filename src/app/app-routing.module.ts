@@ -15,6 +15,7 @@ import { MessageComponent } from './message/message.component';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ImageComponent } from './imageconverter/image/image.component';
+import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
 //import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'vendor-list',component:VendorListComponent ,canActivate: [AuthGuard]},
   {path:'update-profile',component:UpdateProfileComponent ,canActivate: [AuthGuard]},
     {path:'image',component:ImageComponent},
+    {path:'vendor-dashboard',component:VendorDashboardComponent },
     //{path:'vendorprofile',component:VendorprofileComponent}
 
 ];

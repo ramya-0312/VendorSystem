@@ -76,7 +76,11 @@ export class UpdateProfileComponent {
 
     const formattedUser = {
       ...this.user,
-      dob: this.formatDOB()  // Replace dob with formatted one
+      dob: null,
+      password:null,
+      confirmPassword:null
+
+
     };
 
     const apiUrl = 'http://localhost:8080/api/users/register';
