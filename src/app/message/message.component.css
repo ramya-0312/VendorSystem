@@ -65,3 +65,21 @@
   border: 1px solid #ccc;
   margin-right: 10px;
 }
+.bg-gradient-selected {
+  background: linear-gradient(to right, #434343, #000000);
+}
+
+.btn-gradient {
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  color: white;
+  border: none;
+}
+
+.btn-gradient:hover {
+  opacity: 0.9;
+}
+
+input::placeholder {
+  color: #ccc;
+}
+

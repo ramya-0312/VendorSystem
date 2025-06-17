@@ -1,31 +1,81 @@
-<div class="container d-flex justify-content-center mt-4">
-  <div class="card shadow-lg" style="width: 100%; max-width: 600px; height: 80vh;">
-    <div class="card-header bg-primary text-white">
-      Chat
-    </div>
+<div class="container-fluid mt-3">
+  <div class="row" style="height: 85vh;">
 
-    <div #scrollMe class="card-body overflow-auto" style="height: 65vh;">
-      <div *ngFor="let msg of messages" class="mb-3 d-flex" [ngClass]="{'justify-content-end': msg.from === 'me', 'justify-content-start': msg.from !== 'me'}">
-        <div class="d-flex align-items-end" [ngClass]="{'flex-row-reverse': msg.from === 'me'}">
-          <!-- Profile Picture -->
-          <img [src]="msg.profilePicture" class="rounded-circle me-2 ms-2" width="35" height="35" alt="Profile" />
+    <!-- Contacts Panel -->
+    <div class="col-md-4 px-0" style="background: #121212; color: #fff; border-right: 1px solid #2c2c2c;">
+      <div class="px-3 py-3 border-bottom border-secondary bg-gradient-primary text-white">
+        <h5 class="mb-0">Messages</h5>
+      </div>
 
-          <!-- Message Bubble -->
-          <div>
-            <span class="badge bg-secondary">{{ msg.text }}</span>
-            <div class="text-muted" style="font-size: 0.75rem;">{{ msg.time }}</div>
+      <div class="contacts-scroll" style="overflow-y: auto; max-height: calc(85vh - 64px);">
+        <div *ngFor="let contact of contacts"
+             class="d-flex align-items-center px-3 py-2 contact-item"
+             [class.bg-dark]="receiverName === contact.name"
+             (click)="selectContact(contact)"
+             style="cursor: pointer; transition: background-color 0.2s;">
+          <img [src]="contact.profilePicture" class="rounded-circle me-3" width="45" height="45" />
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between">
+              <strong class="text-light">{{ contact.name }}</strong>
+            </div>
+            <small class="text-muted">{{ contact.lastMessage || 'Tap to chat' }}</small>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card-footer">
-      <form (ngSubmit)="sendMessage()">
-        <div class="input-group">
-          <input type="text" [(ngModel)]="newMessage" name="message" class="form-control" placeholder="Type a message" required />
-          <button type="submit" class="btn btn-primary">Send</button>
+    <!-- Chat Window -->
+    <div class="col-md-8 px-0 d-flex justify-content-center" style="background-color: #1e1e1e; color: #fff;">
+      <div *ngIf="receiverName" class="card shadow w-100 border-0"
+           style="max-width: 600px; height: 85vh; background-color: #1e1e1e; display: flex; flex-direction: column;">
+
+        <!-- Header -->
+        <div class="card-header bg-gradient-primary text-white d-flex align-items-center border-0">
+          <img [src]="receiverPic" class="rounded-circle me-2" width="40" height="40" />
+          <strong>{{ receiverName }}</strong>
         </div>
-      </form>
+
+        <!-- Messages Body -->
+        <div #scrollMe class="card-body overflow-auto px-3 py-2"
+             style="flex-grow: 1; background-color: #121212;">
+          <div *ngFor="let msg of messages" class="mb-3 d-flex"
+               [ngClass]="{ 'justify-content-end': msg.from === 'me', 'justify-content-start': msg.from !== 'me' }">
+            <div class="d-flex align-items-end" [ngClass]="{ 'flex-row-reverse': msg.from === 'me' }">
+              <img [src]="msg.profilePicture" class="rounded-circle mx-2" width="35" height="35" />
+              <div>
+                <div class="px-3 py-2 rounded-4"
+                     [ngClass]="msg.from === 'me' ? 'bg-gradient-primary text-white' : 'bg-dark text-light border'">
+                  {{ msg.text }}
+                </div>
+                <div class="text-muted small mt-1">{{ msg.time }}</div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="typing" class="text-muted small">Typing...</div>
+        </div>
+
+        <!-- Input -->
+        <div class="card-footer bg-dark border-0">
+          <form (ngSubmit)="sendMessage()">
+            <div class="input-group">
+              <input type="text"
+                     [(ngModel)]="newMessage"
+                     name="message"
+                     class="form-control bg-secondary text-white border-0 rounded-start-pill"
+                     placeholder="Type a message"
+                     (keydown)="simulateTyping()"
+                     required />
+              <button type="submit" class="btn btn-primary rounded-end-pill px-4">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div *ngIf="!receiverName"
+           class="d-flex align-items-center justify-content-center w-100"
+           style="height: 85vh;">
+        <p class="text-muted fs-5">👈 Select a contact to start chatting</p>
+      </div>
     </div>
   </div>
 </div>

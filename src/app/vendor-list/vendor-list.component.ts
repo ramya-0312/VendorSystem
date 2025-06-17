@@ -32,13 +32,12 @@ export class VendorListComponent implements OnInit {
     1: 0,
   };
 
-
   reviews: any[] = [];
-
 
   pageSize: number = 5;
   currentPage: number = 1;
   toggleDetails: { [email: string]: boolean } = {};
+  toastr: any;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -54,36 +53,57 @@ export class VendorListComponent implements OnInit {
   formatReview(text: string): string {
     return text;
   }
-openPanel(vendor: any): void {
-  console.log("Opening vendor panel:", vendor);
 
-  this.showReviewBox = true;
+  openPanel(vendor: any): void {
+  this.showReviewBox = false;
   this.reviews = [];
   this.averageRating = '0.0';
   this.totalReviews = '0';
   this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
-  // ✅ Convert object to array if needed
-  if (vendor.workPhotosBase64 && typeof vendor.workPhotosBase64 === 'object') {
-    vendor.workPhotosBase64 = Object.values(vendor.workPhotosBase64);
+  // Convert services object to array
+  if (vendor.services && typeof vendor.services === 'object') {
+    vendor.services = Object.values(vendor.services); // or Object.keys() if you need keys
   }
 
   this.fetchReviewsByEmail(vendor.email);
-  this.selectedVendor = vendor;
+  console.log(this.selectedVendor)
+
 }
 
+// fetchReviewsByEmail(email: string): void {
+//   this.http.get<any[]>(http://localhost:8080/api/ratings/id/${email})
+//     .subscribe(data => {
+//       this.reviews = data;
+//       console.log(data)
 
-//
+//   this.selectedVendor = this.reviews;
+//       // process ratings here...
+
+//     });
+// }
 averageRdfating: number = 0;      // ✅ Correct type
 floorRating: number = 0;
 // totalReviews: number = 0;
 fetchReviewsByEmail(email: string): void {
   this.http.get<any>(`http://localhost:8080/api/ratings/id/${email}`)
     .subscribe(data => {
+      this.selectedVendor=data
       this.averageRdfating = Number(data.averageRating);  // ✅ Typecast here
       this.floorRating = Math.floor(this.averageRdfating);
+      console.log(this.floorRating)
       this.totalReviews = data.ratings.length;
+// this.selectedVendor=this.data;
+console.log(this.selectedVendor)
+this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
+      // Count ratings
+      data.ratings.forEach((r: any) => {
+        const rating = r.ratingValue;
+        if (this.ratingsCount[rating] !== undefined) {
+          this.ratingsCount[rating]++;
+        }
+      });
       this.reviews = data.ratings.map((r: any) => ({
         // avatar: 'assets/default-profile.png',
         rating: r.ratingValue,
@@ -116,7 +136,7 @@ console.log(userEmail)
 
     const reviewPayload = {
       usermail: userEmail,
-      vendormail:this.selectedVendor.e,
+      vendormail: this.selectedVendor.email,
       rating: this.rating,
       review: this.reviewText.trim()
     };
@@ -124,29 +144,7 @@ console.log(userEmail)
     this.http.post('http://localhost:8080/api/ratings/add', reviewPayload)
       .subscribe({
         next: (response: any) => {
-          const newReview = {
-            avatar: 'https://i.pravatar.cc/40?img=' + (Math.floor(Math.random() * 70) + 1),
-            rating: this.rating,
-            text: this.reviewText.trim()
-          };
-
-          this.reviews.unshift(newReview);
-
-          if (!this.ratingsCount[this.rating]) {
-            this.ratingsCount[this.rating] = 1;
-          } else {
-            this.ratingsCount[this.rating]++;
-          }
-
-          const total = Object.values(this.ratingsCount).reduce((a, b) => a + b, 0);
-          const weightedSum = Object.entries(this.ratingsCount)
-            .reduce((sum, [star, count]) => sum + (+star * count), 0);
-
-          this.totalReviews = total.toString();
-          this.averageRating = (weightedSum / total).toFixed(1);
-
-          this.rating = 0;
-          this.reviewText = '';
+          this.toastr.success('Login successful!');
         },
         error: (err) => {
           alert('Failed to submit review. Try again later.');
@@ -175,7 +173,7 @@ console.log(userEmail)
           this.vendors = data;
           this.currentPage = 1;
           this.updatePaginatedVendors();
-         // localStorage.setItem('vendors', JSON.stringify(this.vendors));
+          localStorage.setItem('vendors', JSON.stringify(this.vendors));
           data.forEach(v => this.toggleDetails[v.email] = false);
         },
         error: err => console.error('Failed to load vendors:', err)
@@ -189,7 +187,7 @@ console.log(userEmail)
     }
 
     const params = new HttpParams().set('category', this.selectedCategory);
-    this.http.get<any[]>('http://localhost:8080/api/vendor/Catagory', { params })
+    this.http.get<any[]>(`http://localhost:8080/api/vendor/Category`, { params })
       .subscribe({
         next: data => {
           this.vendors = data;
