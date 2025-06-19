@@ -144,17 +144,16 @@ console.log(userEmail)
     this.http.post('http://localhost:8080/api/ratings/add', reviewPayload)
       .subscribe({
         next: (response: any) => {
-          console.log(response)
-         this.toastr.success('Review submitted successfully! ⭐', 'Success');
+          this.toastr.success('Login successful!');
         },
         error: (err) => {
-                  this.toastr.error('Failed to submit review. Try again later.', 'Error');
-
-          // alert('Failed to submit review. Try again later.');
-          console.log("jot");
+          alert('Failed to submit review. Try again later.');
+          console.error(err);
         }
       });
-  } 
+  } else {
+    alert("Please provide both rating and review.");
+  }
 }
 
 
@@ -238,12 +237,10 @@ console.log(userEmail)
   }
 
   goToChatTab(): void {
-  this.router.navigate(['/message']);
-  let receiver=this.selectedVendor.email;
-    // const chatTabEl = document.querySelector('#chatTab');
-    // if (chatTabEl) {
-    //   const tab = new bootstrap.Tab(chatTabEl);
-    //   tab.show();
-    // }
+    const chatTabEl = document.querySelector('#chatTab');
+    if (chatTabEl) {
+      const tab = new bootstrap.Tab(chatTabEl);
+      tab.show();
+    }
   }
 }

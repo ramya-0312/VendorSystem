@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class VendorRegisterComponent {
   step: number = 1;
 
+
   vendor: any = {
   businessName: '',         // fixed spelling
   email: '',
@@ -19,8 +20,10 @@ export class VendorRegisterComponent {
   yearsOfExperience: '',
   servicediscription: '',    // match with backend if that's how your column is spelled
   portfolioBase64: '',             // base64 string (single image)
-  certificationImageBase64: '',    // base64 string (single image)
-  termsAndCondition: '',     // optional, add if you use this
+  certificationImageBase64: '',
+  photoWorksbase64: [],  // base64 string (single image)
+  termsAndCondition: '',
+
 };
 
   categories: string[] = ['Photography', 'Catering', 'Decoration', 'Event Planning', 'Music', 'Other'];
@@ -37,7 +40,7 @@ export class VendorRegisterComponent {
     this.step--;
   }
 
-  onFileSelected(event: Event, type: 'portfolio' | 'certifications'): void {
+  onFileSelected(event: Event, type: 'portfolio' | 'certifications' | 'photoWorks'): void {
     const input = event.target as HTMLInputElement;
 
     if (!input.files || input.files.length === 0) return;

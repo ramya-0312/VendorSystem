@@ -67,27 +67,41 @@
             <div *ngIf="desc.invalid && desc.touched" class="text-danger">Required</div>
           </div>
 <!-- <input type="file" (change)="onFileSelected($event)" accept="image/*"> -->
-          <div class="mb-3">
+         <!-- Portfolio (Multiple Upload) -->
+<div class="mb-3">
   <label>Portfolio</label>
-  <input type="file" class="form-control" (change)="onFileSelected($event, 'portfolio')" accept="image/*">
-  <div *ngIf="vendor.portfolio" class="mt-2">
-    <img [src]="vendor.portfolio" alt="Portfolio Preview" class="img-thumbnail" style="max-height: 200px;">
+  <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'portfolio')" accept="image/*">
+  <div class="mt-2 d-flex flex-wrap gap-2">
+    <img *ngFor="let img of vendor.portfolio" [src]="img" alt="Portfolio Preview" class="img-thumbnail" style="max-height: 120px;">
   </div>
 </div>
 
-<!-- Certifications -->
+<!-- Photo Works (Multiple Upload) -->
+<!-- Portfolio (Multiple Images) -->
+<div class="mb-3">
+  <label>Portfolio</label>
+  <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'portfolio')" accept="image/*">
+  <div class="mt-2 d-flex flex-wrap gap-2">
+    <img *ngFor="let img of vendor.portfolio" [src]="img" class="img-thumbnail" style="max-height: 120px;">
+  </div>
+</div>
+
+<!-- Photo Works (Multiple Images) -->
+<div class="mb-3">
+  <label>Photo Works</label>
+  <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'photoWorks')" accept="image/*">
+  <div class="mt-2 d-flex flex-wrap gap-2">
+    <img *ngFor="let img of vendor.photoWorks" [src]="img" class="img-thumbnail" style="max-height: 120px;">
+  </div>
+</div>
+
+<!-- Certifications (Multiple Images) -->
 <div class="mb-3">
   <label>Certifications</label>
   <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'certifications')" accept="image/*">
-  <div *ngIf="vendor.certifications" class="mt-2">
-    <img [src]="vendor.certifications" alt="Portfolio Preview" class="img-thumbnail" style="max-height: 200px;">
+  <div class="mt-2 d-flex flex-wrap gap-2">
+    <img *ngFor="let img of vendor.certifications" [src]="img" class="img-thumbnail" style="max-height: 120px;">
   </div>
-</div>
-
-          <div class="mb-3">
-  <label for="termsText" class="form-label">Terms and Conditions</label>
-  <textarea class="form-control" rows="5" name="termsAndCondition" required [(ngModel)]="vendor.termsAndCondition"></textarea>
-
 </div>
 
           <div class="d-flex justify-content-between">
