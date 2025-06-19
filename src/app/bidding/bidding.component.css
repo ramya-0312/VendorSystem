@@ -1,0 +1,15 @@
+.bidding-box {
+  width: 100%;
+  max-width: 500px;
+ 
+  border-radius: 16px;
+}
+
+
+select, textarea, button {
+  width: 100%;
+}
+
+button {
+  margin-top: 10px;
+}

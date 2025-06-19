@@ -1,0 +1,19 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-white">
+  <div class="bidding-box card p-4 shadow">
+    <h5 class="mb-3">Place Your Bid</h5>
+
+    <div class="mb-2">
+      <label for="category">Select Category:</label>
+      <select [(ngModel)]="selectedCategory" class="form-select">
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="message">Your Message:</label>
+      <textarea [(ngModel)]="message" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button class="btn btn-primary" (click)="sendBid()">Send Bid</button>
+  </div>
+</div>

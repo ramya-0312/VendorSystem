@@ -15,10 +15,15 @@ export class MessageComponent implements OnInit, AfterViewChecked {
   messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
+
   senderName = '';
+  senderEmail = '';
   senderPic = '';
+
   receiverName = '';
-  receiverPic = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  receiverPic = '';
+
+  contacts: any[] = [];
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('user');
@@ -26,13 +31,60 @@ export class MessageComponent implements OnInit, AfterViewChecked {
       try {
         const userObj = JSON.parse(storedUser);
         this.senderName = userObj.fullName || userObj.response?.email || 'Unknown User';
-this.senderPic = userObj.profilePicture ;
+        this.senderEmail = userObj.email || userObj.response?.email || '';
+        this.senderPic = userObj.profilePicture;
 
-        this.fetchMessages();
+        this.fetchContacts(); // Get contacts dynamically
       } catch (e) {
         console.error('Failed to parse user from localStorage', e);
       }
     }
+
+
+    // this.contacts = [
+    //   {
+    //     name: 'Kumar',
+    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/147/147144.png',
+    //     lastMessage: 'sdadfsgrgvhgfhfh'
+    //   },
+    //   {
+    //     name: 'Ramya',
+    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/194/194938.png',
+    //     lastMessage: 'nkjutrechg'
+    //   },
+    //   {
+    //     name: 'vijay',
+    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/2922/2922522.png',
+    //     lastMessage: 'mjjuyghvb'
+    //   }
+    // ];
+
+
+
+  }
+
+  fetchContacts(): void {
+    const url = `http://localhost:8080/api/chat/receivers?sender=${this.senderName}`;
+    console.log(this.senderEmail);
+    this.http.get<any[]>(url).subscribe({
+      next: (data) => {
+        this.contacts = data;
+        console.log(this.contacts)
+        // Auto-select the first contact if available
+        if (this.contacts.length > 0) {
+          this.selectContact(this.contacts[0]);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load contacts', err);
+      }
+    });
+  }
+
+  selectContact(contact: any): void {
+    this.receiverName = contact.receiver;
+    this.receiverPic = contact.profilePicture;
+    this.fetchMessages();
   }
 
   fetchMessages(): void {
@@ -67,7 +119,12 @@ this.senderPic = userObj.profilePicture ;
       this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
         next: () => this.fetchMessages(),
         error: () => {
-          this.messages.push({ from: 'other', text: 'Error: Unable to send.', time: this.formatTime(new Date()), profilePicture: this.receiverPic });
+          this.messages.push({
+            from: 'other',
+            text: 'Error: Unable to send.',
+            time: this.formatTime(new Date()),
+            profilePicture: this.receiverPic
+          });
           this.scrollToBottom();
         }
       });

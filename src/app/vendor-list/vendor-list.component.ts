@@ -68,18 +68,18 @@ export class VendorListComponent implements OnInit {
 
   this.fetchReviewsByEmail(vendor.email);
   console.log(this.selectedVendor)
-  
+
 }
 
 // fetchReviewsByEmail(email: string): void {
-//   this.http.get<any[]>(`http://localhost:8080/api/ratings/id/${email}`)
+//   this.http.get<any[]>(http://localhost:8080/api/ratings/id/${email})
 //     .subscribe(data => {
 //       this.reviews = data;
 //       console.log(data)
-      
+
 //   this.selectedVendor = this.reviews;
 //       // process ratings here...
-     
+
 //     });
 // }
 averageRdfating: number = 0;      // ✅ Correct type
@@ -109,8 +109,8 @@ this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
         rating: r.ratingValue,
         review: r.review,
         userEmail: r.userEmail
-      }));
-    });
+      }));
+    });
 }
   closePanel(): void {
     this.selectedVendor = null;
@@ -187,7 +187,7 @@ console.log(userEmail)
     }
 
     const params = new HttpParams().set('category', this.selectedCategory);
-    this.http.get<any[]>('http://localhost:8080/api/vendor/Catagory', { params })
+    this.http.get<any[]>(`http://localhost:8080/api/vendor/Category`, { params })
       .subscribe({
         next: data => {
           this.vendors = data;

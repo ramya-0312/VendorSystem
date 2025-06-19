@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./update-profile.component.css']
 })
 export class UpdateProfileComponent {
+  
   user: any = {
+    id: '',
     fullName: '',
     dob: '',
     phone: '',
@@ -18,11 +20,19 @@ export class UpdateProfileComponent {
     password: '',
     confirmPassword: '',
     location: '',
-    profilePicture: ''
+    profilePicture: '',
+    
   };
 
   previewUrl: string = '';
   isUploading = false;
+ngOnInit(): void {
+    const userString = localStorage.getItem("user");
+    if (userString !== null) {
+      const userData = JSON.parse(userString);
+      this.user.id = userData.id;}else {
+      console.error("User data not found in localStorage");
+    }}
 
   constructor(private http: HttpClient,private router:Router,private toastr :ToastrService) {}
 
@@ -49,7 +59,18 @@ export class UpdateProfileComponent {
     alert(`File is too large. Maximum size allowed is ${maxSizeInMB} MB.`);
     return;
   }
+//  let anser=console.log(localStorage.getItem("user"))
+const userString = localStorage.getItem("user");
 
+if (userString !== null) {
+  const userData = JSON.parse(userString);
+  const userId = userData.id;
+  console.log(userId); // Use userId as needed
+} else {
+  console.error("User data not found in localStorage");
+}
+
+// console.log(userId); 
   const reader = new FileReader();
   reader.onload = () => {
     this.user.profilePicture = reader.result as string;
@@ -76,7 +97,12 @@ export class UpdateProfileComponent {
 
     const formattedUser = {
       ...this.user,
-      dob: this.formatDOB()  // Replace dob with formatted one
+      dob: null,
+      password:null,
+      confirmPassword:null,
+     
+
+
     };
 
     const apiUrl = 'http://localhost:8080/api/users/updated';
