@@ -1,3 +1,4 @@
+import { BiddingComponent } from './bidding/bidding.component';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from './auth.guard';
 import { RouterModule, Routes } from '@angular/router';
@@ -17,6 +18,7 @@ import { UpdateProfileComponent } from './update-profile/update-profile.componen
 import { ImageComponent } from './imageconverter/image/image.component';
 import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
 //import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
+//import{BiddingComponent} from './bidding/bidding.component';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
@@ -34,6 +36,7 @@ const routes: Routes = [
   {path:'update-profile',component:UpdateProfileComponent ,canActivate: [AuthGuard]},
     {path:'image',component:ImageComponent},
     {path:'vendor-dashboard',component:VendorDashboardComponent },
+    {path:'bidding',component:BiddingComponent },
     //{path:'vendorprofile',component:VendorprofileComponent}
 
 ];
