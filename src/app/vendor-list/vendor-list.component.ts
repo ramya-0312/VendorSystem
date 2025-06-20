@@ -18,7 +18,7 @@ export class VendorListComponent implements OnInit {
   selectedVendor: any = null;
   showReviewBox = false;
   toggleProfileBase64: string = '';
-
+stroningimage='';
   rating = 0;
   reviewText = '';
   submitted = false;
@@ -88,7 +88,10 @@ floorRating: number = 0;
 fetchReviewsByEmail(email: string): void {
   this.http.get<any>(`http://localhost:8080/api/ratings/id/${email}`)
     .subscribe(data => {
-      this.selectedVendor=data
+      this.selectedVendor=(data)
+this.stroningimage=this.selectedVendor.portfolioBase64;
+console.log(this.stroningimage)
+
       this.averageRdfating = Number(data.averageRating);  // ✅ Typecast here
       this.floorRating = Math.floor(this.averageRdfating);
       console.log(this.floorRating)
@@ -173,7 +176,7 @@ console.log(userEmail)
           this.vendors = data;
           this.currentPage = 1;
           this.updatePaginatedVendors();
-          localStorage.setItem('vendors', JSON.stringify(this.vendors));
+          // localStorage.setItem('vendors', JSON.stringify(this.vendors));
           data.forEach(v => this.toggleDetails[v.email] = false);
         },
         error: err => console.error('Failed to load vendors:', err)
@@ -187,7 +190,7 @@ console.log(userEmail)
     }
 
     const params = new HttpParams().set('category', this.selectedCategory);
-    this.http.get<any[]>(`http://localhost:8080/api/vendor/Category`, { params })
+    this.http.get<any[]>(`http://localhost:8080/api/vendor/Catagory?`, { params })
       .subscribe({
         next: data => {
           this.vendors = data;

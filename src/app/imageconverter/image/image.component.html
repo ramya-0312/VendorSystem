@@ -1,14 +1,29 @@
-<p>image works!</p>
- <input type="file" (change)="onFileSelected($event)" accept="image/*">
-    <div *ngIf="base64Image">
-      <img [src]="base64Image" alt="Selected Image" style="max-width: 300px; max-height: 300px;">
-      <!-- <p *ngIf="base64Image">
-  Base64 Data URL (truncated for display): {{ base64Image?.substring(0, 100) }}...
-</p> -->
-<button (click)="sendImageToBackend()">Click</button>
-    </div>
-    <button (click)="fetchImageFromBackend(1)">Load Image</button>
+<div>
+  <h3>Upload Work Photos</h3>
 
-<!-- <div *ngIf="base64Image">
-  <img [src]="base64Image" alt="Fetched Image" style="max-width: 300px; max-height: 300px;" />
-</div> -->
+  <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" />
+  <br /><br />
+
+  <input type="file" (change)="onFileSelected($event)" multiple />
+  <br /><br />
+
+  <button (click)="uploadImages()">Upload</button>
+</div>
+<div>
+  <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" />
+  <button (click)="getWorkImages()">View Photos</button>
+</div>
+
+<table *ngIf="base64Images.length > 0" border="1">
+  <tr>
+    <th>#</th>
+    <th>Image</th>
+  </tr>
+  <tr *ngFor="let img of base64Images; let i = index">
+    <td>{{ i + 1 }}</td>
+    <td>
+      <img [src]="'data:image/jpeg;base64,' + img" alt="Work Image" width="150" />
+    </td>
+  </tr>
+</table>
+

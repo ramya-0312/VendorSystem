@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-image',
@@ -8,51 +9,54 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './image.component.css'
 })
 export class ImageComponent {
-  base64Image: string | null = null;
-  imageId: number =2;
+  vendorId: number | null = null;
+  selectedFiles: File[] = [];
+  base64Images: string[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) {}
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        this.base64Image = reader.result as string;
-      };
-
-      reader.readAsDataURL(file);
-    } else {
-      this.base64Image = null;
-    }
+  onFileSelected(event: any) {
+    this.selectedFiles = Array.from(event.target.files);
   }
 
-  sendImageToBackend(): void {
-    if (!this.base64Image) {
-      console.warn('No image selected!');
-      return;
-    }
-
-    const payload = {
-      image: this.base64Image,
-      name: "vijay"
-    };
-
-    this.http.post('http://localhost:8080/api/upload-image', payload).subscribe({
-      next: (res) => console.log('Image uploaded successfully', res),
-      error: (err) => console.error('Upload failed', err),
-    });
-
-
+  uploadImages() {
+  if (!this.vendorId || this.selectedFiles.length === 0) {
+    this.toastr.error('Vendor ID and files are required');
+    return;
   }
-   fetchImageFromBackend(id: number) {
-    this.http.get<any>(`http://localhost:8080/api/get-image/3`).subscribe({
-      next: (response) => {
-        this.base64Image = response.image;
+
+  const formData = new FormData();
+  this.selectedFiles.forEach(file => formData.append('files', file));
+  formData.append('vendorId', this.vendorId.toString());
+
+  this.http.post(`http://localhost:8080/api/vendor/${this.vendorId}/upload-work-photos`, formData)
+    .subscribe({
+      next: (res: any) => {
+        this.toastr.success(res.message || 'Images uploaded successfully!');
+        this.selectedFiles = [];
       },
-      error: (err) => console.error('Image load failed', err),
+      error: err => {
+        console.error(err);
+        this.toastr.error('Upload failed!');
+      }
     });
+}
+getWorkImages() {
+  if (!this.vendorId) {
+    this.toastr.error('Please enter Vendor ID');
+    return;
   }
+
+  this.http.get<string[]>(`http://localhost:8080/api/vendor/${this.vendorId}/work-photos`)
+    .subscribe({
+      next: (images) => {
+        this.base64Images = images;
+        this.toastr.success('Photos loaded!');
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('Failed to load images');
+      }
+    });
+}
 }
