@@ -246,4 +246,10 @@ console.log(userEmail)
       tab.show();
     }
   }
+  getImageSrc(base64: string): string {
+  if (base64.startsWith('data:image')) {
+    return base64; // Already a complete data URI
+  }
+  return `data:image/jpeg;base64,${base64}`; // Or png, adjust based on actual content
+}
 }

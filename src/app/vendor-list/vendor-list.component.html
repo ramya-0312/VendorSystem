@@ -59,7 +59,7 @@
   <!-- Header -->
   <div class="offcanvas-header border-bottom border-secondary bg-dark text-white">
     <div class="d-flex align-items-center gap-3">
-      <img [src]="selectedVendor.stroningimage || 'assets/default-profile.png'"
+      <img [src]="selectedVendor.portfolioBase64 || 'assets/default-profile.png'"
            class="rounded"
            style="width: 60px; height: 60px; object-fit: cover;" />
       <div>
@@ -218,7 +218,17 @@
   </div>
 </div>
 
-
+<div *ngIf="selectedVendor?.workPhotosBase64?.length" class="mb-4">
+  <p class="mb-1 small text-muted">📸 Work Portfolio</p>
+  <div class="d-flex flex-wrap gap-3">
+    <img
+      *ngFor="let photo of selectedVendor.workPhotosBase64"
+      [src]=getImageSrc(photo)
+      alt="Work photo"
+      class="rounded shadow-sm"
+      style="width: 150px; height: 150px; object-fit: cover;"
+    />
+  </div>
     <!-- Action Buttons -->
     <div class="d-grid gap-2">
       <a *ngIf="selectedVendor?.website" [href]="selectedVendor.website" target="_blank" class="btn btn-outline-info rounded-pill">
