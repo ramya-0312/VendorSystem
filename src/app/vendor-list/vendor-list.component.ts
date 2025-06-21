@@ -11,6 +11,17 @@ declare var bootstrap: any;
   styleUrls: ['./vendor-list.component.css']
 })
 export class VendorListComponent implements OnInit {
+
+  showChatBox: boolean = false;
+//chatMessages: { sender: string; receiver: string; content: string; timestamp?: Date }[] = [];
+chatInput: string = '';
+senderEmail: string = '';
+//senderEmail = 'user@email.com'; // from localStorage
+senderPic = ''; // or null if not available
+
+vendorEmail = 'vendor@email.com';
+vendorPic = ''; // or null if not available
+
   vendors: any[] = [];
   paginatedVendors: any[] = [];
   selectedCategory: string = '';
@@ -38,12 +49,93 @@ stroningimage='';
   currentPage: number = 1;
   toggleDetails: { [email: string]: boolean } = {};
   toastr: any;
+  message: string = '';
+  chatMessages = [
+  {
+    sender: this.senderEmail,
+    senderPic: '', // Optional: provide image URL
+    content: 'Hello!'
+  },
+
+];
+  selectedVendorPic: string = '';
+  //senderPic: string = 'assets/default-profile.png'; // Default profile picture
 
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchVendors();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  this.senderEmail = user.email || 'guest@example.com';
+  this.fetchVendors();
+}
+toggleChat() {
+  this.showChatBox = !this.showChatBox;
+  this.chatInput = '';
+  this.fetchChatMessages();
+}
+
+sendMessage() {
+  if (this.chatInput.trim()) {
+    const message = {
+      sender: this.senderEmail,
+      receiver: this.selectedVendor.email,
+      content: this.chatInput.trim(),
+      timestamp: new Date()
+    };
+
+    this.http.post('http://localhost:8080/api/chat/send', message).subscribe({
+      next: () => {
+        // 👇 Add this line to match the expected type
+        this.chatMessages.push({
+          sender: this.senderEmail,
+          senderPic: this.getProfilePic(this.senderEmail),  // use your helper
+          content: this.chatInput.trim()
+        });
+
+        this.chatInput = '';
+      },
+      error: err => console.error('Failed to send message:', err)
+    });
   }
+}
+
+
+
+
+fetchChatMessages() {
+  this.http.get<any[]>(`http://localhost:8080/api/chat/conversation`, {
+    params: {
+      sender: this.senderEmail,
+      receiver: this.selectedVendor.email
+    }
+  }).subscribe(data => {
+    this.chatMessages = data;
+  });
+}
+
+getInitials(name: string): string {
+  if (!name) return '';
+  const parts = name.trim().split(' ');
+  return parts.length >= 2
+    ? (parts[0][0] + parts[1][0]).toUpperCase()
+    : parts[0][0].toUpperCase();
+}
+
+getProfilePic(sender: string): string {
+  if (sender === this.senderEmail) {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.profilePic && user.profilePic !== ''
+      ? user.profilePic
+      : 'assets/default-profile.png';
+  } else {
+    return this.selectedVendor?.stroningimage && this.selectedVendor?.stroningimage !== ''
+      ? this.selectedVendor.stroningimage
+      : 'assets/default-profile.png';
+  }
+}
+
+
+
 
   getPercentage(star: number): number {
     const total = Object.values(this.ratingsCount).reduce((a, b) => a + b, 0);
@@ -65,6 +157,8 @@ stroningimage='';
   if (vendor.services && typeof vendor.services === 'object') {
     vendor.services = Object.values(vendor.services); // or Object.keys() if you need keys
   }
+  this.selectedVendor = vendor;
+
 
   this.fetchReviewsByEmail(vendor.email);
   console.log(this.selectedVendor)

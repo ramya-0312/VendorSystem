@@ -241,3 +241,15 @@ textarea {
   cursor: pointer;
   padding: 2px;
 }
+.profile-placeholder {
+  width: 36px;
+  height: 36px;
+  background-color: #6c757d;
+  color: white;
+  font-weight: bold;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
