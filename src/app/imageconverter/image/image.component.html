@@ -1,29 +1,25 @@
-<div>
-  <h3>Upload Work Photos</h3>
+<div class="card-container">
+  <div class="card">
+    <h3>Upload Work Photos</h3>
 
-  <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" />
-  <br /><br />
+    <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" class="input" />
+    <input type="file" (change)="onFileSelected($event)" multiple class="input" />
 
-  <input type="file" (change)="onFileSelected($event)" multiple />
-  <br /><br />
+    <button (click)="uploadImages()" class="btn">Upload</button>
+  </div>
 
-  <button (click)="uploadImages()">Upload</button>
+  <div class="card">
+    <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" class="input" />
+    <button (click)="getWorkImages()" class="btn">View Photos</button>
+  </div>
+
+  <div class="card" *ngIf="base64Images.length > 0">
+    <h4>Uploaded Work Images</h4>
+    <div class="image-grid">
+      <div class="image-box" *ngFor="let img of base64Images; let i = index">
+        <img [src]="'data:image/jpeg;base64,' + img" alt="Work Image" />
+        <p>#{{ i + 1 }}</p>
+      </div>
+    </div>
+  </div>
 </div>
-<div>
-  <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" />
-  <button (click)="getWorkImages()">View Photos</button>
-</div>
-
-<table *ngIf="base64Images.length > 0" border="1">
-  <tr>
-    <th>#</th>
-    <th>Image</th>
-  </tr>
-  <tr *ngFor="let img of base64Images; let i = index">
-    <td>{{ i + 1 }}</td>
-    <td>
-      <img [src]="'data:image/jpeg;base64,' + img" alt="Work Image" width="150" />
-    </td>
-  </tr>
-</table>
-

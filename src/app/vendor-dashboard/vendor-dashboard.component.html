@@ -5,7 +5,7 @@
     <div class="d-flex gap-4">
       <span class="nav-text" (click)="activeTab = 'chat'">Chat</span>
       <span class="nav-text" (click)="activeTab = 'vendors'">Vendors</span>
-      <span class="nav-text" (click)="activeTab = 'profile'">Update Profile</span>
+      <span class="nav-text" (click)="activeTab = 'profile'">Update Work Photos</span>
       <span class="nav-text" (click)="activeTab = 'bidding'">Bidding</span>
 
     </div>
@@ -37,8 +37,8 @@
 <!-- Other Component Views -->
 <div class="container mt-4" *ngIf="activeTab !== 'chat'">
   <app-vendor-list *ngIf="activeTab === 'vendors'"></app-vendor-list>
-  <app-update-profile *ngIf="activeTab === 'profile'"></app-update-profile>
-  <app-bidding *ngIf="activeTab === 'bidding'"></app-bidding> 
+  <app-image *ngIf="activeTab === 'profile'"></app-image>
+  <app-bidding *ngIf="activeTab === 'bidding'"></app-bidding>
 </div>
 <!-- Logout Confirmation Modal -->
 <!-- Custom Logout Modal -->

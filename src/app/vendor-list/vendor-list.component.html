@@ -229,6 +229,7 @@
       style="width: 150px; height: 150px; object-fit: cover;"
     />
   </div>
+  </div>
     <!-- Action Buttons -->
     <div class="d-grid gap-2">
       <a *ngIf="selectedVendor?.website" [href]="selectedVendor.website" target="_blank" class="btn btn-outline-info rounded-pill">
@@ -236,8 +237,82 @@
       </a>
       <button class="btn btn-outline-success rounded-pill">🧭 Get Directions</button>
       <button class="btn btn-outline-warning rounded-pill">📤 Share Profile</button>
-      <button class="btn btn-outline-primary" (click)="goToChatTab()">💬 Chat with Vendor</button>
+      <button class="btn btn-outline-primary" (click)="toggleChat()">💬 Chat with Vendor</button>
     </div>
 
+
+ <!-- Chat Box -->
+<div *ngIf="showChatBox" class="chat-box rounded bg-dark text-light p-3 mt-3"
+     style="height: 300px; overflow-y: auto; border: 1px solid #444;">
+
+  <div class="chat-messages mb-3" style="height: 220px; overflow-y: auto;">
+    <div *ngFor="let msg of chatMessages" class="d-flex mb-2"
+         [ngClass]="{ 'justify-content-end': msg.sender === senderEmail, 'justify-content-start': msg.sender !== senderEmail }">
+
+      <!-- VENDOR AVATAR (LEFT) -->
+<ng-container *ngIf="msg.sender !== senderEmail">
+  <div class="me-2">
+    <!-- If vendorPic is valid -->
+    <ng-container *ngIf="vendorPic && vendorPic !== '' && vendorPic !== null; else defaultVendorIcon">
+      <img [src]="vendorPic"
+           alt="Vendor"
+           class="rounded-circle"
+           style="width: 36px; height: 36px; object-fit: cover;" />
+    </ng-container>
+
+    <!-- Fallback to icon -->
+    <ng-template #defaultVendorIcon>
+      <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+           style="width: 36px; height: 36px;">
+        <i class="bi bi-person-fill text-white" style="font-size: 1.2rem;"></i>
+      </div>
+    </ng-template>
+  </div>
+</ng-container>
+
+
+      <!-- MESSAGE BUBBLE -->
+      <div>
+        <span class="badge"
+              [ngClass]="{
+                'bg-primary text-white': msg.sender === senderEmail,
+                'bg-light text-dark': msg.sender !== senderEmail
+              }">
+          {{ msg.message}}
+        </span>
+      </div>
+
+      <!-- USER AVATAR (RIGHT) -->
+<ng-container *ngIf="msg.sender === senderEmail">
+  <div class="ms-2">
+    <ng-container *ngIf="senderPic && senderPic !== '' && senderPic !== null; else defaultUserIcon">
+      <img [src]="senderPic"
+           alt="You"
+           class="rounded-circle"
+           style="width: 36px; height: 36px; object-fit: cover;" />
+    </ng-container>
+
+    <ng-template #defaultUserIcon>
+      <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+           style="width: 36px; height: 36px;">
+        <i class="bi bi-person-fill text-white" style="font-size: 1.2rem;"></i>
+      </div>
+    </ng-template>
+  </div>
+</ng-container>
+
+    </div>
+  </div>
+
+  <!-- INPUT FIELD -->
+  <div class="input-group">
+    <input type="text" class="form-control" [(ngModel)]="chatInput"
+           (keyup.enter)="sendMessage()" placeholder="Type a message..." />
+    <button class="btn btn-success" (click)="sendMessage()">Send</button>
   </div>
 </div>
+
+    </div>
+  </div>
+  </div>
+
