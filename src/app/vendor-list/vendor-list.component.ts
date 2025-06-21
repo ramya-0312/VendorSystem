@@ -13,6 +13,8 @@ declare var bootstrap: any;
 export class VendorListComponent implements OnInit {
 
   showChatBox: boolean = false;
+  chatMessages: { sender: string; senderPic?: string; content: string; timestamp?: Date }[] = [];
+
 //chatMessages: { sender: string; receiver: string; content: string; timestamp?: Date }[] = [];
 chatInput: string = '';
 senderEmail: string = '';
@@ -50,14 +52,7 @@ stroningimage='';
   toggleDetails: { [email: string]: boolean } = {};
   toastr: any;
   message: string = '';
-  chatMessages = [
-  {
-    sender: this.senderEmail,
-    senderPic: '', // Optional: provide image URL
-    content: 'Hello!'
-  },
-
-];
+ 
   selectedVendorPic: string = '';
   //senderPic: string = 'assets/default-profile.png'; // Default profile picture
 
@@ -85,10 +80,10 @@ sendMessage() {
 
     this.http.post('http://localhost:8080/api/chat/send', message).subscribe({
       next: () => {
-        // 👇 Add this line to match the expected type
+
         this.chatMessages.push({
           sender: this.senderEmail,
-          senderPic: this.getProfilePic(this.senderEmail),  // use your helper
+          senderPic: this.getProfilePic(this.senderEmail),
           content: this.chatInput.trim()
         });
 

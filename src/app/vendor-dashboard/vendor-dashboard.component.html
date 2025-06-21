@@ -1,28 +1,41 @@
+<!-- Navbar -->
 <nav class="navbar navbar-dark bg-dark px-4">
   <div class="container-fluid justify-content-between">
+    <div class="d-flex gap-4 align-items-center">
 
-    <!-- Left Nav Items -->
-    <div class="d-flex gap-4">
       <span class="nav-text" (click)="activeTab = 'chat'">Chat</span>
+
+      <!-- Bell Icon with Badge -->
+      <span class="nav-text position-relative" data-bs-toggle="dropdown" style="cursor: pointer;">
+        <i class="bi bi-bell-fill text-light fs-5"></i>
+        <span *ngIf="unreadCount > 0"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              style="font-size: 0.6rem;">
+          {{ unreadCount }}
+        </span>
+      </span>
+
+      <!-- Notification Dropdown -->
+      <ul class="dropdown-menu p-2" style="width: 300px;">
+        <li *ngFor="let note of notifications" class="mb-2">
+          <div class="d-flex flex-column">
+            <strong class="text-dark">{{ note.sender }}</strong>
+            <small class="text-muted">{{ note.message }}</small>
+            <div class="mt-2 d-flex gap-2 justify-content-end">
+              <button class="btn btn-sm btn-outline-secondary" (click)="markAsLeft(note.id)">Leave</button>
+              <button class="btn btn-sm btn-success" (click)="openChatFromNotification(note.sender)">Chat</button>
+            </div>
+          </div>
+        </li>
+        <li *ngIf="notifications.length === 0" class="text-center text-muted">No notifications</li>
+      </ul>
+
       <span class="nav-text" (click)="activeTab = 'vendors'">Vendors</span>
       <span class="nav-text" (click)="activeTab = 'profile'">Update Work Photos</span>
       <span class="nav-text" (click)="activeTab = 'bidding'">Bidding</span>
-
     </div>
 
-    <!-- Conditional rendering -->
-<!-- <div *ngIf="activeTab === 'vendors'">
-  <app-vendor (openChat)="switchToChatTab()"></app-vendor>
-</div> -->
-
-<!-- <div *ngIf="activeTab === 'chat'">
-  <app-message></app-message>
-</div> -->
-
-    <!-- Logout -->
-   <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
-  Logout
-</button>
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
   </div>
 </nav>
 
@@ -40,6 +53,8 @@
   <app-image *ngIf="activeTab === 'profile'"></app-image>
   <app-bidding *ngIf="activeTab === 'bidding'"></app-bidding>
 </div>
+
+
 <!-- Logout Confirmation Modal -->
 <!-- Custom Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">

@@ -12,6 +12,10 @@ import { HttpClient } from '@angular/common/http';
 export class VendorDashboardComponent {
   activeTab = 'message';
   activaTab='update-profile';
+  unreadCount: number = 0;
+  notifications: any[] = [];
+  userEmail: string = '';
+
 
   setTab(tab: string) {
     this.activeTab=tab;
@@ -19,6 +23,32 @@ export class VendorDashboardComponent {
 
 
   constructor(private router: Router, private toastr: ToastrService, private http: HttpClient) {}
+
+  ngOnInit() {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  this.userEmail = user.email;
+
+  this.fetchNotifications();
+}
+
+fetchNotifications() {
+  this.http.get<any[]>(`http://localhost:8080/api/notifications/${this.userEmail}`).subscribe(data => {
+    this.notifications = data.filter(n => !n.status || n.status !== 'leave');
+    this.unreadCount = this.notifications.length;
+  });
+}
+
+markAsLeft(notificationId: number) {
+  this.http.post(`http://localhost:8080/api/notifications/leave/${notificationId}`, {}).subscribe(() => {
+    this.fetchNotifications();
+  });
+}
+
+openChatFromNotification(vendorEmail: string) {
+  
+  localStorage.setItem('chatVendorEmail', vendorEmail);
+  this.activeTab = 'chat';
+}
 
   goTo(path: string) {
     this.router.navigate([`/vendor-dashboard/${path}`]);
