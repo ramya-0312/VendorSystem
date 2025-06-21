@@ -1,0 +1,9 @@
+.nav-text {
+  color: white;
+  cursor: pointer;
+  position: relative;
+}
+.nav-text:hover {
+  text-decoration: underline;
+}
+
