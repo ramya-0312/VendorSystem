@@ -221,15 +221,26 @@
 <div *ngIf="selectedVendor?.workPhotosBase64?.length" class="mb-4">
   <p class="mb-1 small text-muted">📸 Work Portfolio</p>
   <div class="d-flex flex-wrap gap-3">
-    <img
-      *ngFor="let photo of selectedVendor.workPhotosBase64"
-      [src]=getImageSrc(photo)
-      alt="Work photo"
-      class="rounded shadow-sm"
-      style="width: 150px; height: 150px; object-fit: cover;"
-    />
+
+    <ng-container *ngFor="let media of selectedVendor.workPhotosBase64">
+      <!-- If media type is video -->
+      <video *ngIf="media.mediaType?.startsWith('video/')" controls class="rounded shadow-sm"
+             style="width: 150px; height: 150px; object-fit: cover;">
+        <source [src]="'data:' + media.mediaType + ';base64,' + media.base64" [type]="media.mediaType" />
+        Your browser does not support the video tag.
+      </video>
+
+      <!-- If media type is image -->
+      <img *ngIf="!media.mediaType?.startsWith('video/')"
+           [src]="'data:' + media.mediaType + ';base64,' + media.base64"
+           alt="Work media"
+           class="rounded shadow-sm"
+           style="width: 150px; height: 150px; object-fit: cover;" />
+    </ng-container>
+
   </div>
-  </div>
+</div>
+
     <!-- Action Buttons -->
     <div class="d-grid gap-2">
       <a *ngIf="selectedVendor?.website" [href]="selectedVendor.website" target="_blank" class="btn btn-outline-info rounded-pill">

@@ -55,6 +55,7 @@ this.notifications = (data.response as any[]).filter((n: any) => !n.status || n.
 }
 // http://localhost:8080/notification/updatee2
 markAsLeft(notificationId: number) {
+  console.log(notificationId)
   this.http.post(`http://localhost:8080/notification/updatee${notificationId}`, {}).subscribe(() => {
     this.notifications = this.notifications.filter(note => note.id !== notificationId);
     this.unreadCount = this.notifications.length;
