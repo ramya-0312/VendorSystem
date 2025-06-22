@@ -13,8 +13,6 @@ declare var bootstrap: any;
 export class VendorListComponent implements OnInit {
 
   showChatBox: boolean = false;
-  chatMessages: { sender: string; senderPic?: string; content: string; timestamp?: Date }[] = [];
-
 //chatMessages: { sender: string; receiver: string; content: string; timestamp?: Date }[] = [];
 chatInput: string = '';
 senderEmail: string = '';
@@ -52,7 +50,14 @@ stroningimage='';
   toggleDetails: { [email: string]: boolean } = {};
   toastr: any;
   message: string = '';
- 
+  chatMessages = [
+  {
+    sender: this.senderEmail,
+    senderPic: '', // Optional: provide image URL
+    message: 'Hello!'
+  },
+
+];
   selectedVendorPic: string = '';
   //senderPic: string = 'assets/default-profile.png'; // Default profile picture
 
@@ -60,7 +65,7 @@ stroningimage='';
 
   ngOnInit(): void {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  this.senderEmail = user.email || 'guest@example.com';
+  this.senderEmail = user.fullName|| 'guest@example.com';
   this.fetchVendors();
 }
 toggleChat() {
@@ -68,23 +73,29 @@ toggleChat() {
   this.chatInput = '';
   this.fetchChatMessages();
 }
+// sender: this.senderName,
+//         receiver: this.receiverName,
+//         message: messageText
 
 sendMessage() {
   if (this.chatInput.trim()) {
     const message = {
       sender: this.senderEmail,
       receiver: this.selectedVendor.email,
-      content: this.chatInput.trim(),
-      timestamp: new Date()
+      message: this.chatInput,
+      // timestamp: new Date()
+      //  sender: this.senderName,
+      //   receiver: this.receiverName,
+      //   message: messageText
     };
 
-    this.http.post('http://localhost:8080/api/chat/send', message).subscribe({
+    this.http.post('http://localhost:8080/api/chat', message).subscribe({
       next: () => {
-
+        // 👇 Add this line to match the expected type
         this.chatMessages.push({
           sender: this.senderEmail,
-          senderPic: this.getProfilePic(this.senderEmail),
-          content: this.chatInput.trim()
+          senderPic: this.getProfilePic(this.senderEmail),  // use your helper
+          message: this.chatInput.trim()
         });
 
         this.chatInput = '';
@@ -98,15 +109,22 @@ sendMessage() {
 
 
 fetchChatMessages() {
-  this.http.get<any[]>(`http://localhost:8080/api/chat/conversation`, {
+  this.http.get<any[]>(`http://localhost:8080/api/chat/chat`, {
     params: {
-      sender: this.senderEmail,
-      receiver: this.selectedVendor.email
+      from: this.senderEmail,
+      to: this.selectedVendor.email
     }
   }).subscribe(data => {
     this.chatMessages = data;
+    console.log(data)
   });
 }
+//  this.messages = data.map(msg => ({
+//         from: msg.sender === this.senderName ? 'me' : 'other',
+//         text: msg.message,
+//         time: this.formatTime(new Date(msg.createAt)),
+//         profilePicture: msg.sender === this.senderName ? this.senderPic : this.receiverPic
+//       }));
 
 getInitials(name: string): string {
   if (!name) return '';
@@ -335,4 +353,10 @@ console.log(userEmail)
       tab.show();
     }
   }
+  getImageSrc(base64: string): string {
+  if (base64.startsWith('data:image')) {
+    return base64; // Already a complete data URI
+  }
+  return `data:image/jpeg;base64,${base64}`; // Or png, adjust based on actual content
+}
 }

@@ -29,7 +29,7 @@ export class VendorLoginComponent {
         this.loginFailed = false;
 
 
-        
+        console.log(res)
         const vendorData = {
           fullName: res.response?.fullName,
           email: res.response?.email,
@@ -37,7 +37,7 @@ export class VendorLoginComponent {
           location: res.response?.location,
           dob: res.response?.dob,
           profilePicture: res.response?.profilePicture, // Assuming this is a base64 string
-          id: res.response.id,
+          id: res.response.userId,
         };
 
         localStorage.setItem('vendor', JSON.stringify(vendorData));

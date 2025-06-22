@@ -2,22 +2,27 @@
   <div class="card">
     <h3>Upload Work Photos</h3>
 
-    <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" class="input" />
     <input type="file" (change)="onFileSelected($event)" multiple class="input" />
-
     <button (click)="uploadImages()" class="btn">Upload</button>
   </div>
 
   <div class="card">
-    <input type="number" [(ngModel)]="vendorId" placeholder="Enter Vendor ID" class="input" />
     <button (click)="getWorkImages()" class="btn">View Photos</button>
   </div>
 
   <div class="card" *ngIf="base64Images.length > 0">
     <h4>Uploaded Work Images</h4>
     <div class="image-grid">
-      <div class="image-box" *ngFor="let img of base64Images; let i = index">
+      <div class="image-box position-relative" *ngFor="let img of base64Images; let i = index">
         <img [src]="'data:image/jpeg;base64,' + img" alt="Work Image" />
+
+        <!-- ❌ CROSS ICON -->
+        <button (click)="removeImage(i)"
+                class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 p-1"
+                style="border-radius: 50%; width: 24px; height: 24px; line-height: 0;">
+          &times;
+        </button>
+
         <p>#{{ i + 1 }}</p>
       </div>
     </div>

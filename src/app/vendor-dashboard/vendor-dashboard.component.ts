@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
+import { HostListener } from '@angular/core';
 
 @Component({
   standalone:false,
@@ -15,6 +16,16 @@ export class VendorDashboardComponent {
   unreadCount: number = 0;
   notifications: any[] = [];
   userEmail: string = '';
+  isNotifOpen: boolean | undefined;
+  showChatBox: boolean = false;
+  chatMessages: any[] = [];
+  chatInput: string = '';
+  senderEmail: string = '';
+  senderPic: string = '';
+  vendorPic: string = '';
+  activeVendor: string = '';
+
+
 
 
   setTab(tab: string) {
@@ -25,30 +36,72 @@ export class VendorDashboardComponent {
   constructor(private router: Router, private toastr: ToastrService, private http: HttpClient) {}
 
   ngOnInit() {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  this.userEmail = user.email;
-
+  const user = JSON.parse(localStorage.getItem('vendor') || '{}');
+  this.userEmail = user.id;
+ console.log(user.id)
   this.fetchNotifications();
 }
 
 fetchNotifications() {
-  this.http.get<any[]>(`http://localhost:8080/api/notifications/${this.userEmail}`).subscribe(data => {
-    this.notifications = data.filter(n => !n.status || n.status !== 'leave');
+  this.http.get<any>(`http://localhost:8080/notification/id${this.userEmail}`).subscribe(data => {
+    if (data && Array.isArray(data.response)) {
+this.notifications = (data.response as any[]).filter((n: any) => !n.status || n.status !== 'leave');
+      this.unreadCount = this.notifications.length;
+    } else {
+      this.notifications = [];
+      this.unreadCount = 0;
+    }
+  });
+}
+// http://localhost:8080/notification/updatee2
+markAsLeft(notificationId: number) {
+  this.http.post(`http://localhost:8080/notification/updatee${notificationId}`, {}).subscribe(() => {
+    this.notifications = this.notifications.filter(note => note.id !== notificationId);
     this.unreadCount = this.notifications.length;
   });
 }
 
-markAsLeft(notificationId: number) {
-  this.http.post(`http://localhost:8080/api/notifications/leave/${notificationId}`, {}).subscribe(() => {
-    this.fetchNotifications();
-  });
+
+openChatFromNotification(senderEmail: string) {
+  this.activeVendor = senderEmail;
+  this.activeTab = 'chat';
+
+  
+  const note = this.notifications.find(n => n.sender === senderEmail);
+
+
+  if (note) {
+    this.chatMessages = [{
+      sender: note.sender,
+      message: note.message,
+      timestamp: new Date()
+    }];
+
+
+    this.markAsLeft(note.id);
+  } else {
+    this.chatMessages = [];
+  }
 }
 
-openChatFromNotification(vendorEmail: string) {
-  
-  localStorage.setItem('chatVendorEmail', vendorEmail);
-  this.activeTab = 'chat';
+
+
+sendMessage() {
+  if (this.chatInput.trim()) {
+    const newMsg = {
+      sender: this.senderEmail,
+      receiver: this.activeVendor,
+      message: this.chatInput.trim(),
+      timestamp: new Date()
+    };
+
+    this.chatMessages.push(newMsg);
+    this.chatInput = '';
+
+
+  }
 }
+
 
   goTo(path: string) {
     this.router.navigate([`/vendor-dashboard/${path}`]);
@@ -66,4 +119,11 @@ openChatFromNotification(vendorEmail: string) {
     localStorage.clear();
     this.router.navigate(['/vendor-login']);
   }
+  @HostListener('document:click', ['$event'])
+onClickOutside(event: Event): void {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.dropdown')) {
+    this.isNotifOpen = false;
+  }
+}
 }

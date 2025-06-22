@@ -32,7 +32,7 @@ export class MessageComponent implements OnInit, AfterViewChecked {
         const userObj = JSON.parse(storedUser);
         this.senderName = userObj.fullName || userObj.response?.email || 'Unknown User';
         this.senderEmail = userObj.email || userObj.response?.email || '';
-        this.senderPic = userObj.profilePicture;
+        this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 
         this.fetchContacts(); // Get contacts dynamically
       } catch (e) {
