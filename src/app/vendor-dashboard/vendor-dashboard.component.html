@@ -1,41 +1,50 @@
 <!-- Navbar -->
 <nav class="navbar navbar-dark bg-dark px-4">
   <div class="container-fluid justify-content-between">
+
+    <!-- Left Section -->
     <div class="d-flex gap-4 align-items-center">
+      <span class="nav-text text-light" (click)="activeTab = 'chat'">Chat</span>
+      <span class="nav-text text-light" (click)="activeTab = 'vendors'">Vendors</span>
+      <span class="nav-text text-light" (click)="activeTab = 'profile'">Update Work Photos</span>
+      <span class="nav-text text-light" (click)="activeTab = 'bidding'">Bidding</span>
+    </div>
 
-      <span class="nav-text" (click)="activeTab = 'chat'">Chat</span>
+    <!-- Right Section (Bell + Logout) -->
+    <div class="d-flex align-items-center gap-3">
 
-      <!-- Bell Icon with Badge -->
-      <span class="nav-text position-relative" data-bs-toggle="dropdown" style="cursor: pointer;">
+      <!-- Bell Icon with "Notification" Text -->
+      <div class="position-relative dropdown d-flex align-items-center gap-1" data-bs-toggle="dropdown" style="cursor: pointer;">
         <i class="bi bi-bell-fill text-light fs-5"></i>
+        <span class="text-light small">Notification</span>
+
+        <!-- Badge -->
         <span *ngIf="unreadCount > 0"
               class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
               style="font-size: 0.6rem;">
           {{ unreadCount }}
         </span>
-      </span>
 
-      <!-- Notification Dropdown -->
-      <ul class="dropdown-menu p-2" style="width: 300px;">
-        <li *ngFor="let note of notifications" class="mb-2">
-          <div class="d-flex flex-column">
-            <strong class="text-dark">{{ note.sender }}</strong>
-            <small class="text-muted">{{ note.message }}</small>
-            <div class="mt-2 d-flex gap-2 justify-content-end">
-              <button class="btn btn-sm btn-outline-secondary" (click)="markAsLeft(note.id)">Leave</button>
-              <button class="btn btn-sm btn-success" (click)="openChatFromNotification(note.sender)">Chat</button>
+        <!-- Notification Dropdown -->
+        <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
+          <li *ngFor="let note of notifications" class="mb-2">
+            <div class="d-flex flex-column">
+              <strong class="text-dark">{{ note.sender }}</strong>
+              <small class="text-muted">{{ note.message }}</small>
+              <div class="mt-2 d-flex gap-2 justify-content-end">
+                <button class="btn btn-sm btn-outline-secondary" (click)="markAsLeft(note.id)">Leave</button>
+                <button class="btn btn-sm btn-success" (click)="openChatFromNotification(note.sender)">Chat</button>
+              </div>
             </div>
-          </div>
-        </li>
-        <li *ngIf="notifications.length === 0" class="text-center text-muted">No notifications</li>
-      </ul>
+          </li>
+          <li *ngIf="notifications.length === 0" class="text-center text-muted">No notifications</li>
+        </ul>
+      </div>
 
-      <span class="nav-text" (click)="activeTab = 'vendors'">Vendors</span>
-      <span class="nav-text" (click)="activeTab = 'profile'">Update Work Photos</span>
-      <span class="nav-text" (click)="activeTab = 'bidding'">Bidding</span>
+      <!-- Logout Button -->
+      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
     </div>
 
-    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
   </div>
 </nav>
 
@@ -54,9 +63,7 @@
   <app-bidding *ngIf="activeTab === 'bidding'"></app-bidding>
 </div>
 
-
 <!-- Logout Confirmation Modal -->
-<!-- Custom Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content logout-modal">
@@ -75,52 +82,3 @@
     </div>
   </div>
 </div>
-<!-- <div class="container mt-4">
-  <div class="row">
-    <div class="col-md-12">
-      <h3 class="text-center mb-4">Vendor Dashboard</h3> -->
-
-      <!-- Step Navigation
-      <ul class="nav nav-pills mb-4 justify-content-center">
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="step === 1" (click)="step = 1">Step 1</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="step === 2" (click)="step = 2">Step 2</a>
-        </li>
-      </ul> -->
-
-      <!-- Step Content -->
-      <!-- <form #registerForm="ngForm" (ngSubmit)="submitForm(registerForm)"> -->
-        <!-- Step 1 -->
-        <!-- <div *ngIf="step === 1">
-          <h4 class="mb-4 text-center">Vendor Registration - Step 1</h4> -->
-
-          <!-- <div class="mb-3">
-            <label>Business Name</label>
-            <input type="text" class="form-control" name="businessName" required [(ngModel)]="vendor.businessName" #name="ngModel">
-            <div *ngIf="name.invalid && name.touched" class="text-danger">Required</div>
-          </div> -->
-
-          <!-- <div class="mb-3">
-            <label>Category</label>
-            <select class="form-select" name="category" required [(ngModel)]="vendor.category" #categorySelect="ngModel">
-              <option value="" disabled selected>Select Category</option>
-              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-            </select>
-            <div *ngIf="categorySelect.invalid && categorySelect.touched" class="text-danger">Required</div>
-          </div> -->
-
-          <!-- Location -->
-          <!-- <div class="mb-3">
-            <label>Location</label>
-            <input type="text" class="form-control" name="location" required [(ngModel)]="vendor.location" #locationInput="ngModel">
-            <div *ngIf="locationInput.invalid && locationInput.touched" class="text-danger">Required</div>
-          </div> -->
-
-          <!-- Phone Number -->
-          <!-- <div class="mb-3">
-            <label>Phone Number</label>
-            <input type="tel" class="form-control" name="phone" required pattern="[0-9]{10}" [(ngModel)]="vendor.phone" #phoneInput="ngModel">
-            <div *ngIf="phoneInput.invalid && phoneInput.touched" class="text-danger">Enter 10-digit number</div>
-          </div> -->
