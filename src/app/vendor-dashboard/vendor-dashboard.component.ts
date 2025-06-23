@@ -35,6 +35,7 @@ export class VendorDashboardComponent {
   chatContainer='';
   nativeElement:any;
   showPopupChatBox: boolean = false;
+  selectedVendor: any = null;
 
 
   contacts: any[] = [];
@@ -44,6 +45,11 @@ export class VendorDashboardComponent {
   setTab(tab: string) {
     this.activeTab=tab;
   }
+resetVendorView() {
+  this.activeTab = 'vendors';
+  // Optional: Use a shared service or Output event to notify vendor list to reset
+}
+
 
 
   constructor(private router: Router, private toastr: ToastrService, private http: HttpClient) {}
@@ -51,6 +57,7 @@ export class VendorDashboardComponent {
   ngOnInit() {
   const user = JSON.parse(localStorage.getItem('vendor') || '{}');
   this.vendorid = user.id;
+  this.selectedVendor = null;
  console.log(user.id)
   this.fetchNotifications();
 }
@@ -58,6 +65,7 @@ export class VendorDashboardComponent {
 openFullChat() {
   this.activeTab = 'chat';
   this.showPopupChatBox = false;
+  this.selectedVendor = null;
 }
 
 selectContact(contact: any): void {

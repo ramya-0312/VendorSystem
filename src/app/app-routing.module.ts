@@ -17,6 +17,8 @@ import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ImageComponent } from './imageconverter/image/image.component';
 import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
+import { VendorBidComponent } from './vendor-bid/vendor-bid.component';
+import { VendorChatComponent } from './vendor-chat/vendor-chat.component';
 //import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
 //import{BiddingComponent} from './bidding/bidding.component';
 
@@ -32,6 +34,8 @@ const routes: Routes = [
   { path: 'user-reset-password',component:UserResetPasswordComponent},
   { path: 'user-dashboard',component:UserDashboardComponent},
   { path: 'message',component:MessageComponent },
+  {path: 'vendor-bid',component:VendorBidComponent },
+  {path: 'vendor-chat',component:VendorChatComponent },
   { path: 'vendor-list',component:VendorListComponent ,canActivate: [AuthGuard]},
   {path:'update-profile',component:UpdateProfileComponent ,canActivate: [AuthGuard]},
     {path:'image',component:ImageComponent},

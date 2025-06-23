@@ -23,6 +23,8 @@ import { UpdateProfileComponent } from './update-profile/update-profile.componen
 import { ImageComponent } from './imageconverter/image/image.component';
 import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
 import { BiddingComponent } from './bidding/bidding.component';
+import { VendorBidComponent } from './vendor-bid/vendor-bid.component';
+import { VendorChatComponent } from './vendor-chat/vendor-chat.component';
 //import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
 
 
@@ -45,6 +47,8 @@ import { BiddingComponent } from './bidding/bidding.component';
     ImageComponent,
     VendorDashboardComponent,
     BiddingComponent,
+    VendorBidComponent,
+    VendorChatComponent,
     //VendorprofileComponent,
   ],
   imports: [

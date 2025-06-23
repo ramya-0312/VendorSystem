@@ -8,7 +8,7 @@
 
       <span class="nav-text text-light" (click)="activeTab = 'vendors'">Vendors</span>
       <span class="nav-text text-light" (click)="activeTab = 'profile'">Update Work Photos</span>
-      <span class="nav-text text-light" (click)="activeTab = 'bidding'">Bidding</span>
+      <span class="nav-text text-light" (click)="activeTab = 'vendor-bid'">Bidding</span>
     </div>
 
     <!-- Right Section (Bell + Logout) -->
@@ -30,8 +30,9 @@
         <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
           <li *ngFor="let note of notifications" class="mb-2">
             <div class="d-flex flex-column">
-              <strong class="text-dark">{{ note.sender }}</strong>
+              <strong class="text-light">{{ note.sender }}</strong>
               <small class="text-muted">{{ note.message }}</small>
+              <small class="text-muted fst-italic">Event Date: {{ note.date | date: 'dd MMM yyyy' }}</small>
               <div class="mt-2 d-flex gap-2 justify-content-end">
                 <button class="btn btn-sm btn-outline-secondary" (click)="markAsLeft(note.id)">Leave</button>
                 <button class="btn btn-sm btn-success" (click)="openChatFromNotification(note.sender)">Chat</button>
@@ -223,10 +224,10 @@
 
 
 <!-- Other Component Views -->
-<div class="container mt-4" *ngIf="activeTab !== 'chat'">
+<div class="container mt-4" *ngIf="activeTab !== 'vendor-chat'">
   <app-vendor-list *ngIf="activeTab === 'vendors'"></app-vendor-list>
   <app-image *ngIf="activeTab === 'profile'"></app-image>
-  <app-bidding *ngIf="activeTab === 'bidding'"></app-bidding>
+  <app-bidding *ngIf="activeTab === 'vendor-bid'"></app-bidding>
 </div>
 
 <!-- Logout Confirmation Modal -->

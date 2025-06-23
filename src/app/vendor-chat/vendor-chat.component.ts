@@ -3,18 +3,16 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   standalone: false,
-  selector: 'app-message',
-  templateUrl: './message.component.html',
-  styleUrls: ['./message.component.css']
+  selector: 'app-vendor-chat',
+  templateUrl: './vendor-chat.component.html',
+  styleUrls: ['./vendor-chat.component.css']
 })
-export class MessageComponent implements OnInit, AfterViewChecked {
+export class VendorChatComponent implements OnInit, AfterViewChecked {
   @ViewChild('scrollMe') private chatContainer!: ElementRef;
 
   constructor(private http: HttpClient) {}
 
- messages: { from: string, text: string, time: string, profilePicture: string | undefined }[] = [];
-
-
+  messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
 
@@ -22,9 +20,8 @@ export class MessageComponent implements OnInit, AfterViewChecked {
   senderEmail = '';
   senderPic = '';
 
-
   receiverName = '';
-  receiverPic: string | undefined = '';
+  receiverPic = '';
 
   contacts: any[] = [];
 

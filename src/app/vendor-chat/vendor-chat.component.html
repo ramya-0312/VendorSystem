@@ -13,22 +13,7 @@
              [class.bg-dark]="receiverName === contact.receiver"
              (click)="selectContact(contact)"
              style="cursor: pointer; transition: background-color 0.2s;">
-
-          <!-- Avatar with fallback -->
-          <ng-container *ngIf="contact.profilePicture; else defaultContactAvatar">
-  <img [src]="contact.profilePicture"
-       (error)="contact.profilePicture = null"
-       class="rounded-circle me-3"
-       width="45" height="45" />
-</ng-container>
-<ng-template #defaultContactAvatar>
-  <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
-       style="width: 45px; height: 45px;">
-    <i class="bi bi-person-fill fs-5"></i>
-  </div>
-</ng-template>
-
-
+          <img [src]="contact.profilePicture" class="rounded-circle me-3" width="45" height="45" />
           <div class="flex-grow-1">
             <div class="d-flex justify-content-between">
               <strong class="text-light">{{ contact.receiver }}</strong>
@@ -46,19 +31,7 @@
 
         <!-- Header -->
         <div class="card-header bg-gradient-primary text-white d-flex align-items-center border-0">
-          <ng-container *ngIf="receiverPic; else defaultHeaderAvatar">
-  <img [src]="receiverPic"
-       (error)="receiverPic = undefined"
-       class="rounded-circle me-2"
-       width="40" height="40" />
-</ng-container>
-<ng-template #defaultHeaderAvatar>
-  <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
-       style="width: 40px; height: 40px;">
-    <i class="bi bi-person-fill fs-6"></i>
-  </div>
-</ng-template>
-
+          <img [src]="receiverPic" class="rounded-circle me-2" width="40" height="40" />
           <strong>{{ receiverName }}</strong>
         </div>
 
@@ -67,25 +40,8 @@
              style="flex-grow: 1; background-color: #121212;">
           <div *ngFor="let msg of messages" class="mb-3 d-flex"
                [ngClass]="{ 'justify-content-end': msg.from === 'me', 'justify-content-start': msg.from !== 'me' }">
-
             <div class="d-flex align-items-end" [ngClass]="{ 'flex-row-reverse': msg.from === 'me' }">
-
-              <!-- Avatar with fallback -->
-              <ng-container *ngIf="msg.profilePicture; else defaultMsgAvatar">
-  <img [src]="msg.profilePicture"
-       (error)="msg.profilePicture = undefined"
-       class="rounded-circle mx-2"
-       width="35" height="35" />
-</ng-container>
-<ng-template #defaultMsgAvatar>
-  <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-2"
-       style="width: 35px; height: 35px;">
-    <i class="bi bi-person-fill fs-6"></i>
-  </div>
-</ng-template>
-
-
-              <!-- Message Bubble -->
+              <img [src]="msg.profilePicture" class="rounded-circle mx-2" width="35" height="35" />
               <div>
                 <div class="px-3 py-2 rounded-4"
                      [ngClass]="msg.from === 'me' ? 'bg-gradient-primary text-white' : 'bg-dark text-light border'">

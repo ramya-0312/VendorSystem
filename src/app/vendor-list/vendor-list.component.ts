@@ -26,7 +26,7 @@ vendorPic = ''; // or null if not available
   paginatedVendors: any[] = [];
   selectedCategory: string = '';
   categories: string[] = ['Photography', 'Catering', 'Decoration', 'Music', 'Makeup'];
-  selectedVendor: any = {};
+  selectedVendor: any = null;
   showReviewBox = false;
   toggleProfileBase64: string = '';
 stroningimage='';
@@ -165,12 +165,13 @@ getProfilePic(sender: string): string {
   this.averageRating = '0.0';
   this.totalReviews = '0';
   this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+  this.selectedVendor = vendor;
 
   // Convert services object to array
   if (vendor.services && typeof vendor.services === 'object') {
     vendor.services = Object.values(vendor.services); // or Object.keys() if you need keys
   }
-  this.selectedVendor = vendor;
+
 
 
   this.fetchReviewsByEmail(vendor.email);
