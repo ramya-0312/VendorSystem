@@ -25,6 +25,19 @@ export class VendorDashboardComponent {
   vendorPic: string = '';
   activeVendor: string = '';
 
+  messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
+  newMessage = '';
+  typing = false;
+
+  senderName = '';
+  receiverName = '';
+  receiverPic = '';
+  chatContainer='';
+  nativeElement:any;
+  showPopupChatBox: boolean = false;
+
+
+  contacts: any[] = [];
 
 
 
@@ -41,6 +54,47 @@ export class VendorDashboardComponent {
  console.log(user.id)
   this.fetchNotifications();
 }
+
+openFullChat() {
+  this.activeTab = 'chat';
+  this.showPopupChatBox = false;
+}
+
+selectContact(contact: any): void {
+    this.receiverName = contact.receiver;
+    this.receiverPic = contact.profilePicture;
+    this.fetchMessages();
+  }
+
+   simulateTyping(): void {
+    this.typing = true;
+    setTimeout(() => {
+      this.typing = false;
+    }, 2000);
+  }
+
+   fetchMessages(): void {
+    const url = `http://localhost:8080/api/chat/chat?from=${this.senderName}&to=${this.receiverName}`;
+    this.http.get<any[]>(url).subscribe(data => {
+      this.messages = data.map(msg => ({
+        from: msg.sender === this.senderName ? 'me' : 'other',
+        text: msg.message,
+        time: this.formatTime(new Date(msg.createAt)),
+        profilePicture: msg.sender === this.senderName ? this.senderPic : this.receiverPic
+      }));
+      //this.scrollToBottom();
+    });
+  }
+
+   formatTime(date: Date): string {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  //  scrollToBottom(): void {
+  //   try {
+  //     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+  //   } catch (err) {}
+  // }
 
 fetchNotifications() {
   this.http.get<any>(`http://localhost:8080/notification/id${this.userEmail}`).subscribe(data => {
@@ -65,8 +119,9 @@ markAsLeft(notificationId: number) {
 openChatFromNotification(senderEmail: string) {
   this.activeVendor = senderEmail;
   this.activeTab = 'chat';
+  this.showPopupChatBox = true;
 
-  
+
   const note = this.notifications.find(n => n.sender === senderEmail);
 
 
