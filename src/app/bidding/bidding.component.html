@@ -1,19 +1,70 @@
 <div class="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-white">
-  <div class="bidding-box card p-4 shadow">
+  <div class="bidding-box card p-4 shadow bg-light text-dark" style="width: 100%; max-width: 500px;">
     <h5 class="mb-3">Place Your Bid</h5>
 
+    <!-- Name -->
+    <div class="mb-2">
+      <label for="name">Name:</label>
+      <input [(ngModel)]="name" id="name" type="text" class="form-control" placeholder="Enter your name" />
+    </div>
+
+    <!-- Email -->
+    <div class="mb-2">
+      <label for="email">Email:</label>
+      <input [(ngModel)]="email" id="email" type="email" class="form-control" placeholder="Enter your email" />
+    </div>
+
+    <!-- Mobile Number -->
+    <div class="mb-2">
+      <label for="mobile">Mobile No:</label>
+      <input [(ngModel)]="mobile" id="mobile" type="tel" class="form-control" placeholder="Enter mobile number" />
+    </div>
+
+    <!-- City -->
+    <div class="mb-2">
+      <label for="city">City:</label>
+      <input [(ngModel)]="city" id="city" type="text" class="form-control" placeholder="Enter city" />
+    </div>
+
+    <!-- Date -->
+    <div class="mb-2">
+      <label for="date">Date:</label>
+      <input [(ngModel)]="date" id="date" type="date" class="form-control" />
+    </div>
+
+   <!-- Start Time -->
+<div class="mb-2">
+ <label for="startTime">Start Time:</label>
+<select [(ngModel)]="startTime" (change)="updateEndTimes()">
+  <option *ngFor="let time of allTimes" [value]="time">{{ time }}</option>
+</select>
+</div>
+
+<!-- End Time -->
+<div class="mb-2">
+  <label for="endTime">End Time (3+ hours later):</label>
+<select [(ngModel)]="endTime">
+  <option *ngFor="let time of filteredEndTimes" [value]="time">{{ time }}</option>
+</select>
+</div>
+
+
+
+    <!-- Category -->
     <div class="mb-2">
       <label for="category">Select Category:</label>
-      <select [(ngModel)]="selectedCategory" class="form-select">
+      <select [(ngModel)]="selectedCategory" id="category" class="form-select">
         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
       </select>
     </div>
 
+    <!-- Message -->
     <div class="mb-3">
       <label for="message">Your Message:</label>
-      <textarea [(ngModel)]="message" class="form-control" rows="3"></textarea>
+      <textarea [(ngModel)]="message" id="message" class="form-control" rows="3" placeholder="Enter message"></textarea>
     </div>
 
-    <button class="btn btn-primary" (click)="sendBid()">Send Bid</button>
+    <!-- Submit Button -->
+    <button class="btn btn-primary w-100" (click)="sendBid()">Send Bid</button>
   </div>
 </div>

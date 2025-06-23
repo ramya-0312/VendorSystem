@@ -15,7 +15,7 @@ export class VendorDashboardComponent {
   activaTab='update-profile';
   unreadCount: number = 0;
   notifications: any[] = [];
-  userEmail: string = '';
+  vendorid: string = '';
   isNotifOpen: boolean | undefined;
   showChatBox: boolean = false;
   chatMessages: any[] = [];
@@ -37,13 +37,13 @@ export class VendorDashboardComponent {
 
   ngOnInit() {
   const user = JSON.parse(localStorage.getItem('vendor') || '{}');
-  this.userEmail = user.id;
+  this.vendorid = user.id;
  console.log(user.id)
   this.fetchNotifications();
 }
 
 fetchNotifications() {
-  this.http.get<any>(`http://localhost:8080/notification/id${this.userEmail}`).subscribe(data => {
+  this.http.get<any>(`http://localhost:8080/notification/id${this.vendorid}`).subscribe(data => {
     if (data && Array.isArray(data.response)) {
 this.notifications = (data.response as any[]).filter((n: any) => !n.status || n.status !== 'leave');
       this.unreadCount = this.notifications.length;

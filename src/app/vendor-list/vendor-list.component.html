@@ -59,7 +59,7 @@
   <!-- Header -->
   <div class="offcanvas-header border-bottom border-secondary bg-dark text-white">
     <div class="d-flex align-items-center gap-3">
-      <img [src]="selectedVendor.portfolioBase64 || 'assets/default-profile.png'"
+      <img [src]="dp || 'assets/default-profile.png'"
            class="rounded"
            style="width: 60px; height: 60px; object-fit: cover;" />
       <div>
@@ -218,28 +218,31 @@
   </div>
 </div>
 
-<div *ngIf="selectedVendor?.workPhotosBase64?.length" class="mb-4">
+<div *ngIf="photos" class="mb-4">
   <p class="mb-1 small text-muted">📸 Work Portfolio</p>
+   <!-- <p>{{selectedVendor.workPhotosBase64}}</p> -->
   <div class="d-flex flex-wrap gap-3">
-
-    <ng-container *ngFor="let media of selectedVendor.workPhotosBase64">
-      <!-- If media type is video -->
-      <video *ngIf="media.mediaType?.startsWith('video/')" controls class="rounded shadow-sm"
+    <ng-container *ngFor="let media of photos">
+     
+      <video *ngIf="isVideo(media.mediaType)" controls
+             class="rounded shadow-sm"
              style="width: 150px; height: 150px; object-fit: cover;">
-        <source [src]="'data:' + media.mediaType + ';base64,' + media.base64" [type]="media.mediaType" />
+        <source [src]="getMediaSrc(media)" [type]="media.mediaType" />
         Your browser does not support the video tag.
       </video>
 
-      <!-- If media type is image -->
-      <img *ngIf="!media.mediaType?.startsWith('video/')"
-           [src]="'data:' + media.mediaType + ';base64,' + media.base64"
-           alt="Work media"
+      <!-- Render image -->
+      <img *ngIf="!isVideo(media.mediaType)"
+           [src]="getMediaSrc(media)"
+           alt="Work portfolio"
            class="rounded shadow-sm"
            style="width: 150px; height: 150px; object-fit: cover;" />
-    </ng-container>
 
+    </ng-container>
   </div>
 </div>
+
+
 
     <!-- Action Buttons -->
     <div class="d-grid gap-2">
