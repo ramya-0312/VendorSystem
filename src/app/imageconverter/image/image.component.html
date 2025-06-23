@@ -11,19 +11,28 @@
   </div>
 
   <div class="card" *ngIf="base64Images.length > 0">
-    <h4>Uploaded Work Images</h4>
+    <h4>Uploaded Work Media</h4>
     <div class="image-grid">
-      <div class="image-box position-relative" *ngFor="let img of base64Images; let i = index">
-        <img [src]="'data:image/jpeg;base64,' + img" alt="Work Image" />
+      <div class="image-box position-relative" *ngFor="let media of base64Images; let i = index">
+        <!-- Show video if mediaType starts with 'video/' -->
+        <video *ngIf="media.mediaType?.startsWith('video/')" controls width="250">
+          <source [src]="'data:' + media.mediaType + ';base64,' + media.base64" [type]="media.mediaType" />
+          Your browser does not support the video tag.
+        </video>
+
+        <!-- Otherwise show image -->
+        <img *ngIf="!media.mediaType?.startsWith('video/')" 
+             [src]="'data:' + media.mediaType + ';base64,' + media.base64" 
+             alt="Work Image" />
 
         <!-- ❌ CROSS ICON -->
-        <button (click)="removeImage(i)"
+        <button (click)="removeImage(media.id, i)"
                 class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 p-1"
                 style="border-radius: 50%; width: 24px; height: 24px; line-height: 0;">
           &times;
         </button>
 
-        <p>#{{ i + 1 }}</p>
+        <p>#{{ i + 1 }} | ID: {{ media.id }}</p>
       </div>
     </div>
   </div>

@@ -31,13 +31,13 @@ export class VendorLoginComponent {
 
         console.log(res)
         const vendorData = {
-          fullName: res.response?.fullName,
+          fullName: res.response?.businessName,
           email: res.response?.email,
           phone: res.response?.phone,
           location: res.response?.location,
-          dob: res.response?.dob,
-          profilePicture: res.response?.profilePicture, // Assuming this is a base64 string
-          id: res.response.userId,
+          // dob: res.response?.dob,
+          profilePicture: res.response?.portfolioBase64, // Assuming this is a base64 string
+          id: res.response.id,
         };
 
         localStorage.setItem('vendor', JSON.stringify(vendorData));

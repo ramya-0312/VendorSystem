@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 
+interface WorkImageDTO {
+  id: number;
+  base64: string;
+  mediaType: string; // Added to differentiate images and videos
+}
+
 @Component({
   selector: 'app-image',
   standalone: false,
@@ -10,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ImageComponent implements OnInit {
   selectedFiles: File[] = [];
-  base64Images: string[] = [];
+  base64Images: WorkImageDTO[] = [];
   vendorId: number | null = null;
 
   constructor(private http: HttpClient, private toastr: ToastrService) {}
@@ -36,32 +42,33 @@ export class ImageComponent implements OnInit {
 
     this.http.post(`http://localhost:8080/api/vendor/${this.vendorId}/upload-work-photos`, formData)
       .subscribe({
-        next: (res: any) => {
-
+        next: () => {
           this.selectedFiles = [];
           this.getWorkImages();
           this.toastr.success('Photos uploaded successfully!');
         },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Failed to upload photos');
+        }
       });
   }
 
-  removeImage(index: number) {
-  if (this.vendorId === null) return;
+  removeImage(id: number, index: number) {
+    if (this.vendorId === null) return;
 
-  this.http.delete(`http://localhost:8080/api/vendor/${this.vendorId}/delete-work-photo/${index}`)
-    .subscribe({
-      next: () => {
-        this.base64Images.splice(index, 1);
-        this.toastr.success('Image deleted from server');
-      },
-      error: (err) => {
-        console.error(err);
-        this.toastr.error('Failed to delete image');
-      }
-    });
-}
-
-
+    this.http.delete(`http://localhost:8080/api/vendor/iddelete/${id}`)
+      .subscribe({
+        next: () => {
+          this.base64Images.splice(index, 1);
+          this.toastr.success('Media deleted from server');
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Failed to delete media');
+        }
+      });
+  }
 
   getWorkImages() {
     if (!this.vendorId) {
@@ -69,7 +76,7 @@ export class ImageComponent implements OnInit {
       return;
     }
 
-    this.http.get<string[]>(`http://localhost:8080/api/vendor/${this.vendorId}/work-photos`)
+    this.http.get<WorkImageDTO[]>(`http://localhost:8080/api/vendor/${this.vendorId}/work-photos`)
       .subscribe({
         next: (images) => {
           this.base64Images = images;

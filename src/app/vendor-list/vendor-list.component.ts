@@ -26,7 +26,7 @@ vendorPic = ''; // or null if not available
   paginatedVendors: any[] = [];
   selectedCategory: string = '';
   categories: string[] = ['Photography', 'Catering', 'Decoration', 'Music', 'Makeup'];
-  selectedVendor: any = null;
+  selectedVendor: any = {};
   showReviewBox = false;
   toggleProfileBase64: string = '';
 stroningimage='';
@@ -189,39 +189,46 @@ getProfilePic(sender: string): string {
 
 //     });
 // }
+dp:String ="";
 averageRdfating: number = 0;      // ✅ Correct type
 floorRating: number = 0;
+photos =[{
+  mediaType:"",
+  base64:""
+}]
+
 // totalReviews: number = 0;
 fetchReviewsByEmail(email: string): void {
   this.http.get<any>(`http://localhost:8080/api/ratings/id/${email}`)
     .subscribe(data => {
-      this.selectedVendor=(data)
-this.stroningimage=this.selectedVendor.portfolioBase64;
-console.log(this.stroningimage)
+      this.selectedVendor = data;
+        this.photos = data.workPhotosBase64;
+        this.dp=data.portfolioBase64;
 
-      this.averageRdfating = Number(data.averageRating);  // ✅ Typecast here
+console.log(this.selectedVendor.workPhotosBase64);
+      // ✅ This is the key part - ensure workPhotosBase64 is set
+      this.selectedVendor.workPhotosBase64 = data.portfolioBase64 || [];
+
+      this.averageRdfating = Number(data.averageRating);
       this.floorRating = Math.floor(this.averageRdfating);
-      console.log(this.floorRating)
       this.totalReviews = data.ratings.length;
-// this.selectedVendor=this.data;
-console.log(this.selectedVendor)
-this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
-      // Count ratings
+      this.ratingsCount = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
       data.ratings.forEach((r: any) => {
         const rating = r.ratingValue;
         if (this.ratingsCount[rating] !== undefined) {
           this.ratingsCount[rating]++;
         }
       });
+
       this.reviews = data.ratings.map((r: any) => ({
-        // avatar: 'assets/default-profile.png',
         rating: r.ratingValue,
         review: r.review,
         userEmail: r.userEmail
       }));
     });
 }
+
   closePanel(): void {
     this.selectedVendor = null;
   }
@@ -358,5 +365,12 @@ console.log(userEmail)
     return base64; // Already a complete data URI
   }
   return `data:image/jpeg;base64,${base64}`; // Or png, adjust based on actual content
+}
+isVideo(mediaType: string): boolean {
+  return mediaType?.startsWith('video/');
+}
+
+getMediaSrc(media: { mediaType: string; base64: string }): string {
+  return `data:${media.mediaType};base64,${media.base64}`;
 }
 }
