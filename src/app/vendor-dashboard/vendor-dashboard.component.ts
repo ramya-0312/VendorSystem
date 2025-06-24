@@ -28,6 +28,7 @@ export class VendorDashboardComponent {
   messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
+  activeVendorEmail: string = '';
 
   senderName = '';
   receiverName = '';
@@ -55,6 +56,7 @@ resetVendorView() {
   constructor(private router: Router, private toastr: ToastrService, private http: HttpClient) {}
 
   ngOnInit() {
+    this.senderEmail = localStorage.getItem('userEmail') || '';
   const user = JSON.parse(localStorage.getItem('vendor') || '{}');
   this.vendorid = user.id;
   this.selectedVendor = null;
@@ -94,6 +96,32 @@ selectContact(contact: any): void {
     });
   }
 
+  sendMessage() {
+  if (!this.chatInput.trim()) return;
+
+  const messagePayload = {
+    sender: this.senderEmail,
+    receiver: this.activeVendorEmail,
+    message: this.chatInput
+  };
+
+  this.http.post('http://localhost:8080/api/messages/send', messagePayload).subscribe({
+    next: (response) => {
+      this.chatMessages.push({
+        sender: this.senderEmail,
+         receiver: this.activeVendorEmail,
+        message: this.chatInput
+      });
+
+      this.chatInput = '';
+    },
+    error: (err) => {
+      console.error('Failed to send message', err);
+    }
+  });
+}
+
+
    formatTime(date: Date): string {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
@@ -129,6 +157,7 @@ openChatFromNotification(senderEmail: string) {
   this.activeVendor = senderEmail;
   this.activeTab = 'chat';
   this.showPopupChatBox = true;
+  this.activeVendorEmail = senderEmail;
 
 
   const note = this.notifications.find(n => n.sender === senderEmail);
@@ -148,23 +177,6 @@ openChatFromNotification(senderEmail: string) {
   }
 }
 
-
-
-sendMessage() {
-  if (this.chatInput.trim()) {
-    const newMsg = {
-      sender: this.senderEmail,
-      receiver: this.activeVendor,
-      message: this.chatInput.trim(),
-      timestamp: new Date()
-    };
-
-    this.chatMessages.push(newMsg);
-    this.chatInput = '';
-
-
-  }
-}
 
 
   goTo(path: string) {
