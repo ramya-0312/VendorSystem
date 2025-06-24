@@ -25,6 +25,7 @@ import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.co
 import { BiddingComponent } from './bidding/bidding.component';
 import { VendorBidComponent } from './vendor-bid/vendor-bid.component';
 import { VendorChatComponent } from './vendor-chat/vendor-chat.component';
+import { NewComponentComponent } from './new-component/new-component.component';
 //import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
 
 
@@ -49,6 +50,7 @@ import { VendorChatComponent } from './vendor-chat/vendor-chat.component';
     BiddingComponent,
     VendorBidComponent,
     VendorChatComponent,
+    NewComponentComponent,
     //VendorprofileComponent,
   ],
   imports: [
