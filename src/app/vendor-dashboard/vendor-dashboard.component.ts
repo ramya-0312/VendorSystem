@@ -190,4 +190,7 @@ onClickOutside(event: Event): void {
     this.isNotifOpen = false;
   }
 }
+setActiveTab(tab: string) {
+  this.activeTab = tab;
+}
 }

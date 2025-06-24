@@ -84,13 +84,14 @@ export class VendorBidComponent implements OnInit {
       category: this.selectedCategory,
       message: this.message,
       status: "null",
-      vendor_id: this.vendorId
+      vendorid: 6
 };
 
-
-      this.http.post('http://localhost:8080/notification/sentbid', payload)
+console.log(payload)
+      this.http.post('http://localhost:8080/notification/vendorbit', payload)
         .subscribe({
           next: (res: any) => {
+            console.log(payload)
             this.toastr.success(res.response || 'Bid sent successfully!');
             // Reset form
             this.name = '';
