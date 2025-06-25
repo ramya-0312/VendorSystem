@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { HostListener } from '@angular/core';
+import { VendorChatComponent } from '../vendor-chat/vendor-chat.component';
 
 @Component({
   standalone:false,
@@ -11,7 +12,8 @@ import { HostListener } from '@angular/core';
   styleUrls: ['./vendor-dashboard.component.css']
 })
 export class VendorDashboardComponent {
-  activeTab = 'message';
+   @ViewChild(VendorChatComponent) chatComponent!: VendorChatComponent
+  activeTab = 'vendor chat'
   activaTab='update-profile';
   unreadCount: number = 0;
   notifications: any[] = [];
@@ -39,14 +41,16 @@ export class VendorDashboardComponent {
 
 
   contacts: any[] = [];
+  selectedReceiverEmail: any;
 
 
 
   setTab(tab: string) {
     this.activeTab=tab;
+    console.log(this.activeTab)
   }
 resetVendorView() {
-  this.activeTab = 'vendors';
+  this.activeTab = 'chat';
   // Optional: Use a shared service or Output event to notify vendor list to reset
 }
 
@@ -55,23 +59,33 @@ resetVendorView() {
   constructor(private router: Router, private toastr: ToastrService, private http: HttpClient) {}
 
   ngOnInit() {
+   
   const user = JSON.parse(localStorage.getItem('vendor') || '{}');
   this.vendorid = user.id;
+  this.senderEmail= user.email
   this.selectedVendor = null;
+   console.log(this.activeTab)
  console.log(user.id)
   this.fetchNotifications();
+  // console.log(this.fetchMessages)
 }
 
-openFullChat() {
-  this.activeTab = 'chat';
-  this.showPopupChatBox = false;
-  this.selectedVendor = null;
-}
+ openFullChat() {
+    this.activeTab = 'chat';
+    this.showPopupChatBox = false;
+    this.activeVendor = '';
+
+    // ✅ Trigger after DOM updates
+    setTimeout(() => {
+      this.chatComponent?.fetchContacts();
+    }, 100);
+  }
 
 selectContact(contact: any): void {
+  console.log(7)
     this.receiverName = contact.receiver;
     this.receiverPic = contact.profilePicture;
-    this.fetchMessages();
+    // this.fetchMessages();
   }
 
    simulateTyping(): void {
@@ -80,46 +94,27 @@ selectContact(contact: any): void {
       this.typing = false;
     }, 2000);
   }
-
-   fetchMessages(): void {
-    const url = `http://localhost:8080/api/chat/chat?from=${this.senderName}&to=${this.receiverName}`;
-    this.http.get<any[]>(url).subscribe(data => {
-      this.messages = data.map(msg => ({
-        from: msg.sender === this.senderName ? 'me' : 'other',
-        text: msg.message,
-        time: this.formatTime(new Date(msg.createAt)),
-        profilePicture: msg.sender === this.senderName ? this.senderPic : this.receiverPic
-      }));
-      //this.scrollToBottom();
-    });
-  }
-
    formatTime(date: Date): string {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
-
-  //  scrollToBottom(): void {
-  //   try {
-  //     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-  //   } catch (err) {}
-  // }
-
 fetchNotifications() {
   this.http.get<any>(`http://localhost:8080/notification/id${this.vendorid}`).subscribe(data => {
     if (data && Array.isArray(data.response)) {
 this.notifications = (data.response as any[]).filter((n: any) => !n.status || n.status !== 'leave');
       this.unreadCount = this.notifications.length;
+      console.log(this.notifications)
     } else {
       this.notifications = [];
       this.unreadCount = 0;
     }
   });
 }
-// http://localhost:8080/notification/updatee2
+
 markAsLeft(notificationId: number) {
   console.log(notificationId)
   this.http.post(`http://localhost:8080/notification/updatee${notificationId}`, {}).subscribe(() => {
     this.notifications = this.notifications.filter(note => note.id !== notificationId);
+
     this.unreadCount = this.notifications.length;
   });
 }
@@ -133,6 +128,7 @@ openChatFromNotification(senderEmail: string) {
 
   const note = this.notifications.find(n => n.sender === senderEmail);
 
+    this.selectedReceiverEmail = note.email;
 
   if (note) {
     this.chatMessages = [{
@@ -151,28 +147,45 @@ openChatFromNotification(senderEmail: string) {
 
 
 sendMessage() {
-  if (this.chatInput.trim()) {
-    const newMsg = {
-      sender: this.senderEmail,
-      receiver: this.activeVendor,
-      message: this.chatInput.trim(),
-      timestamp: new Date()
-    };
+  const messageText = this.chatInput.trim();
+  if (!messageText) return;
 
-    this.chatMessages.push(newMsg);
-    this.chatInput = '';
+  // Build payload
+  const payload = {
+    sender: this.senderEmail, // or this.senderName if that's what your backend expects
+    receiver: this.selectedReceiverEmail, // or this.receiverName if backend expects name
+    message: messageText
+  };
 
+  // Optimistically add to UI
+  this.chatMessages.push({
+    sender: this.senderEmail,
+    message: messageText,
+    timestamp: new Date()
+  });
 
-  }
+  this.chatInput = '';
+
+  // Send to backend
+  this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
+    next: () => {
+      // this.fetchMessages(); // Refresh messages from backend
+    },
+    error: () => {
+      this.chatMessages.push({
+        sender: 'system',
+        message: '❌ Error: Unable to send message.',
+        timestamp: new Date()
+      });
+    }
+  });
 }
-
-
   goTo(path: string) {
     this.router.navigate([`/vendor-dashboard/${path}`]);
   }
 
   switchToChatTab(){
-    this.activeTab = 'message';
+    this.activeTab = 'vendor-chat';
   }
 
   logout() {
@@ -190,7 +203,15 @@ onClickOutside(event: Event): void {
     this.isNotifOpen = false;
   }
 }
-setActiveTab(tab: string) {
+ setActiveTab(tab: string) {
   this.activeTab = tab;
+
+  if (tab === 'vendor-chat') {
+   
+    setTimeout(() => {
+      this.chatComponent?.fetchContacts();
+    }, 100); // Give time for DOM/component to be ready
+  }
 }
+
 }

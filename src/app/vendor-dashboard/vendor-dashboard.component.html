@@ -1,10 +1,10 @@
 <!-- Navbar -->
 <nav class="navbar navbar-dark bg-dark px-4">
   <div class="container-fluid justify-content-between">
-<p class="text-light">Current Tab: {{ activeTab }}</p>
+<!-- <p class="text-light">Current Tab: {{ activeTab }}</p> -->
     <!-- Left Section -->
     <div class="d-flex gap-4 align-items-center">
-      <span class="nav-text text-light" (click)="openFullChat()">Chat</span>
+      <span class="nav-text text-light" (click)="setActiveTab('vendor-chat')">Chat</span>
 
       <span class="nav-text text-light" (click)="activeTab = 'vendors'">Vendors</span>
       <span class="nav-text text-light" (click)="activeTab = 'profile'">Update Work Photos</span>
@@ -139,10 +139,10 @@
 
 
 <!-- Main Chat Interface -->
- <div *ngIf="activeTab === 'chat' && !showPopupChatBox" class="container-fluid mt-3">
+ <div *ngIf="activeTab === 'vendor-chat' && !showPopupChatBox" class="container-fluid mt-3">
   <div class="container-fluid mt-3">
   <div class="row" style="height: 85vh;">
-
+<app-vendor-chat/>
     <!-- Contacts Panel -->
     <div class="col-md-4 px-0" style="background: #121212; color: #fff; border-right: 1px solid #2c2c2c;">
       <div class="px-3 py-3 border-bottom border-secondary bg-gradient-primary text-white">

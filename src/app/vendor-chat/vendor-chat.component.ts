@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./vendor-chat.component.css']
 })
 export class VendorChatComponent implements OnInit, AfterViewChecked {
+ ;
   @ViewChild('scrollMe') private chatContainer!: ElementRef;
 
   constructor(private http: HttpClient) {}
@@ -26,11 +27,12 @@ export class VendorChatComponent implements OnInit, AfterViewChecked {
   contacts: any[] = [];
 
   ngOnInit(): void {
-    const storedUser = localStorage.getItem('user');
+
+    const storedUser = localStorage.getItem('vendor');
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
-        this.senderName = userObj.fullName || userObj.response?.email || 'Unknown User';
+        this.senderName =  userObj.response?.email || 'Unknown User';
         this.senderEmail = userObj.email || userObj.response?.email || '';
         this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 
@@ -39,38 +41,13 @@ export class VendorChatComponent implements OnInit, AfterViewChecked {
         console.error('Failed to parse user from localStorage', e);
       }
     }
-
-
-    // this.contacts = [
-    //   {
-    //     name: 'Kumar',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/147/147144.png',
-    //     lastMessage: 'sdadfsgrgvhgfhfh'
-    //   },
-    //   {
-    //     name: 'Ramya',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/194/194938.png',
-    //     lastMessage: 'nkjutrechg'
-    //   },
-    //   {
-    //     name: 'vijay',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/2922/2922522.png',
-    //     lastMessage: 'mjjuyghvb'
-    //   }
-    // ];
-
-
-
   }
 
-  fetchContacts(): void {
-    const url = `http://localhost:8080/api/chat/receivers?sender=${this.senderName}`;
-    console.log(this.senderEmail);
+   fetchContacts(): void {
+    const url = `http://localhost:8080/api/chat/receivers?sender=${this.senderEmail}`;
     this.http.get<any[]>(url).subscribe({
       next: (data) => {
         this.contacts = data;
-        console.log(this.contacts)
-        // Auto-select the first contact if available
         if (this.contacts.length > 0) {
           this.selectContact(this.contacts[0]);
         }
@@ -85,6 +62,7 @@ export class VendorChatComponent implements OnInit, AfterViewChecked {
     this.receiverName = contact.receiver;
     this.receiverPic = contact.profilePicture;
     this.fetchMessages();
+    // this.fetchContacts();
   }
 
   fetchMessages(): void {
