@@ -33,8 +33,10 @@ export class MessageComponent implements OnInit, AfterViewChecked {
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
-        this.senderName = userObj.fullName || userObj.response?.email || 'Unknown User';
+        this.senderName =  userObj.email || 'Unknown User';
+        console.log(this.senderName);
         this.senderEmail = userObj.email || userObj.response?.email || '';
+        console.log(this.senderEmail)
         this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 
         this.fetchContacts(); // Get contacts dynamically

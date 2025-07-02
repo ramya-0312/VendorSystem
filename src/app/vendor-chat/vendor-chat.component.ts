@@ -22,7 +22,7 @@ export class VendorChatComponent implements OnInit, AfterViewChecked {
   senderPic = '';
 
   receiverName = '';
-  receiverPic = '';
+receiverPic: string | undefined = '';
 
   contacts: any[] = [];
 
@@ -32,7 +32,7 @@ export class VendorChatComponent implements OnInit, AfterViewChecked {
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
-        this.senderName =  userObj.response?.email || 'Unknown User';
+        this.senderName =  userObj.email || 'Unknown User';
         this.senderEmail = userObj.email || userObj.response?.email || '';
         this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 

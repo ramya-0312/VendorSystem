@@ -30,6 +30,7 @@ export class VendorDashboardComponent {
   messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
+  activeVendorEmail: string = '';
 
   senderName = '';
   receiverName = '';
@@ -59,7 +60,7 @@ resetVendorView() {
   constructor(private router: Router, private toastr: ToastrService, private http: HttpClient) {}
 
   ngOnInit() {
-   
+    this.senderEmail = localStorage.getItem('userEmail') || '';
   const user = JSON.parse(localStorage.getItem('vendor') || '{}');
   this.vendorid = user.id;
   this.senderEmail= user.email
@@ -124,6 +125,7 @@ openChatFromNotification(senderEmail: string) {
   this.activeVendor = senderEmail;
   this.activeTab = 'chat';
   this.showPopupChatBox = true;
+  this.activeVendorEmail = senderEmail;
 
 
   const note = this.notifications.find(n => n.sender === senderEmail);
