@@ -100,7 +100,7 @@ selectContact(contact: any): void {
   if (!this.chatInput.trim()) return;
 
   const messagePayload = {
-    sender: this.senderEmail,
+    sender: this.selectedVendor ? this.selectedVendor.email : this.senderEmail,
     receiver: this.activeVendorEmail,
     message: this.chatInput
   };

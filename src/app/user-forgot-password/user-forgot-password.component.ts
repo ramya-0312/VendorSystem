@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -14,7 +15,8 @@ export class UserForgotPasswordComponent {
   generatedCode = '';
   isVerified = false;
   constructor(
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ){}
 
   generateCode() {
@@ -25,11 +27,19 @@ export class UserForgotPasswordComponent {
   }
 
   verifyCode() {
-    if (this.enteredCode === this.generatedCode) {
-      this.isVerified = true;
-      this.router.navigate(['/user-reset-password']);
-    } else {
-      alert('Invalid code. Please try again.');
+    this.http.post('http://localhost:8080/api/users/verifyCode', { email: this.email, code: this.enteredCode }).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.isVerified = true;
+          this.router.navigate(['/user-reset-password']);
+        } else {
+          alert('Invalid code. Please try again.');
+        }
+      },
+      error: () => {
+        alert('Error verifying code. Please try again later.');
+      }
+    });
     }
   }
-}
+
