@@ -12,6 +12,10 @@ declare var bootstrap: any;
 })
 export class VendorListComponent implements OnInit {
 
+  latitude = 13.0827
+longitude = 80.2707
+
+
   showChatBox: boolean = false;
 //chatMessages: { sender: string; receiver: string; content: string; timestamp?: Date }[] = [];
 chatInput: string = '';
@@ -374,4 +378,48 @@ isVideo(mediaType: string): boolean {
 getMediaSrc(media: { mediaType: string; base64: string }): string {
   return `data:${media.mediaType};base64,${media.base64}`;
 }
+
+getGoogleMapsUrl(): string {
+  if (this.selectedVendor?.latitude && this.selectedVendor?.longitude) {
+    return `https://www.google.com/maps?q=${this.selectedVendor.latitude},${this.selectedVendor.longitude}`;
+  }
+  return '#';
 }
+
+openMap() {
+  const url = this.getGoogleMapsUrl();
+  if (url !== '#') {
+    window.open(url, '_blank');
+  }
+}
+// Generate vendor profile link
+getVendorProfileLink(): string {
+  const baseUrl = window.location.origin;
+  return `${baseUrl}/vendor-profile/${this.selectedVendor?.email}`;
+}
+
+// WhatsApp Share URL
+getWhatsAppShareUrl(): string {
+  const text = `Check out this vendor profile: ${this.getVendorProfileLink()}`;
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+}
+
+// Email Share URL
+getEmailShareUrl(): string {
+  const subject = 'Vendor Profile Recommendation';
+  const body = `Hi,\n\nCheck out this vendor I found:\n${this.getVendorProfileLink()}`;
+  return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+// Copy to Clipboard
+copyProfileLink(): void {
+  const link = this.getVendorProfileLink();
+  navigator.clipboard.writeText(link).then(() => {
+    alert('Profile link copied to clipboard!');
+  }, () => {
+    alert('Failed to copy link.');
+  });
+}
+
+
+  }

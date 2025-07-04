@@ -32,6 +32,7 @@ export class VendorDashboardComponent {
   typing = false;
   activeVendorEmail: string = '';
 
+
   senderName = '';
   receiverName = '';
   receiverPic = '';
@@ -121,30 +122,25 @@ markAsLeft(notificationId: number) {
 }
 
 
-openChatFromNotification(senderEmail: string) {
-  this.activeVendor = senderEmail;
+openChatFromNotification(note: any) {
+  this.activeVendor = note.sender;
   this.activeTab = 'chat';
   this.showPopupChatBox = true;
-  this.activeVendorEmail = senderEmail;
+  this.activeVendorEmail = note.sender;
+  this.selectedReceiverEmail = note.email;
 
 
-  const note = this.notifications.find(n => n.sender === senderEmail);
+  this.chatMessages = [{
+    sender: note.sender,
+    message: note.message,
+    timestamp: new Date(),
+    startTime: note.startTime,
+    endTime: note.endTime
+  }];
 
-    this.selectedReceiverEmail = note.email;
-
-  if (note) {
-    this.chatMessages = [{
-      sender: note.sender,
-      message: note.message,
-      timestamp: new Date()
-    }];
-
-
-    this.markAsLeft(note.id);
-  } else {
-    this.chatMessages = [];
-  }
+  this.markAsLeft(note.id);
 }
+
 
 
 
@@ -152,14 +148,14 @@ sendMessage() {
   const messageText = this.chatInput.trim();
   if (!messageText) return;
 
-  // Build payload
+
   const payload = {
-    sender: this.senderEmail, // or this.senderName if that's what your backend expects
-    receiver: this.selectedReceiverEmail, // or this.receiverName if backend expects name
+    sender: this.senderEmail,
+    receiver: this.selectedReceiverEmail,
     message: messageText
   };
 
-  // Optimistically add to UI
+
   this.chatMessages.push({
     sender: this.senderEmail,
     message: messageText,
@@ -168,7 +164,7 @@ sendMessage() {
 
   this.chatInput = '';
 
-  // Send to backend
+  
   this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
     next: () => {
       // this.fetchMessages(); // Refresh messages from backend

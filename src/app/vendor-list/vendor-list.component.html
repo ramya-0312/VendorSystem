@@ -223,7 +223,7 @@
    <!-- <p>{{selectedVendor.workPhotosBase64}}</p> -->
   <div class="d-flex flex-wrap gap-3">
     <ng-container *ngFor="let media of photos">
-     
+
       <video *ngIf="isVideo(media.mediaType)" controls
              class="rounded shadow-sm"
              style="width: 150px; height: 150px; object-fit: cover;">
@@ -250,7 +250,31 @@
         🌐 Visit Website
       </a>
       <button class="btn btn-outline-success rounded-pill">🧭 Get Directions</button>
-      <button class="btn btn-outline-warning rounded-pill">📤 Share Profile</button>
+      <!-- Share Button -->
+<div class="dropdown d-grid gap-2">
+  <button class="btn btn-outline-warning rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">
+    📤 Share Profile
+  </button>
+
+  <ul class="dropdown-menu">
+    <li>
+      <a class="dropdown-item" [href]="getWhatsAppShareUrl()" target="_blank">
+        📱 Share via WhatsApp
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item" [href]="getEmailShareUrl()">
+        📧 Share via Email
+      </a>
+    </li>
+    <li>
+      <button class="dropdown-item" (click)="copyProfileLink()">
+        📋 Copy Profile Link
+      </button>
+    </li>
+  </ul>
+</div>
+
       <button class="btn btn-outline-primary" (click)="toggleChat()">💬 Chat with Vendor</button>
     </div>
 
