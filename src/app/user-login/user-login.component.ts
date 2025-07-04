@@ -42,7 +42,7 @@ export class UserLoginComponent {
             profilePicture: base64 ,// 👈 include only if small enough
             id:res.response.id,
           };
-
+console.log(userData);
           localStorage.setItem('user', JSON.stringify(userData));
         } else {
           //alert('Profile picture too large to store in localStorage!');

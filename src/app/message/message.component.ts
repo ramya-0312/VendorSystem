@@ -15,6 +15,13 @@ export class MessageComponent implements OnInit, AfterViewChecked {
  messages: { from: string, text: string, time: string, profilePicture: string | undefined }[] = [];
 
 
+ receiverId: string = '';
+showVendorProfile = false;
+vendorDetails: any = null;
+defaultProfile = 'assets/default-avatar.png';
+
+
+
   newMessage = '';
   typing = false;
 
@@ -33,8 +40,10 @@ export class MessageComponent implements OnInit, AfterViewChecked {
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
-        this.senderName = userObj.fullName || userObj.response?.email || 'Unknown User';
+        this.senderName =  userObj.email || 'Unknown User';
+        console.log(this.senderName);
         this.senderEmail = userObj.email || userObj.response?.email || '';
+        console.log(this.senderEmail)
         this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 
         this.fetchContacts(); // Get contacts dynamically
@@ -64,7 +73,49 @@ export class MessageComponent implements OnInit, AfterViewChecked {
 
 
 
+
+
   }
+  viewingVendorProfile = false;
+
+ openVendorProfile() {
+  this.viewingVendorProfile = true;
+
+  this.http.get<any[]>('http://localhost:8080/api/vendor/getvendorlist').subscribe({
+    next: (vendors) => {
+      const matched = vendors.find(v => v.email === this.receiverName || v.businessName === this.receiverName);
+      if (matched) {
+        this.vendorDetails = {
+          id: matched.id,
+          name: matched.businessName,
+          email: matched.email,
+          phone: matched.phone,
+          address: matched.location,
+          category: matched.category,
+          photo: matched.portfolioBase64 || this.defaultProfile,
+          documents: [matched.certificationImageBase64]
+        };
+      } else {
+        console.warn('Vendor not found for:', this.receiverName);
+      }
+    },
+    error: (err) => {
+      console.error('Error fetching vendor list:', err);
+    }
+  });
+}
+
+
+
+  closeVendorProfile() {
+  this.showVendorProfile = false;
+}
+backToChat() {
+  this.viewingVendorProfile = false;
+}
+
+
+
 
   fetchContacts(): void {
     const url = `http://localhost:8080/api/chat/receivers?sender=${this.senderName}`;

@@ -13,6 +13,7 @@ export class UserDashboardComponent {
 
   setTab(tab: string) {
     this.activeTab=tab;
+    console.log(this.activeTab)
   }
 
 

@@ -1,10 +1,10 @@
 <!-- Navbar -->
 <nav class="navbar navbar-dark bg-dark px-4">
   <div class="container-fluid justify-content-between">
-
+<!-- <p class="text-light">Current Tab: {{ activeTab }}</p> -->
     <!-- Left Section -->
     <div class="d-flex gap-4 align-items-center">
-      <span class="nav-text text-light" (click)="openFullChat()">Chat</span>
+      <span class="nav-text text-light" (click)="setActiveTab('vendor-chat')">Chat</span>
 
       <span class="nav-text text-light" (click)="activeTab = 'vendors'">Vendors</span>
       <span class="nav-text text-light" (click)="activeTab = 'profile'">Update Work Photos</span>
@@ -136,12 +136,12 @@
 
 
 <!-- Main Chat Interface -->
- <div *ngIf="activeTab === 'chat' && !showPopupChatBox" class="container-fluid mt-3">
+ <div *ngIf="activeTab === 'vendor-chat' && !showPopupChatBox" class="container-fluid mt-3">
   <div class="container-fluid mt-3">
   <div class="row" style="height: 85vh;">
-
+<app-vendor-chat/>
     <!-- Contacts Panel -->
-    <div class="col-md-4 px-0" style="background: #121212; color: #fff; border-right: 1px solid #2c2c2c;">
+    <!-- <div class="col-md-4 px-0" style="background: #121212; color: #fff; border-right: 1px solid #2c2c2c;">
       <div class="px-3 py-3 border-bottom border-secondary bg-gradient-primary text-white">
         <h5 class="mb-0">Messages</h5>
       </div>
@@ -161,7 +161,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Chat Window -->
     <div class="col-md-8 px-0 d-flex justify-content-center" style="background-color: #1e1e1e; color: #fff;">
@@ -210,11 +210,11 @@
         </div>
       </div>
 
-      <div *ngIf="!receiverName"
+      <!-- <div *ngIf="!receiverName"
            class="d-flex align-items-center justify-content-center w-100"
            style="height: 85vh;">
         <p class="text-muted fs-5">👈 Select a contact to start chatting</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

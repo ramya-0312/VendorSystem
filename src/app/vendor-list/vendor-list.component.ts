@@ -64,8 +64,8 @@ stroningimage='';
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  this.senderEmail = user.fullName|| 'guest@example.com';
+  const user = JSON.parse(localStorage.getItem('user') || localStorage.getItem('vendor')||'{}');
+  this.senderEmail = user.email|| user.email;
   this.fetchVendors();
 }
 toggleChat() {
