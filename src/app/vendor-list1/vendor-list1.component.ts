@@ -6,11 +6,11 @@ declare var bootstrap: any;
 
 @Component({
   standalone: false,
-  selector: 'app-vendor-list',
-  templateUrl: './vendor-list.component.html',
-  styleUrls: ['./vendor-list.component.css']
+  selector: 'app-vendor-list1',
+  templateUrl: './vendor-list1.component.html',
+  styleUrls: ['./vendor-list1.component.css']
 })
-export class VendorListComponent implements OnInit {
+export class VendorList1Component implements OnInit {
 
   latitude = 13.0827
 longitude = 80.2707

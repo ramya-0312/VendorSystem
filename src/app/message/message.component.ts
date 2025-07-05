@@ -12,23 +12,17 @@ export class MessageComponent implements OnInit, AfterViewChecked {
 
   constructor(private http: HttpClient) {}
 
- messages: { from: string, text: string, time: string, profilePicture: string | undefined }[] = [];
-
-
- receiverId: string = '';
-showVendorProfile = false;
-vendorDetails: any = null;
-defaultProfile = 'assets/default-avatar.png';
-
-
-
+  messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
+  receiverId: string = '';
+  showVendorProfile = false;
+  vendorDetails: any = null;
+  defaultProfile = 'assets/default-avatar.png';
 
   senderName = '';
   senderEmail = '';
   senderPic = '';
-
 
   receiverName = '';
   receiverPic: string | undefined = '';
@@ -36,14 +30,13 @@ defaultProfile = 'assets/default-avatar.png';
   contacts: any[] = [];
 
   ngOnInit(): void {
-    const storedUser = localStorage.getItem('user');
+
+    const storedUser = localStorage.getItem('vendor');
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
         this.senderName =  userObj.email || 'Unknown User';
-        console.log(this.senderName);
         this.senderEmail = userObj.email || userObj.response?.email || '';
-        console.log(this.senderEmail)
         this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 
         this.fetchContacts(); // Get contacts dynamically
@@ -51,32 +44,9 @@ defaultProfile = 'assets/default-avatar.png';
         console.error('Failed to parse user from localStorage', e);
       }
     }
-
-
-    // this.contacts = [
-    //   {
-    //     name: 'Kumar',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/147/147144.png',
-    //     lastMessage: 'sdadfsgrgvhgfhfh'
-    //   },
-    //   {
-    //     name: 'Ramya',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/194/194938.png',
-    //     lastMessage: 'nkjutrechg'
-    //   },
-    //   {
-    //     name: 'vijay',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/2922/2922522.png',
-    //     lastMessage: 'mjjuyghvb'
-    //   }
-    // ];
-
-
-
-
-
   }
-  viewingVendorProfile = false;
+
+   viewingVendorProfile = false;
 
  openVendorProfile() {
   this.viewingVendorProfile = true;
@@ -124,7 +94,7 @@ backToChat() {
       next: (data) => {
         this.contacts = data;
         console.log(this.contacts)
-        // Auto-select the first contact if available
+
         if (this.contacts.length > 0) {
           this.selectContact(this.contacts[0]);
         }
@@ -139,6 +109,7 @@ backToChat() {
     this.receiverName = contact.receiver;
     this.receiverPic = contact.profilePicture;
     this.fetchMessages();
+
   }
 
   fetchMessages(): void {

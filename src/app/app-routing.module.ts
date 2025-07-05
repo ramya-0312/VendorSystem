@@ -19,6 +19,7 @@ import { ImageComponent } from './imageconverter/image/image.component';
 import { VendorDashboardComponent } from './vendor-dashboard/vendor-dashboard.component';
 import { VendorBidComponent } from './vendor-bid/vendor-bid.component';
 import { VendorChatComponent } from './vendor-chat/vendor-chat.component';
+import { VendorList1Component } from './vendor-list1/vendor-list1.component';
 //import { NewComponentComponent } from './new-component/new-component.component';
 //import { VendorprofileComponent } from './vendorprofile/vendorprofile.component';
 //import{BiddingComponent} from './bidding/bidding.component';
@@ -39,6 +40,7 @@ const routes: Routes = [
   {path: 'vendor-chat',component:VendorChatComponent },
   //{path: 'new-component', component: NewComponentComponent},
   { path: 'vendor-list',component:VendorListComponent ,canActivate: [AuthGuard]},
+  { path: 'vendor-list1',component:VendorList1Component ,canActivate: [AuthGuard]},
   {path:'update-profile',component:UpdateProfileComponent ,canActivate: [AuthGuard]},
     {path:'image',component:ImageComponent},
     {path:'vendor-dashboard',component:VendorDashboardComponent },

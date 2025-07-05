@@ -1,45 +1,63 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
 @Component({
-  standalone:false,
+  standalone: false,
   selector: 'app-user-forgot-password',
   templateUrl: './user-forgot-password.component.html',
   styleUrls: ['./user-forgot-password.component.css']
 })
 export class UserForgotPasswordComponent {
-  email = '';
-  codeGenerated = false;
-  enteredCode = '';
-  generatedCode = '';
-  isVerified = false;
-  constructor(
-    private router: Router,
-    private http: HttpClient
-  ){}
+  email: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
+  isVerified: boolean = false;
+  emailInvalid: boolean = false;
+  passwordMismatch: boolean = false;
+  passwordResetSuccess: boolean = false;
 
-  generateCode() {
-    this.generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log('Generated Code:', this.generatedCode);
-    this.codeGenerated = true;
-    alert('Verification code sent to your email (simulated)');
-  }
+  constructor(private http: HttpClient, private toastr: ToastrService, private router: Router) {}
 
-  verifyCode() {
-    this.http.post('http://localhost:8080/api/users/verifyCode', { email: this.email, code: this.enteredCode }).subscribe({
-      next: (res: any) => {
-        if (res.success) {
+  verifyEmail() {
+    this.http.post('/api/user/verify-email', { email: this.email }).subscribe(
+      (res: any) => {
+        if (res.exists) {
           this.isVerified = true;
-          this.router.navigate(['/user-reset-password']);
+          this.emailInvalid = false;
         } else {
-          alert('Invalid code. Please try again.');
+          this.emailInvalid = true;
         }
       },
-      error: () => {
-        alert('Error verifying code. Please try again later.');
+      (err) => {
+        this.emailInvalid = true;
       }
-    });
-    }
+    );
   }
 
+  resetPassword() {
+    if (this.newPassword !== this.confirmPassword) {
+      this.passwordMismatch = true;
+      return;
+    }
+
+    this.passwordMismatch = false;
+
+    this.http.post('/api/user/reset-password', {
+      email: this.email,
+      newPassword: this.newPassword,
+    }).subscribe(
+      (res) => {
+        this.toastr.success('Password reset successfully');
+        this.passwordResetSuccess = true;
+        setTimeout(() => {
+          this.router.navigate(['/user-login']);
+        }, 2000);
+      },
+      (err) => {
+        console.error('Error resetting password', err);
+      }
+    );
+  }
+}
