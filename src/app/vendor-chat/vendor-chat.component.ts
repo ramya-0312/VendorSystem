@@ -33,7 +33,9 @@ receiverPic: string | undefined = '';
       try {
         const userObj = JSON.parse(storedUser);
         this.senderName =  userObj.email || 'Unknown User';
+        console.log(this.senderName)
         this.senderEmail = userObj.email || userObj.response?.email || '';
+        console.log(this.senderEmail)
         this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 
         this.fetchContacts(); // Get contacts dynamically
@@ -48,6 +50,7 @@ receiverPic: string | undefined = '';
     this.http.get<any[]>(url).subscribe({
       next: (data) => {
         this.contacts = data;
+        console.log(data)
         if (this.contacts.length > 0) {
           this.selectContact(this.contacts[0]);
         }

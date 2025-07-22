@@ -21,6 +21,7 @@ export class BiddingComponent implements OnInit {
   endTime = '';
   allTimes: string[] = [];
   filteredEndTimes: string[] = [];
+  
 
   constructor(private http: HttpClient, private toastr: ToastrService) {}
 

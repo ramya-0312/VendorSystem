@@ -17,11 +17,20 @@ export class MessageComponent implements OnInit, AfterViewChecked {
 
  receiverId: string = '';
 showVendorProfile = false;
-vendorDetails: any = null;
+vendorDetails: any = {
+   id: '',
+          name: '',
+          email: '',
+          phone:'',
+          address: '',
+          category: '',
+          photo: '',
+          documents:[]
+};
 defaultProfile = 'assets/default-avatar.png';
 
-
-
+// selectedVendor: any = null;
+getprofile:any=null;
   newMessage = '';
   typing = false;
 
@@ -34,9 +43,17 @@ defaultProfile = 'assets/default-avatar.png';
   receiverPic: string | undefined = '';
 
   contacts: any[] = [];
+ 
+  isVendor = false;
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('user');
+    const storedVendor = localStorage.getItem('vendor');
+    if (storedVendor) {
+      this.isVendor = true;
+    } else {
+      this.isVendor = false;
+    }
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
@@ -50,26 +67,20 @@ defaultProfile = 'assets/default-avatar.png';
       } catch (e) {
         console.error('Failed to parse user from localStorage', e);
       }
+    } else if (storedVendor) {
+      try {
+        const vendorObj = JSON.parse(storedVendor);
+        this.senderName = vendorObj.email || 'Unknown Vendor';
+        this.senderEmail = vendorObj.email || vendorObj.response?.email || '';
+        this.senderPic = vendorObj.profilePicture || vendorObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
+        this.fetchContacts();
+      } catch (e) {
+        console.error('Failed to parse vendor from localStorage', e);
+      }
     }
 
 
-    // this.contacts = [
-    //   {
-    //     name: 'Kumar',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/147/147144.png',
-    //     lastMessage: 'sdadfsgrgvhgfhfh'
-    //   },
-    //   {
-    //     name: 'Ramya',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/194/194938.png',
-    //     lastMessage: 'nkjutrechg'
-    //   },
-    //   {
-    //     name: 'vijay',
-    //     profilePicture: 'https://cdn-icons-png.flaticon.com/512/2922/2922522.png',
-    //     lastMessage: 'mjjuyghvb'
-    //   }
-    // ];
+    
 
 
 
@@ -81,23 +92,27 @@ defaultProfile = 'assets/default-avatar.png';
  openVendorProfile() {
   this.viewingVendorProfile = true;
 
-  this.http.get<any[]>('http://localhost:8080/api/vendor/getvendorlist').subscribe({
+  this.http.get<any[]>(`http://localhost:8080/api/ratings/id/${this.receiverName}`).subscribe({
     next: (vendors) => {
-      const matched = vendors.find(v => v.email === this.receiverName || v.businessName === this.receiverName);
-      if (matched) {
+      this.getprofile=vendors;
+      console.log(this.getprofile.id)
+      console.log(this.getprofile)
+    
+        
+        console.log(this.receiverName)
         this.vendorDetails = {
-          id: matched.id,
-          name: matched.businessName,
-          email: matched.email,
-          phone: matched.phone,
-          address: matched.location,
-          category: matched.category,
-          photo: matched.portfolioBase64 || this.defaultProfile,
-          documents: [matched.certificationImageBase64]
+          id: this.getprofile.businessName,
+          name: this.getprofile.businessName,
+          email: this.getprofile.email,
+          phone: this.getprofile.phone,
+          address: this.getprofile.location,
+          category: this.getprofile.category,
+          photo: this.getprofile.portfolioBase64 || this.defaultProfile,
+          
+          documents: this.getprofile.workPhotosBase64 
         };
-      } else {
-        console.warn('Vendor not found for:', this.receiverName);
-      }
+      console.log(this.vendorDetails)
+      // console.log(documents.length)
     },
     error: (err) => {
       console.error('Error fetching vendor list:', err);
@@ -205,4 +220,21 @@ backToChat() {
   ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
+   getImageSrc(base64: string): string {
+  if (base64?.startsWith('data:image')) {
+    return base64; // Already a complete data URI
+  }
+  // console.log(this.vendorDetails.photo)
+  return `data:image/jpeg;base64,${base64}`; // Or png, adjust based on actual content
+  // data:image/jpeg;Base64
+}
+isVideo(mediaType: string): boolean {
+  return mediaType?.startsWith('video/');
+}
+
+getMediaSrc(media: { mediaType: string; base64: string }): string {
+   console.log( `data:${media.mediaType};base64,${media.base64}`);
+  return `data:${media.mediaType};base64,${media.base64}`;
+ 
+}
 }

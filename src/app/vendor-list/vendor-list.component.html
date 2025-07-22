@@ -18,9 +18,14 @@
           <span class="badge bg-success position-absolute top-0 end-0 m-2 px-3 py-1 rounded-pill text-uppercase small">
             {{ vendor.category }}
           </span>
-
+<ng-template #defaultContactAvatar>
+            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+                 style="width: 45px; height: 45px;">
+              <i class="bi bi-person-fill fs-5"></i>
+            </div>
+          </ng-template>
           <div class="card-body d-flex align-items-center">
-            <img [src]="vendor.portfolioBase64 || 'assets/default-profile.png'"
+            <img [src]="vendor.portfolioBase64"else defaultContactAvatar
                  class="rounded-circle me-4 shadow"
                  style="width: 75px; height: 75px; object-fit: cover;" />
             <div class="flex-grow-1">
@@ -77,6 +82,10 @@
     <div class="mb-3">
       <p class="mb-1 small text-muted">📍 Address</p>
       <p class="fw-medium">{{ selectedVendor?.location }}</p>
+      <a class="btn btn-outline-info btn-sm mt-2" target="_blank"
+         [href]="googleMapsUrl">
+        Get Directions
+      </a>
     </div>
 
     <!-- Phone -->
@@ -249,7 +258,7 @@
       <a *ngIf="selectedVendor?.website" [href]="selectedVendor.website" target="_blank" class="btn btn-outline-info rounded-pill">
         🌐 Visit Website
       </a>
-      <button class="btn btn-outline-success rounded-pill">🧭 Get Directions</button>
+      <!-- <button class="btn btn-outline-success rounded-pill">🧭 Get Directions</button> -->
       <!-- Share Button -->
 <div class="dropdown d-grid gap-2">
   <button class="btn btn-outline-warning rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">

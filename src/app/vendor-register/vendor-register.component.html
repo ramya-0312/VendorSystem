@@ -66,6 +66,11 @@
 <textarea class="form-control" name="serviceDescription" required [(ngModel)]="vendor.serviceDescription" #desc="ngModel"></textarea>
             <div *ngIf="desc.invalid && desc.touched" class="text-danger">Required</div>
           </div>
+          <div class="mb-3">
+            <label>Terms and  Condition</label>
+<textarea class="form-control" name="termsAndCondition" required [(ngModel)]="vendor.termsAndCondition" #desc="ngModel"></textarea>
+            <div *ngIf="desc.invalid && desc.touched" class="text-danger">Required</div>
+          </div>
 <!-- <input type="file" (change)="onFileSelected($event)" accept="image/*"> -->
          <!-- Portfolio (Multiple Upload) -->
 <div class="mb-3">

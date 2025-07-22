@@ -208,7 +208,13 @@ fetchReviewsByEmail(email: string): void {
     .subscribe(data => {
       this.selectedVendor = data;
         this.photos = data.workPhotosBase64;
-        this.dp=data.portfolioBase64;
+const rawBase64 = data.portfolioBase64.replace(/^data:image\/[a-zA-Z]+;base64,/, '');
+
+      // Safely add the prefix just once
+      this.dp = "data:image/png;base64," + rawBase64;
+
+      console.log("DP Image:", this.dp);
+
 
 console.log(this.selectedVendor.workPhotosBase64);
       // ✅ This is the key part - ensure workPhotosBase64 is set
@@ -376,7 +382,7 @@ isVideo(mediaType: string): boolean {
 }
 
 getMediaSrc(media: { mediaType: string; base64: string }): string {
-  return `data:${media.mediaType};base64,${media.base64}`;
+  return `data:image/jpeg;base64,${media.base64}`;
 }
 
 getGoogleMapsUrl(): string {
@@ -421,5 +427,13 @@ copyProfileLink(): void {
   });
 }
 
+  public encodeURIComponent(address: string): string {
+    return encodeURIComponent(address || '');
+  }
+
+  get googleMapsUrl(): string {
+    if (!this.selectedVendor || !this.selectedVendor.location) return '';
+    return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(this.selectedVendor.location);
+  }
 
   }

@@ -1,149 +1,161 @@
 
 
 
-  <div class="row" style="height: vh;">
+<div class="row" style="height: vh;">
 
-    <!-- Contacts Panel -->
-     <div class="col-md-4 px-0"
-             style="background: #121212; color: #fff; border-right: 1px solid #2c2c2c;">
-          <div class="px-3 py-3 border-bottom border-secondary bg-gradient-primary text-white">
-            <h5 class="mb-0">Messages</h5>
+  <!-- Contacts Panel -->
+   <div class="col-md-4 px-0"
+           style="background: #121212; color: #fff; border-right: 1px solid #2c2c2c;">
+        <div class="px-3 py-3 border-bottom border-secondary bg-gradient-primary text-white">
+          <h5 class="mb-0">Messages</h5>
+        </div>
+
+    <div class="contacts-scroll" style="overflow-y: auto; max-height: calc(85vh - 64px);">
+      <div *ngFor="let contact of contacts"
+           class="d-flex align-items-center px-3 py-2 contact-item"
+           [class.bg-dark]="receiverName === contact.receiver"
+           (click)="selectContact(contact)"
+           style="cursor: pointer; transition: background-color 0.2s;">
+
+        <!-- Avatar with fallback -->
+        <ng-container *ngIf="contact.profilePicture; else defaultContactAvatar">
+          <img [src]="contact.profilePicture"
+               (error)="contact.profilePicture = null"
+               class="rounded-circle me-3"
+               width="45" height="45" />
+        </ng-container>
+        <ng-template #defaultContactAvatar>
+          <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+               style="width: 45px; height: 45px;">
+            <i class="bi bi-person-fill fs-5"></i>
           </div>
+        </ng-template>
 
-      <div class="contacts-scroll" style="overflow-y: auto; max-height: calc(85vh - 64px);">
-        <div *ngFor="let contact of contacts"
-             class="d-flex align-items-center px-3 py-2 contact-item"
-             [class.bg-dark]="receiverName === contact.receiver"
-             (click)="selectContact(contact)"
-             style="cursor: pointer; transition: background-color 0.2s;">
-
-          <!-- Avatar with fallback -->
-          <ng-container *ngIf="contact.profilePicture; else defaultContactAvatar">
-            <img [src]="contact.profilePicture"
-                 (error)="contact.profilePicture = null"
-                 class="rounded-circle me-3"
-                 width="45" height="45" />
-          </ng-container>
-          <ng-template #defaultContactAvatar>
-            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
-                 style="width: 45px; height: 45px;">
-              <i class="bi bi-person-fill fs-5"></i>
-            </div>
-          </ng-template>
-
-          <div class="flex-grow-1">
-            <div class="d-flex justify-content-between">
-              <strong class="text-light">{{ contact.receiver }}</strong>
-            </div>
-            <small class="text-muted">{{ contact.message || 'Tap to chat' }}</small>
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between">
+            <strong class="text-light">{{ contact.receiver }}</strong>
           </div>
+          <small class="text-muted">{{ contact.message || 'Tap to chat' }}</small>
         </div>
-      </div>
-    </div>
-
-    <!-- Main Panel: Chat or Profile -->
-    <div class="col-md-8 px-0 d-flex justify-content-center" style="background-color: #1e1e1e; color: #fff;">
-
-      <!-- Vendor Profile Full View -->
-      <div *ngIf="viewingVendorProfile" class="card w-100 border-0 text-white"
-           style="max-width: 600px; height: 85vh; background-color: #1e1e1e; overflow-y: auto;">
-        <div class="card-header bg-gradient-primary d-flex align-items-center justify-content-between">
-          <button class="btn btn-sm btn-light" (click)="backToChat()">&larr; Back</button>
-          <h5 class="mb-0">Vendor Profile</h5>
-          <span></span>
-        </div>
-
-        <div class="card-body text-center">
-          <img [src]="vendorDetails?.photo || defaultProfile" class="rounded-circle border border-light mb-3" width="100" height="100" alt="Profile" />
-          <h5>{{ vendorDetails?.name }}</h5>
-          <p class="text-muted small mb-4">{{ vendorDetails?.category }}</p>
-
-          <div class="text-start px-3">
-            <p><strong>Email:</strong> {{ vendorDetails?.email }}</p>
-            <p><strong>Phone:</strong> {{ vendorDetails?.phone }}</p>
-            <p><strong>Address:</strong> {{ vendorDetails?.address }}</p>
-            <p><strong>Vendor ID:</strong> {{ vendorDetails?.id }}</p>
-          </div>
-
-          <div *ngIf="vendorDetails?.documents?.length" class="mt-4">
-            <h6 class="text-start">Documents</h6>
-            <div class="row g-2">
-              <div class="col-6" *ngFor="let doc of vendorDetails.documents">
-                <img [src]="doc" class="img-fluid rounded border border-light" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Chat Window -->
-      <div *ngIf="!viewingVendorProfile && receiverName" class="card shadow w-100 border-0"
-           style="max-width: 600px; height: 85vh; background-color: #1e1e1e; display: flex; flex-direction: column;">
-
-        <!-- Header -->
-        <div class="card-header bg-gradient-primary text-white d-flex align-items-center border-0"
-             style="cursor: pointer;" (click)="openVendorProfile()">
-
-          <ng-container *ngIf="receiverPic; else defaultHeaderAvatar">
-            <img [src]="receiverPic" (error)="receiverPic = undefined" width="40" height="40" class="me-2" />
-          </ng-container>
-          <ng-template #defaultHeaderAvatar>
-            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
-                 style="width: 40px; height: 40px;">
-              <i class="bi bi-person-fill fs-6"></i>
-            </div>
-          </ng-template>
-
-          <strong>{{ receiverName }}</strong>
-        </div>
-
-        <!-- Messages Body -->
-        <div #scrollMe class="card-body overflow-auto px-3 py-2" style="flex-grow: 1; background-color: #121212;">
-          <div *ngFor="let msg of messages" class="mb-3 d-flex"
-               [ngClass]="{ 'justify-content-end': msg.from === 'me', 'justify-content-start': msg.from !== 'me' }">
-
-            <div class="d-flex align-items-end" [ngClass]="{ 'flex-row-reverse': msg.from === 'me' }">
-              <ng-container *ngIf="msg.profilePicture; else defaultMsgAvatar">
-                <img [src]="msg.profilePicture" (error)="msg.profilePicture = undefined" class="rounded-circle mx-2" width="35" height="35" />
-              </ng-container>
-              <ng-template #defaultMsgAvatar>
-                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-2"
-                     style="width: 35px; height: 35px;">
-                  <i class="bi bi-person-fill fs-6"></i>
-                </div>
-              </ng-template>
-
-              <div>
-                <div class="px-3 py-2 rounded-4"
-                     [ngClass]="msg.from === 'me' ? 'bg-gradient-primary text-white' : 'bg-dark text-light border'">
-                  {{ msg.text }}
-                </div>
-                <div class="text-muted small mt-1">{{ msg.time }}</div>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="typing" class="text-muted small">Typing...</div>
-        </div>
-
-        <!-- Input -->
-        <div class="card-footer bg-dark border-0">
-          <form (ngSubmit)="sendMessage()">
-            <div class="input-group">
-              <input type="text" [(ngModel)]="newMessage" name="message"
-                     class="form-control bg-secondary text-white border-0 rounded-start-pill"
-                     placeholder="Type a message" (keydown)="simulateTyping()" required />
-              <button type="submit" class="btn btn-primary rounded-end-pill px-4">Send</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Default Prompt -->
-      <div *ngIf="!receiverName && !viewingVendorProfile"
-           class="d-flex align-items-center justify-content-center w-100"
-           style="height: 85vh;">
-        <p class="text-muted fs-5">👈 Select a contact to start chatting</p>
       </div>
     </div>
   </div>
+
+  <!-- Main Panel: Chat or Profile -->
+  <div class="col-md-8 px-0 d-flex justify-content-center" style="background-color: #1e1e1e; color: #fff;">
+
+    <!-- Vendor Profile Full View -->
+    <div *ngIf="viewingVendorProfile" class="card w-100 border-0 text-white"
+         style="max-width: 600px; height: 85vh; background-color: #1e1e1e; overflow-y: auto;">
+      <div class="card-header bg-gradient-primary d-flex align-items-center justify-content-between">
+        <button class="btn btn-sm btn-light" (click)="backToChat()">&larr; Back</button>
+        <h5 class="mb-0">Vendor Profile</h5>
+        <span></span>
+      </div>
+
+      <div class="card-body text-center">
+        <img [src]="getImageSrc(vendorDetails?.photo)" class="rounded-circle border border-light mb-3" width="100" height="100" alt="Profile" />
+        <h5>{{ vendorDetails?.name }}</h5>
+        <p class="text-muted small mb-4">{{ vendorDetails?.category }}</p>
+
+        <div class="text-start px-3">
+          <p><strong>Email:</strong> {{ vendorDetails?.email }}</p>
+          <p><strong>Phone:</strong> {{ vendorDetails?.phone }}</p>
+          <p><strong>Address:</strong> {{ vendorDetails?.address }}</p>
+          <p><strong>Vendor ID:</strong> {{ vendorDetails?.id }}</p>
+        </div>
+
+       <div *ngIf="vendorDetails?.documents" class="mb-4">
+  <div class="d-flex flex-wrap gap-3">
+    <ng-container *ngFor="let media of vendorDetails?.documents">
+
+      <video *ngIf="isVideo(media.mediaType)" controls
+             class="rounded shadow-sm"
+             style="width: 150px; height: 150px; object-fit: cover;">
+        <source [src]="getMediaSrc(media)" [type]="media.mediaType" />
+        Your browser does not support the video tag.
+      </video>
+
+      <!-- Render image -->
+      <img *ngIf="!isVideo(media.mediaType)"
+           [src]="getMediaSrc(media)"
+           class="rounded shadow-sm"
+           style="width: 150px; height: 150px; object-fit: cover;" />
+
+    </ng-container>
+  </div>
+</div>
+      </div>
+    </div>
+
+    <!-- Chat Window -->
+    <div *ngIf="!viewingVendorProfile && receiverName" class="card shadow w-100 border-0"
+         style="max-width: 600px; height: 85vh; background-color: #1e1e1e; display: flex; flex-direction: column;">
+
+      <!-- Header -->
+      <div class="card-header bg-gradient-primary text-white d-flex align-items-center border-0"
+           style="cursor: pointer;" (click)="openVendorProfile()">
+
+        <ng-container *ngIf="receiverPic; else defaultHeaderAvatar">
+          <img [src]="receiverPic" (error)="receiverPic = undefined" width="40" height="40" class="me-2" />
+        </ng-container>
+        <ng-template #defaultHeaderAvatar>
+          <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+               style="width: 40px; height: 40px;">
+            <i class="bi bi-person-fill fs-6"></i>
+          </div>
+        </ng-template>
+
+        <strong>{{ receiverName }}</strong>
+      </div>
+
+      <!-- Messages Body -->
+      <div #scrollMe class="card-body overflow-auto px-3 py-2" style="flex-grow: 1; background-color: #121212;">
+        <div *ngFor="let msg of messages" class="mb-3 d-flex"
+             [ngClass]="{ 'justify-content-end': msg.from === 'me', 'justify-content-start': msg.from !== 'me' }">
+
+          <div class="d-flex align-items-end" [ngClass]="{ 'flex-row-reverse': msg.from === 'me' }">
+            <ng-container *ngIf="msg.profilePicture; else defaultMsgAvatar">
+              <img [src]="msg.profilePicture" (error)="msg.profilePicture = undefined" class="rounded-circle mx-2" width="35" height="35" />
+            </ng-container>
+            <ng-template #defaultMsgAvatar>
+              <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-2"
+                   style="width: 35px; height: 35px;">
+                <i class="bi bi-person-fill fs-6"></i>
+              </div>
+            </ng-template>
+
+            <div>
+              <div class="px-3 py-2 rounded-4"
+                   [ngClass]="msg.from === 'me' ? 'bg-gradient-primary text-white' : 'bg-dark text-light border'">
+                {{ msg.text }}
+              </div>
+              <div class="text-muted small mt-1">{{ msg.time }}</div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="typing" class="text-muted small">Typing...</div>
+      </div>
+
+      <!-- Input -->
+      <div class="card-footer bg-dark border-0">
+        <form (ngSubmit)="sendMessage()">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="newMessage" name="message"
+                   class="form-control bg-secondary text-white border-0 rounded-start-pill"
+                   placeholder="Type a message" (keydown)="simulateTyping()" required />
+            <button type="submit" class="btn btn-primary rounded-end-pill px-4">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Default Prompt -->
+    <div *ngIf="!receiverName && !viewingVendorProfile"
+         class="d-flex align-items-center justify-content-center w-100"
+         style="height: 85vh;">
+      <p class="text-muted fs-5"> Select a contact to start chatting</p>
+    </div>
+  </div>
+</div>
 

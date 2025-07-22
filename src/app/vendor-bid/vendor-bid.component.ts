@@ -84,7 +84,7 @@ export class VendorBidComponent implements OnInit {
       category: this.selectedCategory,
       message: this.message,
       status: "null",
-      vendorid: 6
+      vendorid: this.vendorId
 };
 
 console.log(payload)
