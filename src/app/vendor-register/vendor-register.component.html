@@ -1,127 +1,122 @@
-<div class="d-flex justify-content-center align-items-center vh-100 ">
-  <div class="card shadow-lg w-100" style="max-width: 800px;">
-    <div class="card-body">
+<!-- Vendor Registration Page -->
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100"
+     style="background: linear-gradient(to bottom right, #1f1c2c, #928dab); padding: 2rem 1rem;">
+
+  <div class="card shadow-lg"
+       style="width: 100%; max-width: 850px; border-radius: 1.5rem; background-color: rgba(0, 0, 0, 0.85); color: #fff;">
+
+    <div class="card-body p-4">
       <form #registerForm="ngForm" (ngSubmit)="registerVendor()">
 
-        <!-- Step 1 -->
+        <!-- STEP 1 -->
         <div *ngIf="step === 1">
-          <h4 class="mb-4 text-center">Vendor Registration - Step 1</h4>
+          <h4 class="text-center fw-bold mb-4">Vendor Registration - Step 1</h4>
 
-          <div class="mb-3">
-            <label>Business Name</label>
-<input type="text" class="form-control" name="businessName" required [(ngModel)]="vendor.businessName" #bName="ngModel">
-            <div *ngIf="bName.invalid && bName.touched" class="text-danger">Required</div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Business Name</label>
+              <input type="text" class="form-control bg-dark text-white border-secondary" name="businessName" required [(ngModel)]="vendor.businessName" #bName="ngModel">
+              <div *ngIf="bName.invalid && bName.touched" class="text-danger small">Required</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control bg-dark text-white border-secondary" name="email" required email [(ngModel)]="vendor.email" #email="ngModel">
+              <div *ngIf="email.invalid && email.touched" class="text-danger small">Valid email required</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input type="text" class="form-control bg-dark text-white border-secondary" name="phone" required pattern="^[0-9]{10}$" [(ngModel)]="vendor.phone" #phone="ngModel">
+              <div *ngIf="phone.invalid && phone.touched" class="text-danger small">10-digit number</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control bg-dark text-white border-secondary" name="password" required [(ngModel)]="vendor.password" #pass="ngModel">
+              <div *ngIf="pass.invalid && pass.touched" class="text-danger small">Min 6 characters</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Location</label>
+              <input type="text" class="form-control bg-dark text-white border-secondary" name="location" required [(ngModel)]="vendor.location" #loc="ngModel">
+              <div *ngIf="loc.invalid && loc.touched" class="text-danger small">Required</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Category</label>
+              <select class="form-select bg-dark text-white border-secondary" name="category" required [(ngModel)]="vendor.category" #cat="ngModel">
+                <option value="" disabled selected>Select category</option>
+                <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+              </select>
+              <div *ngIf="cat.invalid && cat.touched" class="text-danger small">Required</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Years of Experience</label>
+              <input type="number" class="form-control bg-dark text-white border-secondary" name="yearsOfExperience" required [(ngModel)]="vendor.yearsOfExperience" #exp="ngModel">
+              <div *ngIf="exp.invalid && exp.touched" class="text-danger small">Required</div>
+            </div>
           </div>
 
-          <div class="mb-3">
-            <label>Email</label>
-            <input type="email" class="form-control" name="email" required email [(ngModel)]="vendor.email" #email="ngModel">
-            <div *ngIf="email.invalid && email.touched" class="text-danger">Valid email required</div>
-          </div>
-
-          <div class="mb-3">
-            <label>Phone</label>
-            <input type="text" class="form-control" name="phone" required pattern="^[0-9]{10}$" [(ngModel)]="vendor.phone" #phone="ngModel">
-            <div *ngIf="phone.invalid && phone.touched" class="text-danger">Enter 10-digit number</div>
-          </div>
-
-          <div class="mb-3">
-            <label>Password</label>
-<input type="password" class="form-control" name="password" required [(ngModel)]="vendor.password" #pass="ngModel">
-            <div *ngIf="pass.invalid && pass.touched" class="text-danger">Min 6 characters</div>
-          </div>
-
-          <div class="mb-3">
-            <label>Location</label>
-            <input type="text" class="form-control" name="location" required [(ngModel)]="vendor.location" #loc="ngModel">
-            <div *ngIf="loc.invalid && loc.touched" class="text-danger">Required</div>
-          </div>
-
-          <div class="mb-3">
-            <label>Category</label>
-            <select class="form-select" name="category" required [(ngModel)]="vendor.category" #cat="ngModel">
-              <option value="" disabled selected>Select category</option>
-              <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
-            </select>
-            <div *ngIf="cat.invalid && cat.touched" class="text-danger">Required</div>
-          </div>
-
-          <div class="mb-3">
-            <label>Years of Experience</label>
-<input type="number" class="form-control" name="yearsOfExperience" required [(ngModel)]="vendor.yearsOfExperience" #exp="ngModel">
-            <div *ngIf="exp.invalid && exp.touched" class="text-danger">Required</div>
-          </div>
-
-          <div class="d-grid">
-            <button class="btn btn-dark" type="button" (click)="nextStep(registerForm)">Next</button>
+          <div class="d-grid mt-4">
+            <button class="btn"
+                    type="button"
+                    style="background: linear-gradient(to right, #ff512f, #dd2476); color: white; font-weight: bold;"
+                    (click)="nextStep(registerForm)">
+              Next Step →
+            </button>
           </div>
         </div>
 
-        <!-- Step 2 -->
+        <!-- STEP 2 -->
         <div *ngIf="step === 2">
-          <h4 class="mb-4 text-center">Vendor Registration - Step 2</h4>
+          <h4 class="text-center fw-bold mb-4">Vendor Registration - Step 2</h4>
 
           <div class="mb-3">
-            <label>Service Description</label>
-<textarea class="form-control" name="serviceDescription" required [(ngModel)]="vendor.serviceDescription" #desc="ngModel"></textarea>
-            <div *ngIf="desc.invalid && desc.touched" class="text-danger">Required</div>
+            <label class="form-label">Service Description</label>
+            <textarea class="form-control bg-dark text-white border-secondary" name="serviceDescription" required [(ngModel)]="vendor.serviceDescription" #desc="ngModel"></textarea>
+            <div *ngIf="desc.invalid && desc.touched" class="text-danger small">Required</div>
           </div>
+
           <div class="mb-3">
-            <label>Terms and  Condition</label>
-<textarea class="form-control" name="termsAndCondition" required [(ngModel)]="vendor.termsAndCondition" #desc="ngModel"></textarea>
-            <div *ngIf="desc.invalid && desc.touched" class="text-danger">Required</div>
+            <label class="form-label">Terms and Condition</label>
+            <textarea class="form-control bg-dark text-white border-secondary" name="termsAndCondition" required [(ngModel)]="vendor.termsAndCondition" #desc="ngModel"></textarea>
+            <div *ngIf="desc.invalid && desc.touched" class="text-danger small">Required</div>
           </div>
-<!-- <input type="file" (change)="onFileSelected($event)" accept="image/*"> -->
-         <!-- Portfolio (Multiple Upload) -->
-<div class="mb-3">
-  <label>Portfolio</label>
-  <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'portfolio')" accept="image/*">
-  <div class="mt-2 d-flex flex-wrap gap-2">
-    <img *ngFor="let img of vendor.portfolio" [src]="img" alt="Portfolio Preview" class="img-thumbnail" style="max-height: 120px;">
-  </div>
-</div>
 
-<!-- Photo Works (Multiple Upload) -->
-<!-- Portfolio (Multiple Images) --
+          <div class="mb-3">
+            <label class="form-label">Portfolio</label>
+            <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'portfolio')" accept="image/*">
+            <div class="mt-2 d-flex flex-wrap gap-2">
+              <img *ngFor="let img of vendor.portfolio" [src]="img" alt="Preview" class="img-thumbnail" style="max-height: 120px;">
+            </div>
+          </div>
 
-  Photo Works (Multiple Images) -->
-<!-- Photo Works Upload -->
-<!-- <div class="mb-3">
-  <label class="form-label">Photo Works</label>
-  <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'photoWorks')" accept="image/*" />
-  <div class="mt-2 d-flex flex-wrap gap-2">
-    <div *ngFor="let img of vendor.photoWorks; let i = index" class="position-relative">
-      <img [src]="img" class="img-thumbnail" style="max-height: 120px; max-width: 120px;" />
-      <button type="button"
-              class="btn-close position-absolute top-0 end-0 m-1 bg-white rounded-circle"
-              (click)="removeImage('photoWorks', i)">
-      </button>
-    </div>
-  </div> -->
-<!-- </div> -->
+          <div class="mb-3">
+            <label class="form-label">Certifications</label>
+            <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'certifications')" accept="image/*" />
+            <div class="mt-2 d-flex flex-wrap gap-2">
+              <div *ngFor="let img of vendor.certifications; let i = index" class="position-relative">
+                <img [src]="img" class="img-thumbnail" style="max-height: 120px; max-width: 120px;" />
+                <button type="button"
+                        class="btn-close position-absolute top-0 end-0 m-1 bg-white rounded-circle"
+                        (click)="removeImage('certifications', i)">
+                </button>
+              </div>
+            </div>
+          </div>
 
-<!-- Certifications Upload -->
-<div class="mb-3">
-  <label class="form-label">Certifications</label>
-  <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'certifications')" accept="image/*" />
-  <div class="mt-2 d-flex flex-wrap gap-2">
-    <div *ngFor="let img of vendor.certifications; let i = index" class="position-relative">
-      <img [src]="img" class="img-thumbnail" style="max-height: 120px; max-width: 120px;" />
-      <button type="button"
-              class="btn-close position-absolute top-0 end-0 m-1 bg-white rounded-circle"
-              (click)="removeImage('certifications', i)">
-      </button>
-    </div>
-  </div>
-</div>
-
-
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-secondary" type="button" (click)="prevStep()">Back</button>
-            <button class="btn btn-dark" type="submit" [disabled]="registerForm.invalid">Register</button>
+          <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-secondary" type="button" (click)="prevStep()">← Back</button>
+            <button class="btn"
+                    type="submit"
+                    [disabled]="registerForm.invalid"
+                    style="background: linear-gradient(to right, #ff512f, #dd2476); color: white; font-weight: bold;">
+              Register ✔
+            </button>
           </div>
         </div>
-
       </form>
     </div>
   </div>

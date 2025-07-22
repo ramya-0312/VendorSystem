@@ -1,4 +1,5 @@
 <div class="container mt-4">
+
   <!-- Category Filter -->
   <div class="d-flex justify-content-end mb-4">
     <select id="categoryFilter"
@@ -18,16 +19,21 @@
           <span class="badge bg-success position-absolute top-0 end-0 m-2 px-3 py-1 rounded-pill text-uppercase small">
             {{ vendor.category }}
           </span>
-<ng-template #defaultContactAvatar>
-            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
-                 style="width: 45px; height: 45px;">
-              <i class="bi bi-person-fill fs-5"></i>
-            </div>
-          </ng-template>
+
+          <!-- Vendor Card Body -->
           <div class="card-body d-flex align-items-center">
-            <img [src]="vendor.portfolioBase64"else defaultContactAvatar
-                 class="rounded-circle me-4 shadow"
-                 style="width: 75px; height: 75px; object-fit: cover;" />
+            <ng-container *ngIf="vendor.portfolioBase64; else defaultAvatar">
+              <img [src]="vendor.portfolioBase64"
+                   class="rounded-circle me-4 shadow"
+                   style="width: 75px; height: 75px; object-fit: cover;" />
+            </ng-container>
+            <ng-template #defaultAvatar>
+              <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-4"
+                   style="width: 75px; height: 75px;">
+                <i class="bi bi-person-fill fs-4"></i>
+              </div>
+            </ng-template>
+
             <div class="flex-grow-1">
               <h5 class="mb-1 text-primary fw-semibold">{{ vendor.businessName }}</h5>
               <p class="mb-1 small"><strong>Email:</strong> {{ vendor.email }}</p>
@@ -40,7 +46,7 @@
       </div>
     </div>
 
-    <!-- Pagination Controls -->
+    <!-- Pagination -->
     <div class="d-flex justify-content-between align-items-center mt-4">
       <button class="btn btn-outline-secondary btn-sm rounded-pill px-4" (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
       <span class="fw-medium">Page {{ currentPage }}</span>
@@ -53,19 +59,22 @@
     <div class="text-center mt-5 text-muted fs-6">No vendors found.</div>
   </ng-template>
 
- <!-- Offcanvas Side Panel -->
-  <!-- Vendor Profile Panel -->
-<div class="offcanvas offcanvas-end show"
+  <!-- =================== OFFCANVAS PROFILE PANEL ==================== -->
+  <div class="offcanvas offcanvas-end show"
      tabindex="-1"
      [ngClass]="{ 'd-block': selectedVendor }"
-     style="width: 600px; background-color: #1e1e2f; color: white; overflow-y: auto;"
+     style="width: 600px;
+            background: linear-gradient(to bottom right, #4e64e1, #292974, #4e4c60);
+            color: #f5f5f5;
+            overflow-y: auto;
+            border-left: 3px solid #00c6ff;
+            box-shadow: -4px 0 12px rgba(0,0,0,0.5);"
      *ngIf="selectedVendor">
 
   <!-- Header -->
-  <div class="offcanvas-header border-bottom border-secondary bg-dark text-white">
+  <div class="offcanvas-header border-bottom border-secondary data-bs-toggle text-white shadow-sm">
     <div class="d-flex align-items-center gap-3">
-      <img [src]="dp || 'assets/default-profile.png'"
-           class="rounded"
+      <img [src]="dp || 'assets/default-profile.png'" class="rounded"
            style="width: 60px; height: 60px; object-fit: cover;" />
       <div>
         <h5 class="mb-0 fw-semibold">{{ selectedVendor?.businessName }}</h5>
@@ -82,10 +91,7 @@
     <div class="mb-3">
       <p class="mb-1 small text-muted">📍 Address</p>
       <p class="fw-medium">{{ selectedVendor?.location }}</p>
-      <a class="btn btn-outline-info btn-sm mt-2" target="_blank"
-         [href]="googleMapsUrl">
-        Get Directions
-      </a>
+      <a class="btn btn-outline-info btn-sm mt-2" target="_blank" [href]="googleMapsUrl">Get Directions</a>
     </div>
 
     <!-- Phone -->
@@ -116,7 +122,11 @@
     <div *ngIf="selectedVendor?.services?.length" class="mb-3">
       <p class="mb-1 small text-muted">🔧 Services Offered</p>
       <div class="d-flex flex-wrap gap-2">
-        <span *ngFor="let service of selectedVendor.services" class="badge rounded-pill bg-info text-dark">{{ service }}</span>
+        <span *ngFor="let service of selectedVendor.services"
+              class="badge rounded-pill"
+              style="background: linear-gradient(to right, #00c6ff, #0072ff); color: #fff;">
+          {{ service }}
+        </span>
       </div>
     </div>
 
@@ -128,237 +138,156 @@
       </div>
     </div>
 
-    <!-- Add Review Button -->
-<div class="review-section">
-  <button class="btn btn-outline-light rounded-pill mb-3" (click)="showReviewBox = !showReviewBox">
-    Add Review
-  </button>
+    <!-- Review Section -->
+    <div class="review-section">
+      <button class="btn btn-outline-info rounded-pill mb-3" (click)="showReviewBox = !showReviewBox">✍️ Add Review</button>
 
-  <!-- Review Box -->
-  <div *ngIf="showReviewBox" class="review-box mb-4">
+      <div *ngIf="showReviewBox" class="review-box mb-4">
+        <div class="stars fs-4 text-warning">
+          <i *ngFor="let star of [1,2,3,4,5]"
+             class="bi"
+             [ngClass]="{
+               'bi-star-fill text-warning': star <= rating,
+               'bi-star text-secondary': star > rating
+             }"
+             (click)="setRating(star)"
+             style="cursor: pointer;"></i>
+        </div>
+        <textarea [(ngModel)]="reviewText"
+                  placeholder="Write your review..."
+                  class="form-control mt-2 mb-2"
+                  style="background-color: #2a2a3a; color: #fff; border: 1px solid #444;"></textarea>
+        <button class="btn btn-success rounded-pill" (click)="submitReview()">Submit</button>
+      </div>
 
-    <div class="stars fs-4 text-warning">
-      <i
-    *ngFor="let star of [1, 2, 3, 4, 5]"
-    class="bi"
-    [ngClass]="{
-      'bi-star-fill text-warning': star <= rating,
-      'bi-star text-text-grey': star > rating
-    }"
-    (click)="setRating(star)"
-    style="cursor: pointer; font-size: 1.5rem;"
-  ></i>
-    </div>
+      <div class="review-summary-container">
+        <div class="overall-rating mb-3">
+          <div class="score fs-2 text-success">{{ averageRdfating }}</div>
+          <div class="stars text-warning fs-5">
+            <ng-container *ngFor="let s of [1,2,3,4,5]">
+              <span [ngClass]="{ 'text-warning fw-bold': s <= floorRating, 'text-muted': s > floorRating }">★</span>
+            </ng-container>
+          </div>
+          <div class="total-reviews text-light">{{ totalReviews }} reviews</div>
+        </div>
 
+        <div class="rating-bars mb-4">
+          <div *ngFor="let star of [5,4,3,2,1]" class="d-flex align-items-center mb-1">
+            <span class="me-2">{{ star }}</span>
+            <div class="progress flex-grow-1 me-2" style="height: 20px;">
+              <div class="progress-bar bg-info" [style.width.%]="getPercentage(star)"></div>
+            </div>
+            <span class="text-grey">{{ ratingsCount[star] || 0 }}</span>
+          </div>
+        </div>
 
-    <textarea [(ngModel)]="reviewText" placeholder="Write your review..." class="form-control mt-2 mb-2"></textarea>
-    <button class="btn btn-success rounded-pill" (click)="submitReview()">Submit</button>
-  </div>
-
-  <div class="review-summary-container">
-
-    <!-- Overall Rating -->
-  <div class="overall-rating mb-3">
-  <div class="score fs-2 text-success">{{ averageRdfating }}</div>
-  <div class="stars text-warning fs-5" >
-    <ng-container *ngFor="let s of [1,2,3,4,5]">
-      <span
-        [ngClass]="{
-          'text-warning fw-bold': s <= floorRating,
-          'text-muted': s > floorRating
-        }"
-      >★</span>
-    </ng-container>
-  </div>
-  <div class="total-reviews text-light">{{ totalReviews }} reviews</div>
-</div>
-
-    <!-- Rating Bars -->
-    <div class="rating-bars mb-4">
-  <div *ngFor="let star of [5,4,3,2,1]" class="d-flex align-items-center mb-1">
-    <!-- Star Label -->
-    <span class="me-2">{{ star }}</span>
-
-    <!-- Progress Bar -->
-    <div class="progress flex-grow-1 me-2" style="height: 20px;">
-      <div class="progress-bar bg-info"
-           [style.width.%]="getPercentage(star)">
+        <div class="review-list">
+          <div class="review d-flex mb-3" *ngFor="let review of reviews">
+            <div>
+              <div class="stars mb-1">
+                <span *ngFor="let s of [1,2,3,4,5]"
+                      [ngClass]="{ 'text-warning fw-bold': s <= review.rating, 'text-muted': s > review.rating }">★</span>
+              </div>
+              <p class="mb-0 small text-light">{{ review.review }}</p>
+              <small class="text-muted">— {{ review.userEmail }}</small>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Count per star -->
-    <span class="text-grey">{{ ratingsCount[star] || 0 }}</span>
-  </div>
-</div>
-
-
-    <!-- Individual Reviews -->
-   <div class="review-list">
-  <div class="review d-flex mb-3" *ngFor="let review of reviews">
-    <!-- <img [src]="review.avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;" /> -->
-    <div>
-      <!-- Star Rating -->
-      <!-- <div class="stars text-warning mb-1">
-        <span *ngFor="let s of [1,2,3,4,5]" [class.fw-bold]="s <= review.rating">★</span>
-      </div> -->
-      <!-- Star Rating -->
-<div class="stars mb-1">
-  <span
-    *ngFor="let s of [1,2,3,4,5]"
-    [ngClass]="{
-      'text-warning fw-bold': s <= review.rating,
-      'text-muted': s > review.rating
-    }"
-  >
-    ★
-  </span>
-</div>
-
-
-      <!-- Review Text -->
-      <p class="mb-0 small text-light">{{ review.review }}</p>
-
-      <!-- Reviewer Email -->
-      <small class="text-muted">— {{ review.userEmail }}</small>
+    <!-- Portfolio -->
+    <div *ngIf="photos" class="mb-4">
+      <p class="mb-1 small text-muted">📸 Work Portfolio</p>
+      <div class="d-flex flex-wrap gap-3">
+        <ng-container *ngFor="let media of photos">
+          <video *ngIf="isVideo(media.mediaType)" controls class="rounded shadow-sm"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+            <source [src]="getMediaSrc(media)" [type]="media.mediaType" />
+          </video>
+          <img *ngIf="!isVideo(media.mediaType)" [src]="getMediaSrc(media)" alt="Work portfolio"
+               class="rounded shadow-sm"
+               style="width: 150px; height: 150px; object-fit: cover;" />
+        </ng-container>
+      </div>
     </div>
-  </div>
-</div>
-
-  </div>
-</div>
-
-<div *ngIf="photos" class="mb-4">
-  <p class="mb-1 small text-muted">📸 Work Portfolio</p>
-   <!-- <p>{{selectedVendor.workPhotosBase64}}</p> -->
-  <div class="d-flex flex-wrap gap-3">
-    <ng-container *ngFor="let media of photos">
-
-      <video *ngIf="isVideo(media.mediaType)" controls
-             class="rounded shadow-sm"
-             style="width: 150px; height: 150px; object-fit: cover;">
-        <source [src]="getMediaSrc(media)" [type]="media.mediaType" />
-        Your browser does not support the video tag.
-      </video>
-
-      <!-- Render image -->
-      <img *ngIf="!isVideo(media.mediaType)"
-           [src]="getMediaSrc(media)"
-           alt="Work portfolio"
-           class="rounded shadow-sm"
-           style="width: 150px; height: 150px; object-fit: cover;" />
-
-    </ng-container>
-  </div>
-</div>
-
-
 
     <!-- Action Buttons -->
     <div class="d-grid gap-2">
       <a *ngIf="selectedVendor?.website" [href]="selectedVendor.website" target="_blank" class="btn btn-outline-info rounded-pill">
         🌐 Visit Website
       </a>
-      <!-- <button class="btn btn-outline-success rounded-pill">🧭 Get Directions</button> -->
-      <!-- Share Button -->
-<div class="dropdown d-grid gap-2">
-  <button class="btn btn-outline-warning rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">
-    📤 Share Profile
-  </button>
 
-  <ul class="dropdown-menu">
-    <li>
-      <a class="dropdown-item" [href]="getWhatsAppShareUrl()" target="_blank">
-        📱 Share via WhatsApp
-      </a>
-    </li>
-    <li>
-      <a class="dropdown-item" [href]="getEmailShareUrl()">
-        📧 Share via Email
-      </a>
-    </li>
-    <li>
-      <button class="dropdown-item" (click)="copyProfileLink()">
-        📋 Copy Profile Link
-      </button>
-    </li>
-  </ul>
-</div>
+      <div class="dropdown d-grid gap-2">
+        <button class="btn btn-outline-warning rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          📤 Share Profile
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" [href]="getWhatsAppShareUrl()" target="_blank">📱 WhatsApp</a></li>
+          <li><a class="dropdown-item" [href]="getEmailShareUrl()">📧 Email</a></li>
+          <li><button class="dropdown-item" (click)="copyProfileLink()">📋 Copy Link</button></li>
+        </ul>
+      </div>
 
       <button class="btn btn-outline-primary" (click)="toggleChat()">💬 Chat with Vendor</button>
     </div>
 
+    <!-- Chat Box -->
+    <div *ngIf="showChatBox" class="chat-box rounded text-light p-3 mt-3"
+         style="height: 300px;
+                overflow-y: auto;
+                background: linear-gradient(to top left, #141e30, #243b55);
+                border: 1px solid #555;">
+      <div class="chat-messages mb-3" style="height: 220px; overflow-y: auto;">
+        <div *ngFor="let msg of chatMessages" class="d-flex mb-2"
+             [ngClass]="{ 'justify-content-end': msg.sender === senderEmail, 'justify-content-start': msg.sender !== senderEmail }">
 
- <!-- Chat Box -->
-<div *ngIf="showChatBox" class="chat-box rounded bg-dark text-light p-3 mt-3"
-     style="height: 300px; overflow-y: auto; border: 1px solid #444;">
+          <ng-container *ngIf="msg.sender !== senderEmail">
+            <div class="me-2">
+              <img *ngIf="vendorPic; else defaultVendorIcon" [src]="vendorPic"
+                   class="rounded-circle" style="width: 36px; height: 36px; object-fit: cover;" />
+              <ng-template #defaultVendorIcon>
+                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+                     style="width: 36px; height: 36px;">
+                  <i class="bi bi-person-fill text-white"></i>
+                </div>
+              </ng-template>
+            </div>
+          </ng-container>
 
-  <div class="chat-messages mb-3" style="height: 220px; overflow-y: auto;">
-    <div *ngFor="let msg of chatMessages" class="d-flex mb-2"
-         [ngClass]="{ 'justify-content-end': msg.sender === senderEmail, 'justify-content-start': msg.sender !== senderEmail }">
+          <div>
+            <span class="badge"
+                  [ngClass]="{
+                    'bg-primary text-white': msg.sender === senderEmail,
+                    'bg-light text-dark': msg.sender !== senderEmail
+                  }">
+              {{ msg.message }}
+            </span>
+          </div>
 
-      <!-- VENDOR AVATAR (LEFT) -->
-<ng-container *ngIf="msg.sender !== senderEmail">
-  <div class="me-2">
-    <!-- If vendorPic is valid -->
-    <ng-container *ngIf="vendorPic && vendorPic !== '' && vendorPic !== null; else defaultVendorIcon">
-      <img [src]="vendorPic"
-           alt="Vendor"
-           class="rounded-circle"
-           style="width: 36px; height: 36px; object-fit: cover;" />
-    </ng-container>
+          <ng-container *ngIf="msg.sender === senderEmail">
+            <div class="ms-2">
+              <img *ngIf="senderPic; else defaultUserIcon" [src]="senderPic"
+                   class="rounded-circle" style="width: 36px; height: 36px; object-fit: cover;" />
+              <ng-template #defaultUserIcon>
+                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+                     style="width: 36px; height: 36px;">
+                  <i class="bi bi-person-fill text-white"></i>
+                </div>
+              </ng-template>
+            </div>
+          </ng-container>
 
-    <!-- Fallback to icon -->
-    <ng-template #defaultVendorIcon>
-      <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
-           style="width: 36px; height: 36px;">
-        <i class="bi bi-person-fill text-white" style="font-size: 1.2rem;"></i>
+        </div>
       </div>
-    </ng-template>
-  </div>
-</ng-container>
 
-
-      <!-- MESSAGE BUBBLE -->
-      <div>
-        <span class="badge"
-              [ngClass]="{
-                'bg-primary text-white': msg.sender === senderEmail,
-                'bg-light text-dark': msg.sender !== senderEmail
-              }">
-          {{ msg.message}}
-        </span>
+      <div class="input-group">
+        <input type="text" class="form-control" [(ngModel)]="chatInput"
+               (keyup.enter)="sendMessage()" placeholder="Type a message..." />
+        <button class="btn" style="background: linear-gradient(to right, #00b09b, #96c93d); color: white;" (click)="sendMessage()">Send</button>
       </div>
-
-      <!-- USER AVATAR (RIGHT) -->
-<ng-container *ngIf="msg.sender === senderEmail">
-  <div class="ms-2">
-    <ng-container *ngIf="senderPic && senderPic !== '' && senderPic !== null; else defaultUserIcon">
-      <img [src]="senderPic"
-           alt="You"
-           class="rounded-circle"
-           style="width: 36px; height: 36px; object-fit: cover;" />
-    </ng-container>
-
-    <ng-template #defaultUserIcon>
-      <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
-           style="width: 36px; height: 36px;">
-        <i class="bi bi-person-fill text-white" style="font-size: 1.2rem;"></i>
-      </div>
-    </ng-template>
-  </div>
-</ng-container>
-
     </div>
-  </div>
-
-  <!-- INPUT FIELD -->
-  <div class="input-group">
-    <input type="text" class="form-control" [(ngModel)]="chatInput"
-           (keyup.enter)="sendMessage()" placeholder="Type a message..." />
-    <button class="btn btn-success" (click)="sendMessage()">Send</button>
   </div>
 </div>
 
-    </div>
-  </div>
-  </div>
+</div>

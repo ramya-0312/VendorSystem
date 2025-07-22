@@ -1,35 +1,25 @@
-<nav class="navbar navbar-dark bg-dark px-4">
+<nav class="navbar px-4" style="background: linear-gradient(to right, #1e3c72, #2a5298); color: white;">
   <div class="container-fluid justify-content-between">
 
     <!-- Left Nav Items -->
     <div class="d-flex gap-4">
-      <span class="nav-text" (click)="activeTab = 'chat'">Chat</span>
-      <span class="nav-text" (click)="activeTab = 'vendors'">Vendors</span>
-      <span class="nav-text" (click)="activeTab = 'profile'">Update Profile</span>
-      <span class="nav-text" (click)="activeTab = 'bidding'">Bidding</span>
-
+      <span class="nav-text text-white fw-semibold" style="cursor: pointer;" (click)="activeTab = 'chat'">💬 Chat</span>
+      <span class="nav-text text-white fw-semibold" style="cursor: pointer;" (click)="activeTab = 'vendors'">🏪 Vendors</span>
+      <span class="nav-text text-white fw-semibold" style="cursor: pointer;" (click)="activeTab = 'profile'">🧑‍💼 Update Profile</span>
+      <span class="nav-text text-white fw-semibold" style="cursor: pointer;" (click)="activeTab = 'bidding'">📢 Bidding</span>
     </div>
 
-    <!-- Conditional rendering -->
-<!-- <div *ngIf="activeTab === 'vendors'">
-  <app-vendor (openChat)="switchToChatTab()"></app-vendor>
-</div> -->
-
-<!-- <div *ngIf="activeTab === 'chat'">
-  <app-message></app-message>
-</div> -->
-
     <!-- Logout -->
-   <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
-  Logout
-</button>
+    <button class="btn btn-warning fw-bold text-light px-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
+      🔓 Logout
+    </button>
   </div>
 </nav>
 
 <!-- Fullscreen Chat Pop-up -->
-<div *ngIf="activeTab === 'chat'" class="chat-popup">
+<div *ngIf="activeTab === 'chat'" class="chat-popup" style="background: #121212; color: white; padding: 1rem;">
   <div class="chat-content">
-    <button class="btn btn-light btn-sm float-end" (click)="activeTab = ''">Close</button>
+    <button class="btn btn-outline-light btn-sm float-end" (click)="activeTab = ''">❌ Close</button>
     <app-message></app-message>
   </div>
 </div>
@@ -38,27 +28,40 @@
 <div class="container mt-4" *ngIf="activeTab !== 'chat'">
   <app-vendor-list *ngIf="activeTab === 'vendors'"></app-vendor-list>
   <app-update-profile *ngIf="activeTab === 'profile'"></app-update-profile>
-   <app-bidding *ngIf="activeTab === 'bidding'"></app-bidding>
+  <app-bidding *ngIf="activeTab === 'bidding'"></app-bidding>
 </div>
 
-
 <!-- Logout Confirmation Modal -->
-<!-- Custom Logout Modal -->
+<!-- Logout Confirmation Modal -->
+<!-- Logout Confirmation Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content logout-modal">
+    <div class="modal-content logout-modal" style="background: linear-gradient(to right, #0f2027, #203a43, #2c5364); color: #f8f9fa; border-radius: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+
+      <!-- Modal Header -->
       <div class="modal-header border-0 justify-content-center">
         <h5 class="modal-title text-center w-100" id="logoutModalLabel">
-          <i class="bi bi-box-arrow-right text-danger fs-3 me-2"></i> Confirm Logout
+          <i class="bi bi-box-arrow-right text-info fs-3 me-2"></i> Confirm Logout
         </h5>
       </div>
+
+      <!-- Modal Body -->
       <div class="modal-body text-center">
         <p class="mb-0">Are you sure you want to log out?</p>
       </div>
+
+      <!-- Modal Footer -->
       <div class="modal-footer border-0 d-flex justify-content-center gap-3">
-        <button type="button" class="btn cancel-btn px-4" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn confirm-btn px-4" (click)="confirmLogout()">Logout</button>
+        <button type="button" class="btn btn-outline-light px-4 rounded-pill" data-bs-dismiss="modal">❌ Cancel</button>
+        <button type="button" class="btn px-4 rounded-pill fw-bold" 
+                style="background-color: #00d1ff; color: #000;" 
+                (click)="confirmLogout()">
+          🚪 Logout
+        </button>
       </div>
+
     </div>
   </div>
 </div>
+
+
