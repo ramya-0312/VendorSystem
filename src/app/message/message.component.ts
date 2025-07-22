@@ -12,32 +12,20 @@ export class MessageComponent implements OnInit, AfterViewChecked {
 
   constructor(private http: HttpClient) {}
 
- messages: { from: string, text: string, time: string, profilePicture: string | undefined }[] = [];
 
-
- receiverId: string = '';
-showVendorProfile = false;
-vendorDetails: any = {
-   id: '',
-          name: '',
-          email: '',
-          phone:'',
-          address: '',
-          category: '',
-          photo: '',
-          documents:[]
-};
-defaultProfile = 'assets/default-avatar.png';
-
-// selectedVendor: any = null;
 getprofile:any=null;
+
+  messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
+  receiverId: string = '';
+  showVendorProfile = false;
+  vendorDetails: any = null;
+  defaultProfile = 'assets/default-avatar.png';
 
   senderName = '';
   senderEmail = '';
   senderPic = '';
-
 
   receiverName = '';
   receiverPic: string | undefined = '';
@@ -47,6 +35,7 @@ getprofile:any=null;
   isVendor = false;
 
   ngOnInit(): void {
+
     const storedUser = localStorage.getItem('user');
     const storedVendor = localStorage.getItem('vendor');
     if (storedVendor) {
@@ -54,13 +43,15 @@ getprofile:any=null;
     } else {
       this.isVendor = false;
     }
+
+
+    // const storedUser = localStorage.getItem('vendor');
+
     if (storedUser) {
       try {
         const userObj = JSON.parse(storedUser);
         this.senderName =  userObj.email || 'Unknown User';
-        console.log(this.senderName);
         this.senderEmail = userObj.email || userObj.response?.email || '';
-        console.log(this.senderEmail)
         this.senderPic = userObj.profilePicture || userObj.response?.profilePicture || 'https://cdn-icons-png.flaticon.com/512/147/147144.png';
 
         this.fetchContacts(); // Get contacts dynamically
@@ -80,14 +71,17 @@ getprofile:any=null;
     }
 
 
+
     
 
 
 
 
 
+
   }
-  viewingVendorProfile = false;
+
+   viewingVendorProfile = false;
 
  openVendorProfile() {
   this.viewingVendorProfile = true;
@@ -139,7 +133,7 @@ backToChat() {
       next: (data) => {
         this.contacts = data;
         console.log(this.contacts)
-        // Auto-select the first contact if available
+
         if (this.contacts.length > 0) {
           this.selectContact(this.contacts[0]);
         }
@@ -154,6 +148,7 @@ backToChat() {
     this.receiverName = contact.receiver;
     this.receiverPic = contact.profilePicture;
     this.fetchMessages();
+
   }
 
   fetchMessages(): void {

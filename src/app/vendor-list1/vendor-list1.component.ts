@@ -6,11 +6,11 @@ declare var bootstrap: any;
 
 @Component({
   standalone: false,
-  selector: 'app-vendor-list',
-  templateUrl: './vendor-list.component.html',
-  styleUrls: ['./vendor-list.component.css']
+  selector: 'app-vendor-list1',
+  templateUrl: './vendor-list1.component.html',
+  styleUrls: ['./vendor-list1.component.css']
 })
-export class VendorListComponent implements OnInit {
+export class VendorList1Component implements OnInit {
 
   latitude = 13.0827
 longitude = 80.2707
@@ -208,13 +208,7 @@ fetchReviewsByEmail(email: string): void {
     .subscribe(data => {
       this.selectedVendor = data;
         this.photos = data.workPhotosBase64;
-const rawBase64 = data.portfolioBase64.replace(/^data:image\/[a-zA-Z]+;base64,/, '');
-
-      // Safely add the prefix just once
-      this.dp = "data:image/png;base64," + rawBase64;
-
-      console.log("DP Image:", this.dp);
-
+        this.dp=data.portfolioBase64;
 
 console.log(this.selectedVendor.workPhotosBase64);
       // ✅ This is the key part - ensure workPhotosBase64 is set
@@ -382,7 +376,7 @@ isVideo(mediaType: string): boolean {
 }
 
 getMediaSrc(media: { mediaType: string; base64: string }): string {
-  return `data:image/jpeg;base64,${media.base64}`;
+  return `data:${media.mediaType};base64,${media.base64}`;
 }
 
 getGoogleMapsUrl(): string {
@@ -428,17 +422,4 @@ copyProfileLink(): void {
     alert('Failed to copy link.');
   });
 }
-
-
-  public encodeURIComponent(address: string): string {
-    return encodeURIComponent(address || '');
-  }
-
-  get googleMapsUrl(): string {
-    if (!this.selectedVendor || !this.selectedVendor.location) return '';
-    return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(this.selectedVendor.location);
-  }
-
-  }
-
-
+}

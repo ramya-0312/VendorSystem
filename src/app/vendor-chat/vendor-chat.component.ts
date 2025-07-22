@@ -16,13 +16,17 @@ export class VendorChatComponent implements OnInit, AfterViewChecked {
   messages: { from: string, text: string, time: string, profilePicture?: string }[] = [];
   newMessage = '';
   typing = false;
+  receiverId: string = '';
+  showVendorProfile = false;
+  vendorDetails: any = null;
+  defaultProfile = 'assets/default-avatar.png';
 
   senderName = '';
   senderEmail = '';
   senderPic = '';
 
   receiverName = '';
-receiverPic: string | undefined = '';
+  receiverPic: string | undefined = '';
 
   contacts: any[] = [];
 
@@ -45,12 +49,59 @@ receiverPic: string | undefined = '';
     }
   }
 
-   fetchContacts(): void {
-    const url = `http://localhost:8080/api/chat/receivers?sender=${this.senderEmail}`;
+   viewingVendorProfile = false;
+
+ openVendorProfile() {
+  this.viewingVendorProfile = true;
+
+  this.http.get<any[]>('http://localhost:8080/api/vendor/getvendorlist').subscribe({
+    next: (vendors) => {
+      const matched = vendors.find(v => v.email === this.receiverName || v.businessName === this.receiverName);
+      if (matched) {
+        this.vendorDetails = {
+          id: matched.id,
+          name: matched.businessName,
+          email: matched.email,
+          phone: matched.phone,
+          address: matched.location,
+          category: matched.category,
+          photo: matched.portfolioBase64 || this.defaultProfile,
+          documents: [matched.certificationImageBase64]
+        };
+      } else {
+        console.warn('Vendor not found for:', this.receiverName);
+      }
+    },
+    error: (err) => {
+      console.error('Error fetching vendor list:', err);
+    }
+  });
+}
+
+
+
+  closeVendorProfile() {
+  this.showVendorProfile = false;
+}
+backToChat() {
+  this.viewingVendorProfile = false;
+}
+
+
+
+
+  fetchContacts(): void {
+    const url = `http://localhost:8080/api/chat/receivers?sender=${this.senderName}`;
+    console.log(this.senderEmail);
     this.http.get<any[]>(url).subscribe({
       next: (data) => {
         this.contacts = data;
+
         console.log(data)
+
+        console.log(this.contacts)
+
+
         if (this.contacts.length > 0) {
           this.selectContact(this.contacts[0]);
         }
@@ -65,7 +116,7 @@ receiverPic: string | undefined = '';
     this.receiverName = contact.receiver;
     this.receiverPic = contact.profilePicture;
     this.fetchMessages();
-    // this.fetchContacts();
+    
   }
 
   fetchMessages(): void {
