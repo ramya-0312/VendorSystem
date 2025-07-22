@@ -18,7 +18,7 @@ export class UserResetPasswordComponent {
       alert('Passwords do not match');
       return;
     }
-    // Send new password to backend API
+   
     alert('Password reset successfully!');
     this.router.navigate(['/user-login']);
   }

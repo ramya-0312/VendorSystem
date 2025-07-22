@@ -1,29 +1,27 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="card p-4 vendor-card">
-    <h3 class="text-center mb-4">Vendor Login</h3>
+    <h3 class="text-center mb-4 text-dark">Vendor Login</h3>
 
     <form (ngSubmit)="login()">
       <div class="mb-3">
-        <label for="vendorEmail" class="form-label">Email</label>
+        <label for="vendorEmail" class="form-label text-white">Email</label>
         <input type="email" class="form-control" id="vendorEmail" [(ngModel)]="email" name="email" required>
       </div>
       <div class="mb-3">
-        <label for="vendorPassword" class="form-label">Password</label>
+        <label for="vendorPassword" class="form-label text-white">Password</label>
         <input type="password" class="form-control" id="vendorPassword" [(ngModel)]="password" name="password" required>
       </div>
 
       <div class="d-grid mb-2">
-        <button type="submit" class="btn btn-dark">Login</button>
+        <button type="submit" class="btn btn-gradient">Login</button>
       </div>
 
-      <!-- Show only if login fails -->
-      <div *ngIf="loginFailed" class="text-danger mb-2 text-center">
-        Incorrect password. <a href="/vendor-reset-password" class="text-warning">Forgot password?</a>
+      <div *ngIf="loginFailed" class="text-warning mb-2 text-center">
+        Incorrect password. <a href="/vendor-reset-password" class="text-info">Forgot password?</a>
       </div>
 
-      <!-- Register link -->
-      <div class="text-center mt-2">
-        <span class="text-muted">New user?</span>
+      <div class="text-center mt-2 text-white">
+        <span>New user?</span>
         <a routerLink="/vendor-register" class="text-info">Register</a>
       </div>
     </form>

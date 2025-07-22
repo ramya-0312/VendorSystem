@@ -1,0 +1,40 @@
+.vendor-card {
+  width: 230px;     /* Change to desired square size */
+  height: 230px;    /* Same as width */
+  background-color: #1e1e1e;
+  border-radius: 20px;
+  padding: 15px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+
+.vendor-card:hover {
+  transform: scale(1.05);
+}
+
+.profile-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  border: 2px solid #fff;
+}
+
+.card-body {
+  font-size: 13px;
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 2px 8px;
+}
+

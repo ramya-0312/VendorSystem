@@ -54,7 +54,7 @@ body {
   z-index: 0;
   animation: slideshow 20s infinite ease-in-out;
   transition: background-image 1s ease-in-out;
-  opacity: 0.3;
+  opacity: 0.5;
   filter: brightness(40%);
 }
 
@@ -71,3 +71,5 @@ body {
   border-radius: 1rem;
   border: none;
 }
+
+

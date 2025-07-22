@@ -1,17 +1,51 @@
-body {
-  background-color: #121212;
-  color: #d3d3d3;
+/* Full page gradient background */
+html, body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(135deg, #1e3c72, #2a5298); /* Elegant blue gradient */
+  font-family: 'Segoe UI', sans-serif;
 }
 
+/* Card with soft gradient overlay */
 .vendor-card {
-  background-color: #1e1e1e;
-  color: #e0e0e0;
-  border: 1px solid #444;
-  border-radius: 15px;
-  width: 400px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  width: 360px;
+  border-radius: 20px;
+  padding: 30px;
+  background: rgb(222, 219, 225);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
-a {
-  text-decoration: none;
+/* Input Styling */
+.form-control {
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid #ccc;
 }
+
+.form-control::placeholder {
+  color: #ccc;
+}
+
+/* Gradient button */
+.btn-gradient {
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(to right, #00f2fe, #a64ffe);
+  transform: scale(1.02);
+}
+.container {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  height: 100vh;
+}
+

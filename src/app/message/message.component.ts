@@ -31,7 +31,7 @@ getprofile:any=null;
   receiverPic: string | undefined = '';
 
   contacts: any[] = [];
- 
+
   isVendor = false;
 
   ngOnInit(): void {
@@ -72,7 +72,7 @@ getprofile:any=null;
 
 
 
-    
+
 
 
 
@@ -91,8 +91,8 @@ getprofile:any=null;
       this.getprofile=vendors;
       console.log(this.getprofile.id)
       console.log(this.getprofile)
-    
-        
+
+
         console.log(this.receiverName)
         this.vendorDetails = {
           id: this.getprofile.businessName,
@@ -102,8 +102,8 @@ getprofile:any=null;
           address: this.getprofile.location,
           category: this.getprofile.category,
           photo: this.getprofile.portfolioBase64 || this.defaultProfile,
-          
-          documents: this.getprofile.workPhotosBase64 
+
+          documents: this.getprofile.workPhotosBase64
         };
       console.log(this.vendorDetails)
       // console.log(documents.length)
@@ -230,6 +230,6 @@ isVideo(mediaType: string): boolean {
 getMediaSrc(media: { mediaType: string; base64: string }): string {
    console.log( `data:${media.mediaType};base64,${media.base64}`);
   return `data:${media.mediaType};base64,${media.base64}`;
- 
+
 }
 }
