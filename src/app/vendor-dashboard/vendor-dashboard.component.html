@@ -25,11 +25,12 @@
 </div>
 
 <!-- Welcome Section (default on vendor dashboard load) -->
-<div *ngIf="!activeTab || activeTab === ''" class="container mt-5">
-  <div class="p-5 rounded-4 shadow-lg" style="background: linear-gradient(to bottom right, #283e51, #4b79a1); color: #f1f1f1;">
+<div *ngIf="!activeTab || activeTab === ''" class="d-flex justify-content-center align-items-center"
+     style="height: 100vh; width: 100%; background: linear-gradient(to bottom right, #1f1c2c, #928dab);">
+  <div class="p-5 mb-3 rounded-3 vw-100 vh-100" style="background: linear-gradient(to bottom right, #1f1c2c, #928dab);; color: #f1f1f1;">
 
     <!-- Title -->
-    <h2 class="text-center mb-3 fw-bolder" style="color: #ffc107; font-size: 2.5rem; letter-spacing: 1px; font-family: Georgia, 'Times New Roman', Times, serif;">
+    <h2 class="text-center  fw-bolder" style="color: #ffc107; font-size: 2.5rem; letter-spacing: 1px; font-family: Georgia, 'Times New Roman', Times, serif;">
       👋 Welcome, <span style="color: #ffffff;">Vendor!</span>
     </h2>
     <p class="text-center mb-4" style="color: #e0e0e0; font-size: 1.15rem; font-weight: 400;">
@@ -38,7 +39,7 @@
 
     <div class="row g-4">
       <!-- Your Engagement -->
-      <div class="col-md-6">
+      <div class="col-md-6 mb-4 mt-5">
         <div class="p-4 rounded-3 bg-dark bg-opacity-25 h-100">
           <h4 class="text-warning mb-3" style="font-size: 1.5rem; font-weight: 600; font-style: oblique; font-family: Georgia, 'Times New Roman', Times, serif;">📊 Your Engagement</h4>
           <ul class="list-unstyled" style="line-height: 1.8; font-size: 1.05rem; color: #f1f1f1;">
@@ -51,7 +52,7 @@
       </div>
 
       <!-- Quick Tools -->
-      <div class="col-md-6">
+      <div class="col-md-6 mb-4 mt-5">
         <div class="p-4 rounded-3 bg-dark bg-opacity-25 h-100">
           <h4 class="text-info mb-3" style="font-size: 1.5rem; font-weight: 600; font-style: oblique; font-family: Georgia, 'Times New Roman', Times, serif;">🛠️ Quick Tools</h4>
           <ul class="list-unstyled" style="line-height: 1.8; font-size: 1.05rem; color: #f1f1f1;">
