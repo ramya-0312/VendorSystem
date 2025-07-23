@@ -1,38 +1,46 @@
-<div class="card-container">
-  <div class="card">
-    <h3>Upload Work Photos</h3>
+<div class="card-container" style="background: linear-gradient(to right, #000000, #1a1a1a); min-height: 100vh; padding: 2rem; color: #f5f5f5;">
 
-    <input type="file" (change)="onFileSelected($event)" multiple class="input" />
-    <button (click)="uploadImages()" class="btn">Upload</button>
+  <!-- Upload Card -->
+  <div class="card p-4 mb-4" style="background: #111; border-radius: 1rem; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2); border: 1px solid #333;">
+    <h3 class="mb-3" style="color: gold;">📤 Upload Work Photos</h3>
+    <input type="file" (change)="onFileSelected($event)" multiple class="form-control mb-3 bg-dark text-white border-0 rounded-3" />
+    <button (click)="uploadImages()" class="btn w-100" style="background: gold; color: black; font-weight: 600;">Upload</button>
   </div>
 
-  <div class="card">
-    <button (click)="getWorkImages()" class="btn">View Photos</button>
+  <!-- View Button Card -->
+  <div class="card p-3 mb-4" style="background: #111; border-radius: 1rem; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2); border: 1px solid #333;">
+    <button (click)="getWorkImages()" class="btn w-100" style="background: transparent; color: gold; border: 2px solid gold; font-weight: bold;">
+      👁️ View Photos
+    </button>
   </div>
 
-  <div class="card" *ngIf="base64Images.length > 0">
-    <h4>Uploaded Work Media</h4>
-    <div class="image-grid">
-      <div class="image-box position-relative" *ngFor="let media of base64Images; let i = index">
-        <!-- Show video if mediaType starts with 'video/' -->
-        <video *ngIf="media.mediaType?.startsWith('video/')" controls width="250">
+  <!-- Media Grid -->
+  <div class="card p-4" *ngIf="base64Images.length > 0" style="background: #111; border-radius: 1rem; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2); border: 1px solid #333;">
+    <h4 class="mb-4" style="color: gold;">🖼️ Uploaded Work Media</h4>
+
+    <div class="image-grid d-flex flex-wrap gap-3">
+      <div class="image-box position-relative" *ngFor="let media of base64Images; let i = index" style="width: 250px;">
+
+        <!-- Video -->
+        <video *ngIf="media.mediaType?.startsWith('video/')" controls width="100%" class="rounded shadow border border-warning">
           <source [src]="'data:' + media.mediaType + ';base64,' + media.base64" [type]="media.mediaType" />
           Your browser does not support the video tag.
         </video>
 
-        <!-- Otherwise show image -->
+        <!-- Image -->
         <img *ngIf="!media.mediaType?.startsWith('video/')" 
              [src]="'data:' + media.mediaType + ';base64,' + media.base64" 
-             alt="Work Image" />
+             alt="Work Image"
+             class="img-fluid rounded shadow border border-warning" />
 
-        <!-- ❌ CROSS ICON -->
+        <!-- Delete Button -->
         <button (click)="removeImage(media.id, i)"
                 class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 p-1"
                 style="border-radius: 50%; width: 24px; height: 24px; line-height: 0;">
           &times;
         </button>
 
-        <p>#{{ i + 1 }} | ID: {{ media.id }}</p>
+        <p class="mt-2 text-muted">#{{ i + 1 }} | ID: {{ media.id }}</p>
       </div>
     </div>
   </div>

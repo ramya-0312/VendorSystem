@@ -228,7 +228,7 @@ isVideo(mediaType: string): boolean {
 }
 
 getMediaSrc(media: { mediaType: string; base64: string }): string {
-   console.log( `data:${media.mediaType};base64,${media.base64}`);
+  //  console.log( `data:${media.mediaType};base64,${media.base64}`);
   return `data:${media.mediaType};base64,${media.base64}`;
 
 }

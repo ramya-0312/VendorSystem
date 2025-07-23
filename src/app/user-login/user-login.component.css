@@ -1,17 +1,32 @@
-body {
-  background-color: #121212;
-  color: #d3d3d3;
+.skyblue-bg {
+  background: linear-gradient(to right, #d0f0fd, #e6f7ff);
 }
 
-.vendor-card {
-  background-color: #1e1e1e;
-  color: #e0e0e0;
-  border: 1px solid #444;
-  border-radius: 15px;
-  width: 400px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+.white-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 123, 255, 0.1);
 }
 
-a {
-  text-decoration: none;
+.btn-primary {
+  border-radius: 30px;
+  padding: 10px;
+  background-color: #0d6efd;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+input.form-control {
+  border-radius: 10px;
+  border: 1px solid #cce5ff;
+}
+
+.form-label {
+  font-weight: 600;
 }

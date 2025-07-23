@@ -1,36 +1,29 @@
-body {
-  background-color: #121212;
-  color: #d3d3d3;
+.gradient-bg {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
 }
 
+.card{
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+}
 .custom-card {
-  background-color: #363535;
-  color: #e0e0e0;
-  border: 1px solid #333;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-  border-radius: 15px;
-  width: 350px;
-}
-.background {
-  position: relative;
-  background-image: url('/assets/dark-vendor1.jpeg');
-  background-size: cover;
-  background-position: center;
-  animation: slideShow 20s infinite ease-in-out;
-  height: 100vh;
+  background: rgba(244, 239, 239, 0.51);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+  width: 100%;
+  max-width: 400px;
 }
 
-.background::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(10, 10, 10, 0.6));
-  z-index: 1;
-}
-
-.container {
-  position: relative;
-  z-index: 2;
+.brand-name {
+  color: #ffd700; /* Gold accent for branding */
+  font-weight: bold;
 }
 
 /* Keyframe Animation */
@@ -54,7 +47,7 @@ body {
   z-index: 0;
   animation: slideshow 20s infinite ease-in-out;
   transition: background-image 1s ease-in-out;
-  opacity: 0.5;
+  opacity: 10;
   filter: brightness(40%);
 }
 
@@ -66,10 +59,27 @@ body {
 
 /* Card Styling */
 .custom-card {
-  background-color: rgba(30, 30, 30, 0.9);
+  background-color: rgba(75, 82, 87, 0.9);
   color: #fff;
-  border-radius: 1rem;
-  border: none;
+  border: 2px solid #fff;
+}
+.btn-gradient-vendor {
+  background: linear-gradient(to right, #711eca, #22324d); /* Purple to Blue */
+  border-radius: 80px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn-gradient-user {
+  background: linear-gradient(to right, #22324d, #711eca); /* Orange to Pink */
+   border-radius: 80px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn-gradient-vendor:hover,
+.btn-gradient-user:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+  text-decoration: none;
 }
 
 

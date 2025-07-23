@@ -21,20 +21,21 @@ export class UserForgotPasswordComponent {
   constructor(private http: HttpClient, private toastr: ToastrService, private router: Router) {}
 
   verifyEmail() {
-    this.http.post('/api/user/verify-email', { email: this.email }).subscribe(
-      (res: any) => {
-        if (res.exists) {
-          this.isVerified = true;
-          this.emailInvalid = false;
-        } else {
-          this.emailInvalid = true;
-        }
-      },
-      (err) => {
+  this.http.post('http://localhost:8080/api/users/verify-email', { email: this.email }).subscribe(
+    (res: any) => {
+      if (res.status === 'OK' || res.response.includes('successfully')) {
+        this.isVerified = true;
+        this.emailInvalid = false;
+      } else {
         this.emailInvalid = true;
       }
-    );
-  }
+    },
+    (err) => {
+      this.emailInvalid = true;
+    }
+  );
+}
+
 
   resetPassword() {
     if (this.newPassword !== this.confirmPassword) {
@@ -44,9 +45,9 @@ export class UserForgotPasswordComponent {
 
     this.passwordMismatch = false;
 
-    this.http.post('/api/user/reset-password', {
+    this.http.post('http://localhost:8080/api/users/updatepassword', {
       email: this.email,
-      newPassword: this.newPassword,
+      password: this.newPassword,
     }).subscribe(
       (res) => {
         this.toastr.success('Password reset successfully');

@@ -1,38 +1,16 @@
-.navbar {
-  background: #222 !important;
+body {
+  background-color: #f4f7fa;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.nav-text {
-  color: white;
+.nav-link {
   cursor: pointer;
-  position: relative;
   transition: color 0.3s;
 }
-
-.nav-text:hover {
-  color: #0dcaf0; /* Bootstrap info color */
-  text-decoration: underline;
+.nav-link:hover {
+  color: #6610f2 !important;
 }
 
-.btn-danger {
-  background: #dc3545;
-  border: none;
+.badge {
+  font-size: 0.75rem;
 }
-
-.btn-danger:hover {
-  background: #bb2d3b;
-}
-
-.container {
-  background: none;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
-}
-
-.chat-popup {
-  background: #222;
-  border-radius: 0;
-  box-shadow: none;
-}
-

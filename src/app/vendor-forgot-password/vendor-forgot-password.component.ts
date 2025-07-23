@@ -23,9 +23,9 @@ export class VendorForgotPasswordComponent {
   ){}
 
   verifyEmail() {
-  this.http.post('/api/verify-email', { email: this.email }).subscribe(
+  this.http.post('http://localhost:8080/api/vendor/verify-email', { email: this.email }).subscribe(
     (res: any) => {
-      if (res.exists) {
+      if (res.status === 'OK' && res.response.includes('successfully')) {
         this.isVerified = true;
         this.emailInvalid = false;
       } else {
@@ -38,6 +38,7 @@ export class VendorForgotPasswordComponent {
   );
 }
 
+
 resetPassword() {
   if (this.newPassword !== this.confirmPassword) {
     this.passwordMismatch = true;
@@ -46,7 +47,7 @@ resetPassword() {
 
   this.passwordMismatch = false;
 
-  this.http.post('/api/reset-password', {
+  this.http.post('http://localhost:8080/api/reset-password', {
     email: this.email,
     newPassword: this.newPassword,
   }).subscribe(

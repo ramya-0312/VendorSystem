@@ -1,70 +1,95 @@
-<div class="d-flex justify-content-center align-items-center min-vh-100 bg-black text-white px-2">
-  <div class="card p-4 shadow-lg bg-dark text-white w-100" style="max-width: 520px; border-radius: 1rem;">
+<div class="d-flex justify-content-center align-items-center min-vh-100 px-3" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);">
+  <div class="card shadow-lg w-100 p-4 text-white border-0" style="max-width: 520px; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);">
 
-    <h4 class="mb-4 text-center">📩 Place Your Bid</h4>
+    <h4 class="mb-4 text-center fw-bold text-info">
+      ✨ Place Your <span class="text-warning">Bid</span> ✨
+    </h4>
 
     <!-- Name -->
     <div class="mb-3">
-      <label class="form-label">Name</label>
-      <input [(ngModel)]="name" type="text" class="form-control bg-secondary text-white border-0 rounded-3" placeholder="Enter your name" />
+      <label class="form-label text-warning">👤 Name</label>
+      <input [(ngModel)]="name" type="text"
+             class="form-control border-0 rounded-pill px-4 py-2 text-white"
+             style="background-color: #1e3c72;" placeholder="Enter your name" />
     </div>
 
     <!-- Email -->
     <div class="mb-3">
-      <label class="form-label">Email</label>
-      <input [(ngModel)]="email" type="email" class="form-control bg-secondary text-white border-0 rounded-3" placeholder="Enter your email" />
+      <label class="form-label text-warning">📧 Email</label>
+      <input [(ngModel)]="email" type="email"
+             class="form-control border-0 rounded-pill px-4 py-2 text-white"
+             style="background-color: #2a5298;" placeholder="Enter your email" />
     </div>
 
     <!-- Mobile -->
     <div class="mb-3">
-      <label class="form-label">Mobile No</label>
-      <input [(ngModel)]="mobile" type="tel" class="form-control bg-secondary text-white border-0 rounded-3" placeholder="Enter mobile number" />
+      <label class="form-label text-warning">📱 Mobile No</label>
+      <input [(ngModel)]="mobile" type="tel"
+             class="form-control border-0 rounded-pill px-4 py-2 text-white"
+             style="background-color: #1e3c72;" placeholder="Enter mobile number" />
     </div>
 
     <!-- City -->
     <div class="mb-3">
-      <label class="form-label">City</label>
-      <input [(ngModel)]="city" type="text" class="form-control bg-secondary text-white border-0 rounded-3" placeholder="Enter city" />
+      <label class="form-label text-warning">🏙️ City</label>
+      <input [(ngModel)]="city" type="text"
+             class="form-control border-0 rounded-pill px-4 py-2 text-white"
+             style="background-color: #2a5298;" placeholder="Enter city" />
     </div>
 
-    <!-- Date -->
+    <!-- Event Date -->
     <div class="mb-3">
-      <label class="form-label">Event Date</label>
-      <input [(ngModel)]="date" type="date" class="form-control bg-secondary text-white border-0 rounded-3" />
+      <label class="form-label text-warning">📅 Event Date</label>
+      <input [(ngModel)]="date" type="date"
+             class="form-control border-0 rounded-pill px-4 py-2 text-white"
+             style="background-color: #1e3c72;" />
     </div>
 
     <!-- Start Time -->
     <div class="mb-3">
-      <label class="form-label">Start Time</label>
-      <select [(ngModel)]="startTime" class="form-select bg-secondary text-white border-0 rounded-3" (change)="updateEndTimes()">
+      <label class="form-label text-warning">🕒 Start Time</label>
+      <select [(ngModel)]="startTime"
+              class="form-select border-0 rounded-pill px-4 py-2 text-white"
+              style="background-color: #2a5298;" (change)="updateEndTimes()">
         <option *ngFor="let time of allTimes" [value]="time">{{ time }}</option>
       </select>
     </div>
 
     <!-- End Time -->
     <div class="mb-3">
-      <label class="form-label">End Time </label>
-      <select [(ngModel)]="endTime" class="form-select bg-secondary text-white border-0 rounded-3">
+      <label class="form-label text-warning">⌛ End Time</label>
+      <select [(ngModel)]="endTime"
+              class="form-select border-0 rounded-pill px-4 py-2 text-white"
+              style="background-color: #1e3c72;">
         <option *ngFor="let time of filteredEndTimes" [value]="time">{{ time }}</option>
       </select>
     </div>
 
-    <!-- Category -->
+    <!-- Service Category -->
     <div class="mb-3">
-      <label class="form-label">Service Category</label>
-      <select [(ngModel)]="selectedCategory" class="form-select bg-secondary text-white border-0 rounded-3">
+      <label class="form-label text-warning">🛠️ Service Category</label>
+      <select [(ngModel)]="selectedCategory"
+              class="form-select border-0 rounded-pill px-4 py-2 text-white"
+              style="background-color: #2a5298;">
         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
       </select>
     </div>
 
     <!-- Message -->
     <div class="mb-4">
-      <label class="form-label">Message</label>
-      <textarea [(ngModel)]="message" class="form-control bg-secondary text-white border-0 rounded-3" rows="3" placeholder="Enter message"></textarea>
+      <label class="form-label text-warning">💬 Message</label>
+      <textarea [(ngModel)]="message"
+                class="form-control border-0 rounded-4 px-4 py-3 text-white"
+                style="background-color: #1e3c72;" rows="3"
+                placeholder="Tell us more..."></textarea>
     </div>
 
     <!-- Submit Button -->
-    <button class="btn btn-primary w-100 rounded-pill py-2" (click)="sendBid()">Send Bid</button>
+    <button class="btn w-100 rounded-pill py-2 fw-bold shadow"
+            style="background: linear-gradient(to right, #00c6ff, #0072ff); color: white; border: none; transition: 0.3s;"
+            (click)="sendBid()">
+      🚀 Send Bid
+    </button>
 
   </div>
 </div>

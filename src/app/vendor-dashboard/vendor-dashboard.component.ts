@@ -61,6 +61,7 @@ resetVendorView() {
   constructor(private router: Router, private toastr: ToastrService, private http: HttpClient) {}
 
   ngOnInit() {
+    this.activeTab = '';
     this.senderEmail = localStorage.getItem('userEmail') || '';
   const user = JSON.parse(localStorage.getItem('vendor') || '{}');
   this.vendorid = user.id;
@@ -164,7 +165,7 @@ sendMessage() {
 
   this.chatInput = '';
 
-  
+
   this.http.post<any>('http://localhost:8080/api/chat', payload).subscribe({
     next: () => {
       // this.fetchMessages(); // Refresh messages from backend

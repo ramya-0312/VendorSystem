@@ -1,59 +1,68 @@
-<div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card p-4 user-register-card w-100" style="max-width: 500px;">
-    <h4 class="text-center mb-4">User Registration</h4>
+<div class="container py-5 px-3 d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card shadow p-4 rounded-4 w-100" style="max-width: 480px; background: #ffffff;">
+    
+    <!-- User Emoji -->
+    <div class="text-center mb-3">
+      <div class="bg-primary text-white rounded-circle d-inline-flex justify-content-center align-items-center" 
+           style="width: 60px; height: 60px; font-size: 2rem;">
+        👤
+      </div>
+    </div>
+
+    <h4 class="text-center text-primary mb-4 fw-bold">User Registration</h4>
 
     <form (ngSubmit)="register()" #form="ngForm">
-      <!-- Name -->
+      <!-- Full Name -->
       <div class="mb-3">
-        <label>Name</label>
-        <input type="text" class="form-control" name="fullName" [(ngModel)]="user.fullName" required>
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-control rounded-3" name="fullName" [(ngModel)]="user.fullName" required>
       </div>
 
-      <!-- Date of Birth -->
+      <!-- DOB -->
       <div class="mb-3">
-        <label>Date of Birth</label>
-        <input type="date" class="form-control" name="dob" [(ngModel)]="user.dob" required>
+        <label class="form-label">Date of Birth</label>
+        <input type="date" class="form-control rounded-3" name="dob" [(ngModel)]="user.dob" required>
       </div>
 
-      <!-- Phone Number -->
+      <!-- Phone -->
       <div class="mb-3">
-        <label>Phone Number</label>
-        <input type="tel" class="form-control" name="phone" [(ngModel)]="user.phone" required pattern="[0-9]{10}">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" class="form-control rounded-3" name="phone" [(ngModel)]="user.phone" pattern="[0-9]{10}" required>
       </div>
 
       <!-- Email -->
       <div class="mb-3">
-        <label>Email</label>
-        <input type="email" class="form-control" name="email" [(ngModel)]="user.email" required>
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control rounded-3" name="email" [(ngModel)]="user.email" required>
       </div>
 
       <!-- Password -->
       <div class="mb-3">
-        <label>Password</label>
-        <input type="password" class="form-control" name="password" [(ngModel)]="user.password" required>
+        <label class="form-label">Password</label>
+        <input type="password" class="form-control rounded-3" name="password" [(ngModel)]="user.password" required>
       </div>
 
       <!-- Confirm Password -->
       <div class="mb-3">
-        <label>Confirm Password</label>
-        <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="user.confirmPassword" required>
+        <label class="form-label">Confirm Password</label>
+        <input type="password" class="form-control rounded-3" name="confirmPassword" [(ngModel)]="user.confirmPassword" required>
       </div>
 
       <!-- Location -->
       <div class="mb-3">
-        <label>Location</label>
-        <input type="text" class="form-control" name="location" [(ngModel)]="user.location" required>
+        <label class="form-label">Location</label>
+        <input type="text" class="form-control rounded-3" name="location" [(ngModel)]="user.location" required>
       </div>
 
       <!-- Profile Picture -->
       <div class="mb-3">
-        <label>Profile Picture</label>
-        <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*" required>
+        <label class="form-label">Profile Picture</label>
+        <input type="file" class="form-control rounded-3" (change)="onFileSelected($event)" accept="image/*" required>
       </div>
 
-      <!-- Submit Button -->
-      <div class="d-grid mt-4">
-        <button class="btn btn-primary" type="submit" [disabled]="isUploading">
+      <!-- Submit -->
+      <div class="d-grid mt-3">
+        <button class="btn btn-primary rounded-3" type="submit" [disabled]="isUploading">
           {{ isUploading ? 'Uploading...' : 'Register' }}
         </button>
       </div>

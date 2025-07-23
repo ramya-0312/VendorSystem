@@ -1,37 +1,29 @@
-.navbar {
-  background: #222 !important;
-}
-
 .nav-text {
-  color: white;
   cursor: pointer;
-  position: relative;
-  transition: color 0.3s;
+  transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .nav-text:hover {
-  color: #0dcaf0; /* Bootstrap info color */
-  text-decoration: underline;
+  color: #ffc107;
+  transform: scale(1.05);
 }
 
-.btn-danger {
-  background: #dc3545;
-  border: none;
-}
-
-.btn-danger:hover {
-  background: #bb2d3b;
-}
-
-.container {
-  background: none;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .chat-popup {
-  background: #222;
-  border-radius: 0;
-  box-shadow: none;
+  animation: fadeInUp 0.3s ease-out;
 }
+
+@keyframes fadeInUp {
+  0% {
+    transform: translateY(20px) translateX(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) translateX(-50%);
+    opacity: 1;
+  }
+}
+

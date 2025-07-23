@@ -15,7 +15,9 @@ export class UserDashboardComponent {
     this.activeTab=tab;
     console.log(this.activeTab)
   }
-
+ ngOnInit(): void {
+    this.activeTab = ''; // Force Welcome to show on load/refresh
+  }
 
   constructor(private router: Router) {}
 
